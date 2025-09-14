@@ -7,7 +7,7 @@ https://docs.taro.zone/docs/GETTING-STARTED
 https://towebp.io/jpg-to-webp
 # icon网站找svg的
 https://www.iconpacks.net/free-icon/location-2952.html#google_vignette
-## 项目架构
+## 项目
 
 ```
 DiaryVue/
