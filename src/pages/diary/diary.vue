@@ -1,5 +1,5 @@
 <template>
-  <view class="diary-page bg-default">
+  <view class="diary-page" :class="themeStore.currentThemeClass">
     <view class="title-text text-center margin">我的日记</view>
     <view class="content margin">
       <view class="card diary-item" @tap="viewDiary">
@@ -24,12 +24,19 @@
 
 <script setup>
 import { defineOptions } from 'vue'
+import { useThemeStore } from '../../stores/theme'
 import Taro from '@tarojs/taro'
-import './diary.css'
+import './diary.scss'
 
 defineOptions({
   name: 'DiaryPage'
 })
+
+// 使用主题状态
+const themeStore = useThemeStore()
+
+// 确保导航栏颜色与当前主题一致
+themeStore.updateNavigationBarColor()
 
 const goBack = () => {
   Taro.navigateBack()
@@ -49,30 +56,4 @@ const addNewDiary = () => {
   })
 }
 </script>
-
-<style scoped>
-.diary-page {
-  min-height: 100vh;
-  padding-bottom: 80px;
-}
-.diary-item {
-  margin-bottom: 15px;
-}
-.action-bar {
-  display: flex;
-  justify-content: space-between;
-  padding: 15px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: #ffffff;
-  border-top: 1px solid var(--border-color);
-}
-.action-bar .button,
-.action-bar .button-outline {
-  flex: 1;
-  margin: 0 10px;
-}
-</style>
 

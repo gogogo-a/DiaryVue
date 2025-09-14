@@ -14,9 +14,13 @@
 /* 默认主题类 - 确保默认主题也能正确应用 */
 .theme-default {
   /* 默认主题颜色 */
-  --primary-color: #4a90e2;
-  --primary-light: #72abed;
-  --primary-dark: #3a73b4;
+  --primary-color: rgb(235, 240, 246);
+  --primary-button-background: rgb(82, 168, 220);
+  --primary-button-text: rgb(255, 255, 255);
+  --primary-pitch-on: rgb(223, 233, 243);
+  --svg-outer-color: rgb(245, 249, 252);
+  --svg-background: rgb(246, 230, 242);
+  --svg-select-color: rgb(223, 233, 243);
   --secondary-color: #f0f8ff;
   --text-color: #333333;
   --text-color-light: #666666;
@@ -28,7 +32,7 @@
   --danger-color: #f56c6c;
   --info-color: #909399;
   --white-color: #ffffff;
-  --box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+  --box-shadow: 3px 3px 2px 3px rgba(82, 168, 220, 0.3);
   
   /* 特殊样式变量 */
   --card-background: var(--white-color);

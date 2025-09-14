@@ -6,5 +6,11 @@
 page {
   font-family: var(--text-font-family);
   color: var(--text-color);
-  background-color: var(--background-color);
+  background-color: var(--primary-color);
+  padding-bottom: 120px; /* 为底部导航栏预留空间 */
+}
+
+/* 确保内容不被底部导航栏遮挡 */
+.page-container {
+  padding-bottom: 120px;
 }

@@ -1,0 +1,92 @@
+/* 导入主题变量 */
+@import "../../styles/themes.scss";
+@import "../../styles/variables.scss";
+
+.diary-page {
+  padding: $padding-size;
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--background-color);
+}
+
+.title-text {
+  font-size: $title-font-size;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: var(--text-color);
+  font-family: var(--title-font-family);
+  text-align: center;
+}
+
+.subtitle-text {
+  font-size: $subtitle-font-size;
+  margin-bottom: 10px;
+  color: var(--text-color);
+  font-family: var(--text-font-family);
+}
+
+.tip-text {
+  font-size: $tip-font-size;
+  color: var(--text-color-lighter);
+  margin-bottom: 8px;
+}
+
+.body-text {
+  font-size: $body-font-size;
+  color: var(--text-color-light);
+  line-height: 1.5;
+}
+
+.margin {
+  margin: $margin-size 0;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.card {
+  border-radius: $card-radius;
+  padding: $padding-size;
+  margin-bottom: $margin-size;
+  background-color: var(--card-background);
+  box-shadow: var(--box-shadow);
+  border: var(--card-border);
+}
+
+.diary-item {
+  margin-bottom: 15px;
+}
+
+.action-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--card-background);
+  border-top: 1px solid var(--border-color);
+}
+
+.button {
+  background-color: var(--primary-button-background);
+  color: var(--primary-button-text);
+  padding: 10px 20px;
+  border-radius: $border-radius;
+  text-align: center;
+  flex: 1;
+  margin: 0 10px;
+}
+
+.button-outline {
+  background-color: transparent;
+  color: var(--text-color);
+  padding: 10px 20px;
+  border-radius: $border-radius;
+  text-align: center;
+  flex: 1;
+  margin: 0 10px;
+  border: 1px solid var(--border-color);
+} 

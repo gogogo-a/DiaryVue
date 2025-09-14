@@ -1,34 +1,26 @@
 <template>
-  <!-- 使用ThemeProvider作为最外层容器，提供主题上下文 -->
-  <ThemeProvider>
-    <view class="index">
-      <view class="theme-switch-container">
-        <ThemeSwitch />
-      </view>
-      
-      <view class="card margin">
-        <view class="title-text text-center">我的日记本</view>
-        <Carousel />
-      </view>
-      
-      <view class="card margin">
-        <view class="subtitle-text">计数器示例</view>
-        <Counter />
-      </view>
-      
-      <view class="navigation">
-        <view class="nav-button" @tap="goDiary">查看日记</view>
-      </view>
+  <view class="index" :class="themeStore.currentThemeClass">
+    
+    <view class="card margin">
+      <Carousel />
     </view>
-  </ThemeProvider>
+    
+    <view class="card margin">
+      <FeatureCards />
+    </view>
+    
+    
+    <!-- 底部导航栏 -->
+    <TabBar ref="tabBar" />
+  </view>
 </template>
 
 <script setup>
-import Counter from '../../components/Counter.vue'
-import Carousel from '../../components/Carousel/Carousel.vue'
-import ThemeSwitch from '../../components/ThemeSwitch/ThemeSwitch.vue'
-import ThemeProvider from '../../components/ThemeProvider/ThemeProvider.vue'
-import { defineOptions, inject } from 'vue'
+import Carousel from '../../components/index/Carousel/Carousel.vue'
+import FeatureCards from '../../components/index/FeatureCards/FeatureCards.vue'
+import TabBar from '../../components/public/TabBar/TabBar.vue'
+import { defineOptions, ref, onMounted } from 'vue'
+import { useThemeStore } from '../../stores/theme'
 import Taro from '@tarojs/taro'
 import './index.scss'
 
@@ -36,14 +28,21 @@ defineOptions({
   name: 'IndexPage'
 })
 
-// 从ThemeProvider获取主题信息
-const theme = inject('theme')
+// 使用主题状态
+const themeStore = useThemeStore()
 
-const goDiary = () => {
-  Taro.navigateTo({
-    url: '/pages/diary/diary'
-  })
-}
+// 底部导航栏引用
+const tabBar = ref(null)
+
+// 确保导航栏颜色与当前主题一致
+themeStore.updateNavigationBarColor()
+
+// 页面加载时设置当前激活的标签
+onMounted(() => {
+  if (tabBar.value) {
+    tabBar.value.setActiveTab('index')
+  }
+})
 </script>
 
 

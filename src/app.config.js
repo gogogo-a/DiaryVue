@@ -1,3 +1,4 @@
+
 export default {
   pages: [
     'pages/index/index',
@@ -5,7 +6,7 @@ export default {
   ],
   window: {
     backgroundTextStyle: 'light',
-    navigationBarBackgroundColor: '#fff',
+    navigationBarBackgroundColor: '#ebf0f6', // 默认主题的primaryColor
     navigationBarTitleText: 'DiaryVue',
     navigationBarTextStyle: 'black'
   }

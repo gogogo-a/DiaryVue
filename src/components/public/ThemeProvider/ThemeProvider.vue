@@ -7,9 +7,9 @@
 <script setup>
 import { ref, onMounted, computed, provide, onUnmounted, watch } from 'vue'
 import { defineOptions } from 'vue'
-import themeManager, { THEMES } from '../../utils/themeManager'
+import themeManager, { THEMES } from '../../../utils/themeManager'
 import Taro from '@tarojs/taro'
-import '../../styles/themes.scss'
+import '../../../styles/themes.scss'
 
 defineOptions({
   name: 'ThemeProviderComponent'
@@ -25,6 +25,8 @@ const currentThemeClass = computed(() => {
 
 // 监听主题变化
 watch(currentTheme, (newTheme) => {
+  // 当主题变化时更新导航栏颜色
+  themeManager.updateNavigationBarColor(newTheme)
 }, { immediate: true })
 
 // 在Vue应用中共享当前主题状态
@@ -63,6 +65,9 @@ onMounted(() => {
   
   // 监听主题变更事件
   listenForThemeChanges()
+  
+  // 初始化导航栏颜色
+  themeManager.updateNavigationBarColor(currentTheme.value)
 })
 </script>
 

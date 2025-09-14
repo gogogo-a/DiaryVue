@@ -1,0 +1,55 @@
+@import "../../../styles/themes.scss";
+@import "../../../styles/variables.scss";
+
+.carousel-container {
+  width: 100%;
+  height: 400px;
+  position: relative;
+  border-radius: $card-radius;
+  overflow: hidden;
+  margin-bottom: $margin-size;
+  box-shadow: var(--box-shadow);
+}
+
+.carousel {
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-item {
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 自定义指示点样式 */
+.custom-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    margin: 0 5px;
+    transition: all $transition-time ease;
+    
+    &.active {
+      width: 18px;
+      border-radius: 4px;
+      background-color: var(--primary-button-background);
+    }
+  }
+}

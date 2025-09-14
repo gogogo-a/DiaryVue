@@ -14,18 +14,7 @@
   margin-bottom: 15px;
 }
 
-.card {
-  border-radius: $card-radius;
-  padding: $padding-size;
-  margin-bottom: $margin-size;
-  background-color: var(--card-background);
-  box-shadow: var(--box-shadow);
-  border: var(--card-border);
-}
 
-.margin {
-  margin: $margin-size 0;
-}
 
 .text-center {
   text-align: center;
@@ -47,7 +36,7 @@
 }
 
 .navigation {
-  margin-top: 30px;
+  margin-top: 309px;
   display: flex;
   justify-content: center;
 }

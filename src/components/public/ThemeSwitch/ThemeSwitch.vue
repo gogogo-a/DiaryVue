@@ -11,26 +11,26 @@
 </template>
 
 <script setup>
-import { inject, onMounted, ref, computed } from 'vue'
+import { computed } from 'vue'
 import { defineOptions } from 'vue'
-import { THEMES } from '../../utils/themeManager'
+import { THEMES } from '../../../utils/themeManager'
+import { useThemeStore } from '../../../stores/theme'
 import Taro from '@tarojs/taro'
-import './ThemeSwitch.scss'
 
 defineOptions({
   name: 'ThemeSwitchComponent'
 })
 
-// 从ThemeProvider获取主题状态
-const theme = inject('theme')
+// 使用主题状态
+const themeStore = useThemeStore()
 
 // 创建一个计算属性来获取当前主题
-const currentTheme = computed(() => theme.currentTheme.value)
+const currentTheme = computed(() => themeStore.currentTheme)
 
 // 处理主题切换
 const handleThemeToggle = () => {
-  // 使用ThemeProvider提供的toggleTheme方法
-  const newTheme = theme.toggleTheme()
+  // 使用ThemeStore提供的toggleTheme方法
+  const newTheme = themeStore.toggleTheme()
   
   // 提示用户
   Taro.showToast({

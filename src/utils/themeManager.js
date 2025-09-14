@@ -11,6 +11,7 @@
 
 import Taro from '@tarojs/taro'
 import variables from '../styles/variables.scss'
+import THEME_COLORS from '../styles/themes'
 
 // 主题类型定义
 export const THEMES = {
@@ -45,6 +46,43 @@ export const getCurrentTheme = () => {
 }
 
 /**
+ * 获取当前主题的颜色配置
+ * @returns {Object} 当前主题的颜色配置
+ */
+export const getCurrentThemeColors = () => {
+  const currentTheme = getCurrentTheme()
+  return currentTheme === THEMES.DEFAULT ? THEME_COLORS.DEFAULT : THEME_COLORS.REMEMBER
+}
+
+/**
+ * 更新导航栏颜色
+ * @param {string} theme - 主题名称
+ */
+export const updateNavigationBarColor = (theme = getCurrentTheme()) => {
+  const themeColors = theme === THEMES.DEFAULT ? THEME_COLORS.DEFAULT : THEME_COLORS.REMEMBER
+  
+  try {
+    // 更新导航栏颜色
+    Taro.setNavigationBarColor({
+      frontColor: themeColors.navigationBarTextStyle === 'white' ? '#ffffff' : '#000000',
+      backgroundColor: themeColors.primaryColor,
+      animation: {
+        duration: 300,
+        timingFunc: 'easeIn'
+      },
+      success: () => {
+        console.log('导航栏颜色更新成功')
+      },
+      fail: (error) => {
+        console.error('导航栏颜色更新失败:', error)
+      }
+    })
+  } catch (e) {
+    console.error('更新导航栏颜色失败:', e)
+  }
+}
+
+/**
  * 设置当前主题
  * @param {string} theme - 主题名称
  */
@@ -60,6 +98,9 @@ export const setTheme = (theme) => {
     
     // 保存主题到本地存储
     Taro.setStorageSync(THEME_STORAGE_KEY, theme)
+    
+    // 更新导航栏颜色
+    updateNavigationBarColor(theme)
     
     // 返回成功状态
     return true
@@ -93,6 +134,7 @@ export const toggleTheme = () => {
 export const resetTheme = () => {
   console.log('重置主题为默认主题')
   Taro.removeStorageSync(THEME_STORAGE_KEY)
+  updateNavigationBarColor(THEMES.DEFAULT)
   return THEMES.DEFAULT
 }
 
@@ -114,9 +156,11 @@ export const getThemeStylePath = (theme = getCurrentTheme()) => {
 export default {
   THEMES,
   getCurrentTheme,
+  getCurrentThemeColors,
   setTheme,
   toggleTheme,
   resetTheme,
   getThemeStylePath,
-  getGlobalVariables
+  getGlobalVariables,
+  updateNavigationBarColor
 } 
