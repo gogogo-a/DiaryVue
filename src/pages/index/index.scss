@@ -1,0 +1,64 @@
+/* 导入主题变量 */
+@import "../../styles/themes.scss";
+@import "../../styles/variables.scss";
+
+/* 基础样式，使用CSS变量实现主题切换 */
+.index {
+  padding: $padding-size;
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--primary-color);
+}
+
+.theme-switch-container {
+  margin-bottom: 15px;
+}
+
+.card {
+  border-radius: $card-radius;
+  padding: $padding-size;
+  margin-bottom: $margin-size;
+  background-color: var(--card-background);
+  box-shadow: var(--box-shadow);
+  border: var(--card-border);
+}
+
+.margin {
+  margin: $margin-size 0;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.title-text {
+  font-size: $title-font-size;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: var(--text-color);
+  font-family: var(--title-font-family);
+}
+
+.subtitle-text {
+  font-size: $subtitle-font-size;
+  margin-bottom: 10px;
+  color: var(--text-color);
+  font-family: var(--text-font-family);
+}
+
+.navigation {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.nav-button {
+  padding: 10px 20px;
+  border-radius: $border-radius;
+  font-size: 24px;
+  text-align: center;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border: 1px solid transparent;
+  transition: all $transition-time ease;
+} 

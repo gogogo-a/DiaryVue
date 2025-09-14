@@ -1,0 +1,10 @@
+/* 引入全局主题样式 */
+@import "./styles/themes.scss";
+@import "./styles/variables.scss";
+
+/* 全局样式 */
+page {
+  font-family: var(--text-font-family);
+  color: var(--text-color);
+  background-color: var(--background-color);
+}

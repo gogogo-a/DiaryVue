@@ -1,0 +1,8 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+回答必须为中文回答
+使用的技术框架是Taro+vue样式为@vant/weapp转成的是微信小程序
+创建一个新页面必须有index.vue和index.scss index.config.js这三个文件，创建组件在components文件夹下必须先创建组件的文件夹就也得加用加.scss

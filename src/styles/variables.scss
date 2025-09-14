@@ -1,0 +1,36 @@
+/**
+ * 全局变量文件
+ * 
+ * 定义所有全局尺寸变量，可以在任何组件中使用
+ * 这些变量不依赖于主题，在所有主题中都保持一致
+ * 
+ * 作者: DiaryVue团队
+ * 版本: 1.0.0
+ * 最后更新: 2025-09-14
+ */
+
+/* 全局尺寸变量 */
+$title-font-size: 22px;
+$subtitle-font-size: 18px;
+$body-font-size: 16px;
+$tip-font-size: 14px;
+$button-font-size: 16px;
+$padding-size: 16px;  
+$margin-size: 16px;
+$border-radius: 3px;
+$card-radius: 6px;
+$transition-time: 0.4s;
+
+/* 导出为CSS变量，使其在组件中可用 */
+:export {
+  titleFontSize: $title-font-size;
+  subtitleFontSize: $subtitle-font-size;
+  bodyFontSize: $body-font-size;
+  tipFontSize: $tip-font-size;
+  buttonFontSize: $button-font-size;
+  paddingSize: $padding-size;
+  marginSize: $margin-size;
+  borderRadius: $border-radius;
+  cardRadius: $card-radius;
+  transitionTime: $transition-time;
+} 

@@ -1,0 +1,63 @@
+/**
+ * 主题变量文件
+ * 
+ * 使用CSS变量定义所有主题颜色和样式，方便在运行时切换主题
+ * 
+ * 作者: DiaryVue团队
+ * 版本: 1.0.0
+ * 最后更新: 2025-09-14
+ */
+
+/* 导入全局尺寸变量 */
+@import "./variables.scss";
+
+/* 默认主题类 - 确保默认主题也能正确应用 */
+.theme-default {
+  /* 默认主题颜色 */
+  --primary-color: #4a90e2;
+  --primary-light: #72abed;
+  --primary-dark: #3a73b4;
+  --secondary-color: #f0f8ff;
+  --text-color: #333333;
+  --text-color-light: #666666;
+  --text-color-lighter: #999999;
+  --background-color: #f5f7fa;
+  --border-color: #e0e6ed;
+  --success-color: #67c23a;
+  --warning-color: #e6a23c;
+  --danger-color: #f56c6c;
+  --info-color: #909399;
+  --white-color: #ffffff;
+  --box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+  
+  /* 特殊样式变量 */
+  --card-background: var(--white-color);
+  --card-border: none;
+  --title-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --text-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* 怀旧主题变量 */
+.theme-remember {
+  --primary-color: #e2b14a;
+  --primary-light: #f0c970;
+  --primary-dark: #c49a3f;
+  --secondary-color: #fff8e6;
+  --text-color: #4a3c2d;
+  --text-color-light: #6e5c4a;
+  --text-color-lighter: #8d7a66;
+  --background-color: #faf5ea;
+  --border-color: #e6d6b8;
+  --success-color: #7b9e6b;
+  --warning-color: #d38e56;
+  --danger-color: #c45a5a;
+  --info-color: #8798a6;
+  --white-color: #fffbf0;
+  --box-shadow: 0 2px 8px 0 rgba(162, 136, 91, 0.15);
+  
+  /* 特殊样式变量 */
+  --card-background: #f7f2e4;
+  --card-border: 2px solid #d6c6a5;
+  --title-font-family: 'Times New Roman', serif;
+  --text-font-family: 'Times New Roman', serif;
+} 
