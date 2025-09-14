@@ -9,19 +9,22 @@
       <FeatureCards />
     </view>
     
+    <!-- 写日记按钮 -->
+    <WriteButton />
     
     <!-- 底部导航栏 -->
     <TabBar ref="tabBar" />
   </view>
+
 </template>
 
 <script setup>
 import Carousel from '../../components/index/Carousel/Carousel.vue'
 import FeatureCards from '../../components/index/FeatureCards/FeatureCards.vue'
+import WriteButton from '../../components/index/WriteButton/WriteButton.vue'
 import TabBar from '../../components/public/TabBar/TabBar.vue'
 import { defineOptions, ref, onMounted } from 'vue'
 import { useThemeStore } from '../../stores/theme'
-import Taro from '@tarojs/taro'
 import './index.scss'
 
 defineOptions({

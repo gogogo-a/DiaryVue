@@ -11,15 +11,21 @@
 
 /* 全局尺寸变量 */
 $title-font-size: 22px;
-$subtitle-font-size: 18px;
+$subtitle-font-size: 22px;
 $body-font-size: 22px;
-$tip-font-size: 14px;
+$tip-font-size: 22px;
 $button-font-size: 16px;
 $padding-size: 16px;  
 $margin-size: 16px;
 $border-radius: 3px;
 $card-radius: 6px;
 $transition-time: 0.4s;
+
+/* 字体粗细变量 */
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 600;
+$font-weight-heavy: 700;
 
 /* 导出为CSS变量，使其在组件中可用 */
 :export {
@@ -33,4 +39,8 @@ $transition-time: 0.4s;
   borderRadius: $border-radius;
   cardRadius: $card-radius;
   transitionTime: $transition-time;
+  fontWeightNormal: $font-weight-normal;
+  fontWeightMedium: $font-weight-medium;
+  fontWeightBold: $font-weight-bold;
+  fontWeightHeavy: $font-weight-heavy;
 } 

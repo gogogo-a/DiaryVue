@@ -6,7 +6,7 @@
   padding: $padding-size;
   position: relative;
   min-height: 100vh;
-  background-color: var(--background-color);
+  background-color: var(--primary-color);
 }
 
 .title-text {
@@ -62,12 +62,10 @@
   display: flex;
   justify-content: space-between;
   padding: 15px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  margin-bottom: 120px; /* 为底部导航栏预留空间 */
   background-color: var(--card-background);
   border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .button {

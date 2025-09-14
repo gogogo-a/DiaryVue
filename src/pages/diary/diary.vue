@@ -1,6 +1,13 @@
 <template>
   <view class="diary-page" :class="themeStore.currentThemeClass">
-    <view class="title-text text-center margin">我的日记</view>
+    <!-- 顶部筛选组件 -->
+    <DiaryFilter 
+      @categoryChange="handleCategoryChange"
+      @labelChange="handleLabelChange"
+      @dateChange="handleDateChange"
+      @search="handleSearch"
+    />
+    
     <view class="content margin">
       <view class="card diary-item" @tap="viewDiary">
         <view class="subtitle-text">今天的日记</view>
@@ -19,12 +26,18 @@
       <view class="button" @tap="addNewDiary">添加日记</view>
       <view class="button-outline" @tap="goBack">返回首页</view>
     </view>
+    
+    <!-- 底部导航栏 -->
+    <TabBar ref="tabBar" />
   </view>
+
 </template>
 
 <script setup>
-import { defineOptions } from 'vue'
+import { defineOptions, ref, onMounted } from 'vue'
 import { useThemeStore } from '../../stores/theme'
+import DiaryFilter from '../../components/diary/DiaryFilter/DiaryFilter.vue'
+import TabBar from '../../components/public/TabBar/TabBar.vue'
 import Taro from '@tarojs/taro'
 import './diary.scss'
 
@@ -35,8 +48,15 @@ defineOptions({
 // 使用主题状态
 const themeStore = useThemeStore()
 
-// 确保导航栏颜色与当前主题一致
-themeStore.updateNavigationBarColor()
+// 底部导航栏引用
+const tabBar = ref(null)
+
+// 页面加载时设置当前激活的标签
+onMounted(() => {
+  if (tabBar.value) {
+    tabBar.value.setActiveTab('index')
+  }
+})
 
 const goBack = () => {
   Taro.navigateBack()
@@ -53,6 +73,39 @@ const addNewDiary = () => {
   Taro.showToast({
     title: '添加新日记',
     icon: 'success'
+  })
+}
+
+// 处理筛选事件
+const handleCategoryChange = (category) => {
+  console.log('分类变更:', category)
+  Taro.showToast({
+    title: `已选择: ${category}`,
+    icon: 'none'
+  })
+}
+
+const handleLabelChange = (label) => {
+  console.log('标签变更:', label)
+  Taro.showToast({
+    title: `已选择标签: ${label}`,
+    icon: 'none'
+  })
+}
+
+const handleDateChange = (date) => {
+  console.log('日期变更:', date)
+  Taro.showToast({
+    title: `已选择日期: ${date}`,
+    icon: 'none'
+  })
+}
+
+const handleSearch = (text) => {
+  console.log('搜索:', text)
+  Taro.showToast({
+    title: `正在搜索: ${text}`,
+    icon: 'none'
   })
 }
 </script>

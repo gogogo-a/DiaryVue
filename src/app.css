@@ -14,3 +14,8 @@ page {
 .page-container {
   padding-bottom: 120px;
 }
+
+/* 确保所有页面都有相同的底部间距 */
+.index, .diary-page {
+  padding-bottom: 120px;
+}

@@ -58,7 +58,7 @@
 .feature-title {
   font-size: $body-font-size;
   color: var(--text-color);
-  font-weight: bold;
+  font-weight: $font-weight-medium;
   margin-top: 8px;
   font-family: var(--text-font-family);
 } 

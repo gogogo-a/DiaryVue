@@ -1,0 +1,41 @@
+@import "../../../styles/themes.scss";
+@import "../../../styles/variables.scss";
+
+.write-button {
+  position: fixed;
+  right: 30px;
+  bottom: 160px; /* 确保在底部导航栏上方 */
+  z-index: 100;
+}
+
+.button-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: var(--primary-button-background);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  transition: all $transition-time ease;
+  
+  &:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.button-icon {
+  width: 50;
+  height: 50px;
+  margin-bottom: 5px;
+}
+
+.button-text {
+  font-size: $tip-font-size;
+  color: #ffffff;
+  font-family: var(--text-font-family);
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+} 
