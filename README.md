@@ -3,6 +3,10 @@
 DiaryVue是一个使用Taro框架和Vue 3开发的微信小程序，专注于提供简洁、美观的日记记录体验。项目采用了主题切换功能，支持默认主题和怀旧主题，并具有良好的组件化结构。
 # Taro 官方文档
 https://docs.taro.zone/docs/GETTING-STARTED
+# 图片压缩网站，转webp
+https://towebp.io/jpg-to-webp
+# icon网站找svg的
+https://www.iconpacks.net/free-icon/location-2952.html#google_vignette
 ## 项目架构
 
 ```
