@@ -1,19 +1,19 @@
 <template>
   <view class="index" :class="themeStore.currentThemeClass">
-    
+
     <view class="card margin">
       <Carousel />
     </view>
-    
+
     <view class="card margin">
       <FeatureCards />
     </view>
-    
+
     <!-- 写日记按钮 -->
-    <WriteButton />
-    
+    <!-- <WriteButton /> -->
+
     <!-- 底部导航栏 -->
-    <TabBar ref="tabBar" />
+    <!-- <TabBar ref="tabBar" /> -->
   </view>
 
 </template>
