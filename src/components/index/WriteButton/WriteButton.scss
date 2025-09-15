@@ -4,7 +4,7 @@
 .write-button {
   position: fixed;
   right: 30px;
-  bottom: 160px; /* 确保在底部导航栏上方 */
+  bottom: 200px; /* 上移，确保在底部导航栏上方且不被遮挡 */
   z-index: 100;
 }
 
@@ -19,7 +19,7 @@
   justify-content: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   transition: all $transition-time ease;
-  
+
   &:active {
     transform: scale(0.95);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -38,4 +38,4 @@
   font-family: var(--text-font-family);
   font-weight: bold;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-} 
+}

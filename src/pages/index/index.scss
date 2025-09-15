@@ -52,4 +52,10 @@
   color: var(--white-color);
   border: 1px solid transparent;
   transition: all $transition-time ease;
-} 
+}
+
+/* 底部空间预留，与diary页面保持一致 */
+.bottom-spacer {
+  margin-bottom: 120px; /* 为底部导航栏预留空间 */
+}
+

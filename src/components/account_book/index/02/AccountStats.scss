@@ -1,0 +1,78 @@
+@import "../../../../styles/themes.scss";
+@import "../../../../styles/variables.scss";
+
+.account-stats {
+  width: 100%;
+  background-color: var(--card-background);
+  border-radius: 16px; /* 增加圆角与header保持一致 */
+  box-shadow: var(--box-shadow);
+  overflow: hidden;
+}
+
+.filter-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $padding-size;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--svg-outer-color);
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background-color: var(--card-background);
+  border-radius: $border-radius;
+  transition: all $transition-time ease;
+
+  &:active {
+    transform: scale(0.95);
+    background-color: var(--svg-select-color);
+  }
+}
+
+.filter-text {
+  font-size: $tip-font-size;
+  color: var(--text-color);
+  font-family: var(--text-font-family);
+  font-weight: $font-weight-medium;
+}
+
+.filter-arrow,
+.filter-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.6;
+}
+
+.stats-section {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 30px $padding-size;
+  background-color: var(--card-background);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.stat-amount {
+  font-size: 36px;
+  font-weight: bold;
+  color: var(--text-color);
+  font-family: var(--text-font-family);
+}
+
+.stat-label {
+  font-size: $body-font-size;
+  color: var(--text-color-light);
+  font-family: var(--text-font-family);
+  font-weight: $font-weight-medium;
+}

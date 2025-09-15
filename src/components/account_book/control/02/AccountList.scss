@@ -1,0 +1,146 @@
+@import "../../../../styles/themes.scss";
+@import "../../../../styles/variables.scss";
+
+.account-list {
+  width: 100%;
+}
+
+.account-card {
+  background-color: var(--card-background);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--box-shadow);
+  transition: all $transition-time ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.account-number {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--text-color);
+  font-family: var(--title-font-family);
+}
+
+.edit-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--svg-outer-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-time ease;
+
+  &:active {
+    transform: scale(0.9);
+    background-color: var(--svg-select-color);
+  }
+}
+
+.edit-icon {
+  width: 20px;
+  height: 20px;
+  opacity: 0.7;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.participant-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar-group {
+  position: relative;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--svg-outer-color);
+}
+
+.participant-count {
+  font-size: $body-font-size;
+  color: var(--text-color-light);
+  font-family: var(--text-font-family);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  transition: all $transition-time ease;
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.delete-btn {
+  background-color: #fee;
+  border: 1px solid #fcc;
+
+  .btn-text {
+    color: #d32f2f;
+  }
+}
+
+.invite-btn {
+  background-color: var(--svg-outer-color);
+  border: 1px solid var(--border-color);
+
+  .btn-text {
+    color: var(--text-color);
+  }
+}
+
+.enter-btn {
+  background: linear-gradient(135deg, #d4a574, #c49a65);
+  border: none;
+
+  .btn-text {
+    color: #ffffff;
+  }
+
+  .btn-icon {
+    filter: brightness(0) invert(1);
+  }
+}
+
+.btn-text {
+  font-size: $tip-font-size;
+  font-family: var(--text-font-family);
+  font-weight: $font-weight-medium;
+}
+
+.btn-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+}

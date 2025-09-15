@@ -3,53 +3,61 @@
 
 .carousel-container {
   width: 100%;
-  height: 400px;
+  height: 320px; /* 增加高度，给两层嵌套留足空间 */
   position: relative;
   border-radius: $card-radius;
   overflow: hidden;
   margin-bottom: $margin-size;
-  box-shadow: var(--box-shadow);
 }
 
 .carousel {
   width: 100%;
-  height: 100%;
+  height: 100%; /* 占满容器高度 */
 }
 
 .carousel-item {
   width: 100%;
-  height: 100%;
-}
-
-.carousel-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: 100%; /* 占满swiper高度 */
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+  box-sizing: border-box;
 }
 
 /* 自定义指示点样式 */
 .custom-dots {
   position: absolute;
-  bottom: 20px;
+  bottom: 16px;
   left: 0;
   right: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10;
-  
+  z-index: 100; /* 确保在banner组件之上 */
+
   .dot {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.5);
-    margin: 0 5px;
+    background-color: rgba(0, 0, 0, 0.3);
+    margin: 0 4px;
     transition: all $transition-time ease;
-    
+
     &.active {
-      width: 18px;
-      border-radius: 4px;
-      background-color: var(--primary-button-background);
+      width: 16px;
+      border-radius: 3px;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+  }
+}
+
+// 主题适配指示点
+.theme-remember .carousel-container {
+  .custom-dots .dot {
+    background-color: rgba(255, 255, 255, 0.4);
+
+    &.active {
+      background-color: rgba(255, 255, 255, 0.8);
     }
   }
 }

@@ -25,20 +25,20 @@
   padding: 8px 0;
   transition: all $transition-time ease;
   position: relative;
-  
+
   &.active {
     .icon-wrapper {
       background-color: var(--svg-select-color);
       transform: scale(1.1);
     }
-    
+
     .tab-text {
       font-weight: bold;
     }
   }
 }
 
-.icon-wrapper {
+.icon-wrappe {
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -58,4 +58,4 @@
   font-size: 20px;
   color: var(--text-color);
   font-family: var(--text-font-family);
-} 
+}

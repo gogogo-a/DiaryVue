@@ -11,6 +11,13 @@
     <!-- 写日记按钮 -->
     <WriteButton />
 
+    <!-- 底部操作区域，为导航栏预留空间 -->
+    <view class="bottom-spacer"></view>
+
+    <!-- 底部导航栏 -->
+    <TabBar ref="tabBar" />
+  </view>
+
     <!-- 底部导航栏 -->
     <!-- <TabBar ref="tabBar" /> -->
   </view>

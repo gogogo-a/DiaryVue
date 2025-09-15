@@ -1,0 +1,66 @@
+@import "../../../../styles/themes.scss";
+@import "../../../../styles/variables.scss";
+
+.account-header-card {
+  width: 100%;
+  padding: 30px $padding-size 24px;
+  background: linear-gradient(135deg, var(--svg-outer-color), var(--svg-background));
+  border-radius: 20px;
+  margin-bottom: $margin-size;
+  position: relative;
+  overflow: hidden;
+}
+
+.header-section {
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--text-color);
+  font-family: var(--title-font-family);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.page-subtitle {
+  font-size: $body-font-size;
+  color: var(--text-color-light);
+  font-family: var(--text-font-family);
+  display: block;
+  margin-bottom: 12px;
+}
+
+.title-underline {
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #d4a574, #c49a65);
+  border-radius: 2px;
+}
+
+.action-section {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.add-account-btn {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #d4a574, #c49a65);
+  border-radius: 25px;
+  box-shadow: 0 4px 12px rgba(212, 165, 116, 0.3);
+  transition: all $transition-time ease;
+
+  &:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(212, 165, 116, 0.2);
+  }
+}
+
+.add-btn-text {
+  font-size: $body-font-size;
+  color: #ffffff;
+  font-family: var(--text-font-family);
+  font-weight: $font-weight-medium;
+}
