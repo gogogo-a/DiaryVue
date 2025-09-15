@@ -31,4 +31,4 @@ const handleClick = () => {
     duration: 1500
   })
 }
-</script> 
+</script>

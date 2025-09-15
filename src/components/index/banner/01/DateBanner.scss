@@ -1,0 +1,158 @@
+@import "../../../../styles/themes.scss";
+@import "../../../../styles/variables.scss";
+
+.date-banner {
+  width: 100%;
+  height: 100%; /* 充满swiper-item高度 */
+
+  .outer-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    // 外层背景色 - 温暖的渐变
+    background: linear-gradient(135deg, #FFE4B5 0%, #F0E68C 50%, #E6E6FA 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    box-sizing: border-box;
+
+    .decoration-text {
+      position: absolute;
+      top: 20px;
+      left: 24px;
+      font-size: 14px;
+      color: rgba(139, 115, 85, 0.6);
+      letter-spacing: 1px;
+      z-index: 1;
+    }
+
+    .inner-card {
+      width: 85%;
+      height: 50%; /* 占中间一半区域 */
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 16px;
+      padding: 20px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center; /* 确保内容水平居中 */
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      box-sizing: border-box;
+
+      .greeting {
+        font-size: 24px;
+        font-weight: 500;
+        color: #8B7355;
+        text-align: center;
+        margin-bottom: 12px;
+        letter-spacing: 1px;
+      }
+
+      .date-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .year-month {
+          font-size: 12px;
+          color: #A0956B;
+          margin-bottom: 8px;
+          letter-spacing: 0.5px;
+        }
+
+        .day-week {
+          display: flex;
+          align-items: baseline;
+          gap: 8px;
+
+          .day {
+            font-size: 48px;
+            font-weight: 300;
+            color: #8B7355;
+            line-height: 1;
+          }
+
+          .month {
+            font-size: 16px;
+            color: #8B7355;
+            margin-top: 4px;
+          }
+
+          .week {
+            font-size: 14px;
+            color: #A0956B;
+            margin-left: 8px;
+            margin-top: 4px;
+          }
+        }
+      }
+
+      .memorial-btn {
+        text-align: center;
+
+        .memorial-text {
+          font-size: 12px;
+          color: #A0956B;
+          cursor: pointer;
+          transition: color 0.2s ease;
+
+          &:active {
+            color: #8B7355;
+          }
+        }
+      }
+    }
+  }
+}
+
+// 主题适配
+.theme-remember .date-banner {
+  .outer-container {
+    background: linear-gradient(135deg, #e2b14a 0%, #d4a574 50%, #c49a65 100%);
+
+    .decoration-text {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .inner-card {
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(15px);
+
+      .greeting {
+        color: rgba(255, 255, 255, 0.95);
+      }
+
+      .date-info {
+        .year-month {
+          color: rgba(255, 255, 255, 0.8);
+        }
+
+        .day-week {
+          .day, .month {
+            color: rgba(255, 255, 255, 0.95);
+          }
+
+          .week {
+            color: rgba(255, 255, 255, 0.8);
+          }
+        }
+      }
+
+      .memorial-btn .memorial-text {
+        color: rgba(255, 255, 255, 0.8);
+
+        &:active {
+          color: rgba(255, 255, 255, 0.95);
+        }
+      }
+    }
+  }
+}

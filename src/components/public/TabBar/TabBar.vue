@@ -1,31 +1,31 @@
 <template>
   <view class="tab-bar" :class="themeStore.currentThemeClass">
-    <view 
-      class="tab-item" 
+    <view
+      class="tab-item"
       :class="{ active: activeTab === 'index' }"
       @tap="switchTab('index')"
     >
-      <view class="icon-wrapper">
+      <view class="icon-wrappe">
         <image class="tab-icon" :src="indexIcon" mode="aspectFit" />
       </view>
       <text class="tab-text">首页</text>
     </view>
-    <view 
-      class="tab-item" 
+    <view
+      class="tab-item"
       :class="{ active: activeTab === 'find' }"
       @tap="switchTab('find')"
     >
-      <view class="icon-wrapper">
+      <view class="icon-wrappe">
         <image class="tab-icon" :src="findIcon" mode="aspectFit" />
       </view>
       <text class="tab-text">发现</text>
     </view>
-    <view 
-      class="tab-item" 
+    <view
+      class="tab-item"
       :class="{ active: activeTab === 'my' }"
       @tap="switchTab('my')"
     >
-      <view class="icon-wrapper">
+      <view class="icon-wrappe">
         <image class="tab-icon" :src="myIcon" mode="aspectFit" />
       </view>
       <text class="tab-text">我的</text>
@@ -60,10 +60,10 @@ const switchTab = (tab) => {
   if (activeTab.value === tab) {
     return
   }
-  
+
   // 更新当前激活的标签
   activeTab.value = tab
-  
+
   // 根据选中的标签页进行跳转
   switch(tab) {
     case 'index':
@@ -97,4 +97,4 @@ defineExpose({
     activeTab.value = tab
   }
 })
-</script> 
+</script>

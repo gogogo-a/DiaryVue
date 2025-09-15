@@ -2,32 +2,32 @@
   <view class="feature-cards">
     <view class="feature-grid">
       <!-- 日记本 -->
-      <view class="feature-card" @tap="handleFeatureClick('diary')">
-        <view class="icon-wrapper">
+      <view class="feature-card diary-card" @tap="handleFeatureClick('diary')">
+        <view class="icon-wrapper diary-icon">
           <image class="feature-icon" :src="diaryIcon" mode="aspectFit" />
         </view>
         <text class="feature-title">日记本</text>
       </view>
 
       <!-- 共享日记 -->
-      <view class="feature-card" @tap="handleFeatureClick('shareDiary')">
-        <view class="icon-wrapper">
+      <view class="feature-card share-card" @tap="handleFeatureClick('shareDiary')">
+        <view class="icon-wrapper share-icon">
           <image class="feature-icon" :src="shareDiaryIcon" mode="aspectFit" />
         </view>
         <text class="feature-title">共享日记</text>
       </view>
 
       <!-- 记账本 -->
-      <view class="feature-card" @tap="handleFeatureClick('money')">
-        <view class="icon-wrapper">
+      <view class="feature-card money-card" @tap="handleFeatureClick('money')">
+        <view class="icon-wrapper money-icon">
           <image class="feature-icon" :src="moneyIcon" mode="aspectFit" />
         </view>
         <text class="feature-title">记账本</text>
       </view>
 
       <!-- 切换主题 -->
-      <view class="feature-card" @tap="handleFeatureClick('theme')">
-        <view class="icon-wrapper">
+      <view class="feature-card theme-card" @tap="handleFeatureClick('theme')">
+        <view class="icon-wrapper theme-icon">
           <image class="feature-icon" :src="themeIcon" mode="aspectFit" />
         </view>
         <text class="feature-title">切换主题</text>
