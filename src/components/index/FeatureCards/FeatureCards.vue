@@ -70,9 +70,8 @@ const handleFeatureClick = (feature) => {
       })
       break
     case 'money':
-      Taro.showToast({
-        title: '记账本功能即将上线',
-        icon: 'none'
+      Taro.navigateTo({
+        url: '/pages/account_book/index/account_book'
       })
       break
     case 'theme':

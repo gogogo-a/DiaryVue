@@ -1,0 +1,88 @@
+/* 导入主题变量 */
+@import "../../../styles/themes.scss";
+@import "../../../styles/variables.scss";
+
+.account-book-page {
+  padding: $padding-size;
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--primary-color);
+}
+
+.title-text {
+  font-size: $title-font-size;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: var(--text-color);
+  font-family: var(--title-font-family);
+  text-align: center;
+}
+
+.margin {
+  margin: $margin-size 0;
+}
+
+.card {
+  border-radius: $card-radius;
+  padding: 0; /* 让子组件自己控制padding */
+  margin-bottom: $margin-size;
+  background-color: transparent; /* 让子组件控制背景 */
+}
+
+/* 空状态显示 */
+.empty-state {
+  text-align: center;
+  padding: 60px $padding-size;
+  background-color: var(--card-background);
+  border-radius: $card-radius;
+  box-shadow: var(--box-shadow);
+}
+
+.empty-text {
+  font-size: $subtitle-font-size;
+  color: var(--text-color-light);
+  font-family: var(--text-font-family);
+  display: block;
+  margin-bottom: 10px;
+}
+
+.empty-tip {
+  font-size: $tip-font-size;
+  color: var(--text-color-lighter);
+  font-family: var(--text-font-family);
+  display: block;
+}
+
+/* 添加记账按钮 */
+.add-record-btn {
+  position: fixed;
+  right: 30px;
+  bottom: 200px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--primary-button-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  transition: all $transition-time ease;
+
+  &:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.add-btn-text {
+  font-size: 32px;
+  color: #ffffff;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* 底部空间预留，与其他页面保持一致 */
+.bottom-spacer {
+  margin-bottom: 120px; /* 为底部导航栏预留空间 */
+}

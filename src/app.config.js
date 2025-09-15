@@ -2,7 +2,9 @@
 export default {
   pages: [
     'pages/index/index',
-    'pages/diary/diary'
+    'pages/diary/diary',
+    'pages/account_book/index/account_book',
+    'pages/account_book/control/account_control'
   ],
   window: {
     backgroundTextStyle: 'light',
