@@ -8,7 +8,7 @@
         </view>
         <text class="feature-title">日记本</text>
       </view>
-      
+
       <!-- 共享日记 -->
       <view class="feature-card" @tap="handleFeatureClick('shareDiary')">
         <view class="icon-wrapper">
@@ -16,7 +16,7 @@
         </view>
         <text class="feature-title">共享日记</text>
       </view>
-      
+
       <!-- 记账本 -->
       <view class="feature-card" @tap="handleFeatureClick('money')">
         <view class="icon-wrapper">
@@ -24,7 +24,7 @@
         </view>
         <text class="feature-title">记账本</text>
       </view>
-      
+
       <!-- 切换主题 -->
       <view class="feature-card" @tap="handleFeatureClick('theme')">
         <view class="icon-wrapper">
@@ -84,4 +84,4 @@ const handleFeatureClick = (feature) => {
       break
   }
 }
-</script> 
+</script>

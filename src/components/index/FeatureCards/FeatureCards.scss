@@ -32,13 +32,13 @@
   box-shadow: var(--box-shadow);
   transition: transform $transition-time ease;
   height: 150px;
-  
+
   &:active {
     transform: scale(0.95);
   }
 }
 
-.icon-wrapper {
+.feature-icon-wrapper {
   width: 80px;
   height: 80px;
   background-color: var(--svg-background);
@@ -61,4 +61,4 @@
   font-weight: $font-weight-medium;
   margin-top: 8px;
   font-family: var(--text-font-family);
-} 
+}
