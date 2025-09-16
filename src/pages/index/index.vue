@@ -17,10 +17,6 @@
     <!-- 底部导航栏 -->
     <TabBar ref="tabBar" />
   </view>
-
-    <!-- 底部导航栏 -->
-    <!-- <TabBar ref="tabBar" /> -->
-  </view>
 </template>
 
 <script setup>
