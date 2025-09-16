@@ -1,4 +1,3 @@
-
 export default {
   pages: [
     'pages/index/index',
@@ -10,10 +9,13 @@ export default {
     'pages/account_book/add/add_record',
     'pages/discover/index/discover'
   ],
+  navigationBarTitleText: "日记本",
+  navigationBarBackgroundColor: "#ebf0f6",
+  backgroundColor: "#ebf0f6",
   window: {
-    backgroundTextStyle: 'light',
-    navigationBarBackgroundColor: '#ebf0f6', // 默认主题的primaryColor
-    navigationBarTitleText: 'DiaryVue',
-    navigationBarTextStyle: 'black'
-  }
-}
+    backgroundTextStyle: "light",
+    navigationBarBackgroundColor: "#ebf0f6",
+    navigationBarTitleText: "日记本",
+    navigationBarTextStyle: "black",
+  },
+};
