@@ -94,7 +94,6 @@ DiaryVue/
      <!-- 模板内容 -->
    </template>
 
-   <script setup>
    // 导入
    import { defineOptions, ref } from 'vue'
    import './ComponentName.scss'

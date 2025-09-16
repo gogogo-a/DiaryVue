@@ -1,0 +1,222 @@
+/**
+ * 个人空间头部组件样式
+ */
+
+@import "../../../styles/themes.scss";
+@import "../../../styles/variables.scss";
+
+.personal-space-header {
+  position: relative;
+  overflow: hidden;
+
+  /* 上层背景图区域 */
+  .background-section {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+
+    .background-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .overlay-info {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.3) 0%,
+        rgba(0, 0, 0, 0.1) 50%,
+        rgba(0, 0, 0, 0.4) 100%
+      );
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px;
+
+      .follow-stats {
+        display: flex;
+        justify-content: flex-end;
+        gap: 20px;
+        margin-top: 10px;
+
+        .stat-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          background: rgba(255, 255, 255, 0.2);
+          backdrop-filter: blur(10px);
+          border-radius: 12px;
+          padding: 8px 16px;
+          min-width: 60px;
+
+          .stat-number {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            line-height: 1.2;
+          }
+
+          .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 2px;
+          }
+        }
+      }
+
+      .action-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-bottom: 10px;
+
+        .action-btn {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          background: rgba(255, 255, 255, 0.2);
+          backdrop-filter: blur(10px);
+          border-radius: 8px;
+          padding: 8px 12px;
+          min-width: 50px;
+
+          .btn-icon {
+            font-size: 16px;
+            margin-bottom: 2px;
+          }
+
+          .btn-text {
+            font-size: 10px;
+            color: white;
+            text-align: center;
+          }
+
+          &:active {
+            background: rgba(255, 255, 255, 0.3);
+          }
+        }
+      }
+    }
+  }
+
+  /* 下层用户介绍区域 */
+  .profile-section {
+    background-color: var(--card-background, var(--white-color));
+    padding: 20px;
+    position: relative;
+    margin-top: -20px;
+    border-radius: 20px 20px 0 0;
+
+    .avatar-container {
+      position: absolute;
+      top: -40px;
+      left: 20px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid var(--white-color);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+      .user-avatar {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .user-info {
+      margin-left: 100px;
+      margin-top: 20px;
+
+      .join-date {
+        font-size: 14px;
+        color: var(--text-color-light);
+        margin-bottom: 4px;
+      }
+
+      .username {
+        font-size: 20px;
+        font-weight: bold;
+        color: var(--text-color);
+        margin-bottom: 16px;
+      }
+
+      .signature-section {
+        .signature-btn {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background: var(--primary-color);
+          border-radius: 20px;
+          padding: 10px 16px;
+          margin-bottom: 16px;
+
+          .signature-text {
+            font-size: 14px;
+            color: var(--text-color);
+          }
+
+          .signature-arrow {
+            font-size: 14px;
+            color: var(--text-color-light);
+          }
+
+          &:active {
+            opacity: 0.8;
+          }
+        }
+      }
+    }
+
+    .privacy-notice {
+      display: flex;
+      align-items: center;
+      background: var(--secondary-color);
+      border-radius: 8px;
+      padding: 12px;
+
+      .notice-icon {
+        font-size: 16px;
+        color: var(--info-color);
+        margin-right: 8px;
+      }
+
+      .notice-text {
+        font-size: 12px;
+        color: var(--text-color-light);
+        line-height: 1.4;
+        flex: 1;
+      }
+    }
+  }
+}
+
+/* 怀旧主题特殊样式 */
+.theme-remember {
+  .personal-space-header {
+    .profile-section {
+      .user-info {
+        .signature-section {
+          .signature-btn {
+            background: var(--primary-light);
+
+            .signature-text {
+              color: var(--text-color);
+            }
+          }
+        }
+      }
+
+      .privacy-notice {
+        background: var(--secondary-color);
+        border: 1px solid var(--border-color);
+      }
+    }
+  }
+}

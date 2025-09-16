@@ -1,0 +1,128 @@
+/**
+ * 个人信息头部组件样式
+ */
+
+.mine-header {
+  background: var(--card-background);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 16px;
+  box-shadow: var(--box-shadow);
+  border: var(--card-border);
+
+  .user-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+
+    .avatar-section {
+      .avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: var(--border-color);
+        border: 3px solid var(--primary-color);
+      }
+    }
+
+    .user-details {
+      flex: 1;
+
+      .username {
+        font-size: 20px;
+        font-weight: bold;
+        color: var(--text-color);
+        margin-bottom: 8px;
+        font-family: var(--title-font-family);
+      }
+
+      .follow-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .follow-count {
+          font-size: 16px;
+          font-weight: bold;
+          color: var(--text-color);
+        }
+
+        .follow-label {
+          font-size: 14px;
+          color: var(--text-color-light);
+        }
+      }
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .btn-primary, .btn-secondary {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 12px;
+        text-align: center;
+        min-width: 70px;
+      }
+
+      .btn-primary {
+        background-color: var(--primary-color);
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+      }
+
+      .btn-secondary {
+        background-color: transparent;
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+      }
+    }
+  }
+
+  .birthday-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background-color: var(--secondary-color);
+    border-radius: 8px;
+    cursor: pointer;
+
+    .birthday-icon {
+      font-size: 18px;
+    }
+
+    .birthday-text {
+      font-size: 14px;
+      color: var(--text-color-light);
+      font-family: var(--text-font-family);
+    }
+  }
+}
+
+/* 怀旧主题特殊样式 */
+.theme-remember .mine-header {
+  .user-info {
+    .avatar-section .avatar {
+      border-color: var(--primary-dark);
+    }
+
+    .action-buttons {
+      .btn-primary {
+        background-color: var(--primary-light);
+        color: var(--text-color);
+      }
+    }
+  }
+
+  .birthday-section {
+    background-color: var(--primary-light);
+
+    .birthday-text {
+      color: var(--text-color);
+    }
+  }
+}

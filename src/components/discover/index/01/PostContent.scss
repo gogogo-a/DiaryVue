@@ -1,0 +1,242 @@
+@import "../../../../styles/themes.scss";
+@import "../../../../styles/variables.scss";
+
+.post-content {
+  width: 100%;
+  padding-bottom: 100px; /* 为底部导航栏预留空间 */
+
+  .post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .post-item {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 0 16px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+
+        .user-avatar {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: #f0f0f0;
+          flex-shrink: 0;
+          transition: all 0.2s ease;
+
+          &:active {
+            transform: scale(0.95);
+          }
+        }
+
+        .user-details {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+
+          .user-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333333;
+            transition: color 0.2s ease;
+
+            &:active {
+              color: #666666;
+            }
+          }
+
+          .post-time {
+            font-size: 13px;
+            color: #999999;
+          }
+        }
+
+        .post-date {
+          font-size: 13px;
+          color: #999999;
+          flex-shrink: 0;
+        }
+      }
+
+      .post-body {
+        margin-bottom: 16px;
+
+        .post-text {
+          font-size: 15px;
+          line-height: 1.6;
+          color: #333333;
+          margin-bottom: 12px;
+          word-break: break-word;
+        }
+
+        .post-images {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+
+          .post-image {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            border-radius: 12px;
+            background: #f0f0f0;
+            transition: all 0.2s ease;
+
+            &:active {
+              transform: scale(0.98);
+            }
+          }
+        }
+      }
+
+      .post-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .action-left {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .avatars {
+            display: flex;
+            align-items: center;
+
+            .like-avatar {
+              width: 28px;
+              height: 28px;
+              border-radius: 50%;
+              border: 2px solid #ffffff;
+              margin-left: -8px;
+              background: #f0f0f0;
+
+              &:first-child {
+                margin-left: 0;
+              }
+            }
+          }
+
+          .more-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+
+            .arrow {
+              font-size: 14px;
+              color: #999999;
+              font-weight: bold;
+            }
+          }
+        }
+
+        .action-right {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+
+          .like-btn, .comment-btn, .more-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 8px;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+
+            &:active {
+              background: #f5f5f5;
+              transform: scale(0.95);
+            }
+          }
+
+          .like-btn {
+            gap: 6px;
+
+            .like-count {
+              font-size: 14px;
+              color: #666666;
+              font-weight: 500;
+            }
+          }
+
+          .action-icon {
+            width: 20px;
+            height: 20px;
+            opacity: 0.6;
+          }
+
+          .more-icon {
+            font-size: 20px;
+            color: #999999;
+            line-height: 1;
+          }
+        }
+      }
+    }
+  }
+}
+
+// 主题适配
+.theme-remember .post-content {
+  .post-list {
+    .post-item {
+      background: rgba(0, 0, 0, 0.1);
+
+      .user-info {
+        .user-details {
+          .user-name {
+            color: rgba(255, 255, 255, 0.9);
+
+            &:active {
+              color: rgba(255, 255, 255, 0.7);
+            }
+          }
+
+          .post-time {
+            color: rgba(255, 255, 255, 0.6);
+          }
+        }
+
+        .post-date {
+          color: rgba(255, 255, 255, 0.6);
+        }
+      }
+
+      .post-body {
+        .post-text {
+          color: rgba(255, 255, 255, 0.9);
+        }
+      }
+
+      .post-actions {
+        .action-right {
+          .like-btn {
+            .like-count {
+              color: rgba(255, 255, 255, 0.8);
+            }
+          }
+
+          .more-icon {
+            color: rgba(255, 255, 255, 0.6);
+          }
+
+          .like-btn, .comment-btn, .more-btn {
+            &:active {
+              background: rgba(255, 255, 255, 0.1);
+            }
+          }
+        }
+      }
+    }
+  }
+}

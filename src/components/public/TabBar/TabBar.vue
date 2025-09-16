@@ -64,29 +64,66 @@ const switchTab = (tab) => {
   // 更新当前激活的标签
   activeTab.value = tab
 
+  // 获取当前页面栈
+  const pages = Taro.getCurrentPages()
+  const currentPage = pages[pages.length - 1]
+  const currentRoute = currentPage ? currentPage.route : ''
+
   // 根据选中的标签页进行跳转
   switch(tab) {
     case 'index':
-      Taro.switchTab({
-        url: '/pages/index/index',
-        fail: () => {
-          Taro.navigateTo({
-            url: '/pages/index/index'
-          })
-        }
-      })
+      // 如果当前不在首页，则跳转
+      if (currentRoute !== 'pages/index/index') {
+        Taro.navigateTo({
+          url: '/pages/index/index',
+          success: () => {
+            console.log('跳转到首页成功')
+          },
+          fail: (err) => {
+            console.error('跳转到首页失败:', err)
+            Taro.showToast({
+              title: '跳转失败，请重试',
+              icon: 'none'
+            })
+          }
+        })
+      }
       break
     case 'find':
-      Taro.showToast({
-        title: '发现功能即将上线',
-        icon: 'none'
-      })
+      // 如果当前不在发现页面，则跳转
+      if (currentRoute !== 'pages/discover/index/discover') {
+        Taro.navigateTo({
+          url: '/pages/discover/index/discover',
+          success: () => {
+            console.log('跳转到发现页面成功')
+          },
+          fail: (err) => {
+            console.error('跳转到发现页面失败:', err)
+            Taro.showToast({
+              title: '跳转失败，请重试',
+              icon: 'none'
+            })
+          }
+        })
+      }
       break
     case 'my':
-      Taro.showToast({
-        title: '我的功能即将上线',
-        icon: 'none'
-      })
+      // 如果当前不在个人页面，则跳转
+      if (currentRoute !== 'pages/mine/index/mine') {
+        Taro.navigateTo({
+          url: '/pages/mine/index/mine',
+          success: () => {
+            console.log('跳转到个人页面成功')
+          },
+          fail: (err) => {
+            console.error('跳转到个人页面失败:', err)
+            Taro.showToast({
+              title: '跳转失败，请重试',
+              icon: 'none'
+            })
+          }
+        })
+      }
       break
   }
 }

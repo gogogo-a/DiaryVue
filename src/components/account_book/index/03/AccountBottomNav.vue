@@ -3,26 +3,32 @@
     <view class="nav-container">
       <!-- 管理账本 -->
       <view class="nav-item" @tap="handleManage">
-        <view class="nav-icon">
-          <image class="icon-img" src="../../../../assets/svg/diary/label.svg" mode="aspectFit" />
+        <view class="nav-content">
+          <view class="nav-icon">
+            <image class="icon-img" src="../../../../assets/svg/diary/label.svg" mode="aspectFit" />
+          </view>
+          <text class="nav-text">管理账本</text>
         </view>
-        <text class="nav-text">管理账本</text>
       </view>
 
-      <!-- 记一笔 -->
+      <!-- 记一笔 - 中间按钮 -->
       <view class="nav-item center-item" @tap="handleAddRecord">
-        <view class="add-button">
-          <text class="add-icon">+</text>
+        <view class="nav-content">
+          <view class="add-button">
+            <text class="add-icon">+</text>
+          </view>
+          <text class="nav-text">记一笔</text>
         </view>
-        <text class="nav-text">记一笔</text>
       </view>
 
       <!-- 邀请 -->
       <view class="nav-item" @tap="handleInvite">
-        <view class="nav-icon">
-          <image class="icon-img" src="../../../../assets/svg/diary/search.svg" mode="aspectFit" />
+        <view class="nav-content">
+          <view class="nav-icon">
+            <image class="icon-img" src="../../../../assets/svg/diary/search.svg" mode="aspectFit" />
+          </view>
+          <text class="nav-text">邀请</text>
         </view>
-        <text class="nav-text">邀请</text>
       </view>
     </view>
   </view>
@@ -61,9 +67,22 @@ const handleManage = () => {
 
 // 处理添加记录
 const handleAddRecord = () => {
-  Taro.showToast({
-    title: '记一笔功能即将上线',
-    icon: 'none'
+  console.log('点击记一笔按钮')
+
+
+  Taro.navigateTo({
+    url: '/pages/account_book/add/add_record',
+    success: (res) => {
+      console.log('跳转到记账页面成功:', res)
+    },
+    fail: (err) => {
+      console.error('跳转失败详细信息:', err)
+      Taro.showToast({
+        title: `跳转失败: ${err.errMsg}`,
+        icon: 'none',
+        duration: 3000
+      })
+    }
   })
 }
 

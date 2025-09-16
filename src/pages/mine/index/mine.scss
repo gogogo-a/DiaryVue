@@ -1,0 +1,38 @@
+/**
+ * 个人中心页面样式
+ */
+
+@import "../../../styles/themes.scss";
+@import "../../../styles/variables.scss";
+
+.mine-page {
+  min-height: 100vh;
+  background-color: var(--background-color);
+  padding-bottom: 120px; /* 为底部导航栏预留空间 */
+
+  .card {
+    background-color: var(--card-background, var(--white-color));
+    border-radius: 16px;
+    box-shadow: var(--box-shadow);
+    border: var(--card-border, none);
+    overflow: hidden;
+  }
+
+  .margin {
+    margin: 16px;
+  }
+
+  .bottom-spacer {
+    height: 20px;
+  }
+}
+
+/* 确保页面不被底部导航栏遮挡 */
+.mine-page {
+  padding-bottom: 120px;
+}
+
+/* 怀旧主题特殊样式 */
+.theme-remember.mine-page {
+  background-color: var(--background-color);
+}

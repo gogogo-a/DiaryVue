@@ -1,0 +1,78 @@
+@import "../../../../styles/themes.scss";
+@import "../../../../styles/variables.scss";
+
+.user-card {
+  width: 100%;
+  padding: 16px;
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .user-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #f0f0f0;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+
+    .user-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .user-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333333;
+        transition: color 0.2s ease;
+
+        &:active {
+          color: #666666;
+        }
+      }
+
+      .post-time {
+        font-size: 13px;
+        color: #999999;
+      }
+    }
+
+    .post-date {
+      font-size: 13px;
+      color: #999999;
+      flex-shrink: 0;
+    }
+  }
+}
+
+// 主题适配
+.theme-remember .user-card {
+  .user-info {
+    .user-details {
+      .user-name {
+        color: rgba(255, 255, 255, 0.9);
+
+        &:active {
+          color: rgba(255, 255, 255, 0.7);
+        }
+      }
+
+      .post-time {
+        color: rgba(255, 255, 255, 0.6);
+      }
+    }
+
+    .post-date {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  }
+}

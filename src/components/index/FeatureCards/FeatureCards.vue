@@ -25,6 +25,22 @@
         <text class="feature-title">记账本</text>
       </view>
 
+      <!-- 打卡 -->
+      <view class="feature-card checkin-card" @tap="handleFeatureClick('checkin')">
+        <view class="icon-wrapper checkin-icon">
+          <image class="feature-icon" :src="checkinIcon" mode="aspectFit" />
+        </view>
+        <text class="feature-title">打卡</text>
+      </view>
+
+      <!-- 待办 -->
+      <view class="feature-card todo-card" @tap="handleFeatureClick('todo')">
+        <view class="icon-wrapper todo-icon">
+          <image class="feature-icon" :src="todoIcon" mode="aspectFit" />
+        </view>
+        <text class="feature-title">待办</text>
+      </view>
+
       <!-- 切换主题 -->
       <view class="feature-card theme-card" @tap="handleFeatureClick('theme')">
         <view class="icon-wrapper theme-icon">
@@ -46,6 +62,8 @@ import './FeatureCards.scss'
 import diaryIcon from '../../../assets/svg/index/diary.svg'
 import shareDiaryIcon from '../../../assets/svg/index/share_diary.svg'
 import moneyIcon from '../../../assets/svg/index/money.svg'
+import checkinIcon from '../../../assets/svg/diary/calendar.svg' // 使用日历图标代表打卡
+import todoIcon from '../../../assets/svg/index/pen.svg' // 使用笔图标代表待办
 import themeIcon from '../../../assets/svg/index/theme.svg'
 
 defineOptions({
@@ -72,6 +90,18 @@ const handleFeatureClick = (feature) => {
     case 'money':
       Taro.navigateTo({
         url: '/pages/account_book/index/account_book'
+      })
+      break
+    case 'checkin':
+      Taro.showToast({
+        title: '打卡功能即将上线',
+        icon: 'none'
+      })
+      break
+    case 'todo':
+      Taro.showToast({
+        title: '待办功能即将上线',
+        icon: 'none'
       })
       break
     case 'theme':

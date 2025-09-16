@@ -1,0 +1,95 @@
+/**
+ * 个人功能菜单列表组件样式
+ */
+
+.mine-menu-list {
+  margin: 16px;
+
+  .menu-item {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    background: var(--card-background);
+    border: var(--card-border);
+    margin-bottom: 2px;
+
+    &:first-child {
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+      margin-bottom: 0;
+    }
+
+    &:active {
+      background-color: var(--secondary-color);
+    }
+
+    .menu-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 16px;
+
+      .icon-text {
+        font-size: 16px;
+      }
+    }
+
+    .menu-title {
+      flex: 1;
+      font-size: 16px;
+      color: var(--text-color);
+      font-family: var(--text-font-family);
+    }
+
+    .menu-arrow {
+      .arrow-text {
+        font-size: 20px;
+        color: var(--text-color-lighter);
+        font-weight: 300;
+      }
+    }
+
+    .menu-switch {
+      switch {
+        transform: scale(0.8);
+      }
+    }
+
+    .menu-extra {
+      .version-text {
+        font-size: 14px;
+        color: var(--text-color-light);
+        font-family: var(--text-font-family);
+      }
+    }
+  }
+}
+
+/* 怀旧主题特殊样式 */
+.theme-remember .mine-menu-list {
+  .menu-item {
+    &:active {
+      background-color: var(--primary-light);
+    }
+
+    .menu-title {
+      color: var(--text-color);
+    }
+
+    .menu-arrow .arrow-text {
+      color: var(--text-color-light);
+    }
+
+    .menu-extra .version-text {
+      color: var(--text-color-light);
+    }
+  }
+}

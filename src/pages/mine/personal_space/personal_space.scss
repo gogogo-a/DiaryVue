@@ -1,0 +1,157 @@
+/**
+ * 个人空间页面样式
+ */
+
+@import "../../../styles/themes.scss";
+@import "../../../styles/variables.scss";
+
+.personal-space-page {
+  min-height: 100vh;
+  background-color: var(--background-color);
+
+  /* 日记区域 */
+  .diary-section {
+    padding: 0 16px 16px;
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      padding: 20px 0 16px;
+
+      .title-text {
+        font-size: 18px;
+        font-weight: bold;
+        color: var(--text-color);
+        margin-right: 8px;
+      }
+
+      .title-count {
+        font-size: 14px;
+        color: var(--text-color-light);
+      }
+    }
+
+    /* 日记列表 */
+    .diary-list {
+      .diary-item {
+        background-color: var(--card-background, var(--white-color));
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 12px;
+        box-shadow: var(--box-shadow);
+        border: var(--card-border, none);
+
+        .diary-date {
+          font-size: 12px;
+          color: var(--text-color-lighter);
+          margin-bottom: 4px;
+        }
+
+        .diary-title {
+          font-size: 16px;
+          font-weight: bold;
+          color: var(--text-color);
+          margin-bottom: 8px;
+          line-height: 1.4;
+        }
+
+        .diary-preview {
+          font-size: 14px;
+          color: var(--text-color-light);
+          line-height: 1.5;
+          margin-bottom: 12px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+        }
+
+        .diary-meta {
+          display: flex;
+          gap: 16px;
+
+          .meta-item {
+            font-size: 12px;
+            color: var(--text-color-lighter);
+            display: flex;
+            align-items: center;
+          }
+        }
+
+        &:active {
+          opacity: 0.8;
+        }
+      }
+    }
+
+    /* 空状态 */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px;
+      text-align: center;
+
+      .empty-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+        opacity: 0.6;
+      }
+
+      .empty-text {
+        font-size: 18px;
+        font-weight: bold;
+        color: var(--text-color);
+        margin-bottom: 8px;
+      }
+
+      .empty-desc {
+        font-size: 14px;
+        color: var(--text-color-light);
+        line-height: 1.5;
+        margin-bottom: 24px;
+        max-width: 280px;
+      }
+
+      .empty-action {
+        background: var(--primary-color);
+        border-radius: 20px;
+        padding: 12px 24px;
+
+        text {
+          font-size: 14px;
+          color: var(--text-color);
+        }
+
+        &:active {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+
+  .bottom-spacer {
+    height: 20px;
+  }
+}
+
+/* 怀旧主题特殊样式 */
+.theme-remember {
+  .personal-space-page {
+    .diary-section {
+      .diary-list {
+        .diary-item {
+          background-color: var(--card-background);
+          border: var(--card-border);
+        }
+      }
+
+      .empty-state {
+        .empty-action {
+          background: var(--primary-light);
+        }
+      }
+    }
+  }
+}
