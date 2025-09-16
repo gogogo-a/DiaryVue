@@ -1,0 +1,212 @@
+@use "../../../styles/themes.scss" as themes;
+@use "../../../styles/variables.scss" as vars;
+
+.diary-detail-page {
+  background-color: var(--background-color);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx;
+  background-color: var(--card-background);
+  border-bottom: 1rpx solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  color: var(--text-color);
+}
+
+.detail-title {
+  font-size: 32rpx;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-color);
+}
+
+.header-actions {
+  font-size: 36rpx;
+}
+
+.detail-content {
+  height: calc(100vh - 200rpx);
+  padding: 0; /* 移除左右padding，让内容居中 */
+}
+
+.author-section {
+  margin-bottom: 40rpx;
+  padding: 0 32rpx; /* 添加左右padding */
+  padding-top: 32rpx; /* 添加上部padding */
+}
+
+.author-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.author-name-large {
+  font-size: 32rpx;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-color);
+  margin-bottom: 8rpx;
+}
+
+.publish-time {
+  font-size: 24rpx;
+  color: var(--text-color-light);
+}
+
+.diary-content {
+  background-color: var(--card-background);
+  padding: 40rpx;
+  border-radius: 16rpx;
+  margin: 0 32rpx 40rpx 32rpx; /* 添加上左右margin */
+  border: var(--card-border);
+  box-sizing: border-box; /* 确保边框和内边距包含在宽度内 */
+  width: calc(100% - 64rpx); /* 计算宽度，考虑左右margin */
+}
+
+.content-text {
+  font-size: 30rpx;
+  line-height: 1.8;
+  color: var(--text-color);
+  word-wrap: break-word; /* 确保长文本换行 */
+}
+
+.interaction-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin: 0 32rpx 60rpx 32rpx; /* 添加上左右margin */
+  padding: 32rpx 0;
+  border-top: 1rpx solid var(--border-color);
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.interaction-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 40rpx;
+}
+
+.icon {
+  font-size: 44rpx;
+  margin-bottom: 8rpx;
+}
+
+.btn-text {
+  font-size: 24rpx;
+  color: var(--text-color-light);
+}
+
+.comments-section {
+  margin-bottom: 120rpx;
+  padding: 0 32rpx; /* 添加左右padding */
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-color);
+  margin-bottom: 32rpx;
+  display: block;
+}
+
+.comment-item {
+  margin-bottom: 40rpx;
+  padding: 32rpx;
+  background-color: var(--card-background);
+  border-radius: 16rpx;
+  border: var(--card-border);
+  box-sizing: border-box;
+}
+
+.comment-content {
+  flex: 1;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.comment-author {
+  font-size: 28rpx;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-color);
+}
+
+.comment-time {
+  font-size: 24rpx;
+  color: var(--text-color-light);
+}
+
+.comment-text {
+  font-size: 28rpx;
+  line-height: 1.6;
+  color: var(--text-color);
+  margin-bottom: 20rpx;
+  display: block;
+  word-wrap: break-word; /* 确保评论文本换行 */
+}
+
+.comment-actions {
+  display: flex;
+  gap: 32rpx;
+}
+
+.action-btn {
+  font-size: 24rpx;
+  color: var(--text-color-light);
+}
+
+.comment-input-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  padding: 20rpx 32rpx;
+  background-color: var(--card-background);
+  border-top: 1rpx solid var(--border-color);
+  box-sizing: border-box;
+}
+
+.comment-input {
+  flex: 1;
+  background-color: var(--background-color);
+  padding: 20rpx 32rpx;
+  border-radius: 40rpx;
+  margin-right: 20rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+.send-btn {
+  padding: 20rpx 32rpx;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+/* 添加全局样式重置 */
+* {
+  box-sizing: border-box;
+}
+
+scroll-view {
+  box-sizing: border-box;
+}
