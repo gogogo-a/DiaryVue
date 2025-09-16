@@ -25,3 +25,4 @@ const themeStore = useThemeStore()
 // 确保导航栏颜色与当前主题一致
 themeStore.updateNavigationBarColor()
 </script>
+
