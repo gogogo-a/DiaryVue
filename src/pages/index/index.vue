@@ -66,18 +66,13 @@ const handleLogin = async () => {
 };
 
 // 页面加载时检查登录状态
-/* onMounted(async () => {
+onMounted(async () => {
   // 初始化用户状态（从本地存储恢复）
   userStore.initUserState();
-
-  // 如果没有登录，自动尝试登录
-  if (!userStore.isLoggedIn) {
-    await userStore.ensureLogin();
-  }
 
   // 设置当前激活的标签
   if (tabBar.value) {
     tabBar.value.setActiveTab("index");
   }
-}); */
+});
 </script>

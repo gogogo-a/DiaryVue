@@ -26,3 +26,4 @@ const themeStore = useThemeStore()
 themeStore.updateNavigationBarColor()
 </script>
 
+

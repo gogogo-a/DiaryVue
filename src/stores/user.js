@@ -19,8 +19,8 @@ const LOGIN_STATUS_KEY = 'DIARY_LOGIN_STATUS'
 
 // 定义用户store
 export const useUserStore = defineStore('user', () => {
-  // 登录状态：默认false，开发者模式，默认ture
-  const isLoggedIn = ref(true)
+  // 登录状态：默认false
+  const isLoggedIn = ref(false)
 
   // 用户信息
   const userInfo = ref(null)

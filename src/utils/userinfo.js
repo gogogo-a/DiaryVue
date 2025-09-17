@@ -195,7 +195,7 @@ export const apiRequest = async (url, method = 'GET', data = null) => {
  */
 export const getToken = () => {
   try {
-    return Taro.getStorageSync('token')
+    return Taro.getStorageSync('DIARY_TOKEN')
   } catch (error) {
     return null
   }
