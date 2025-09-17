@@ -31,11 +31,8 @@ export const wxLogin = async () => {
 
     console.log('发送登录请求:', loginData)
 
-    // 发送到后端API（使用http实例，但不带token）
-    const response = await http.sendRequest({
-      url: '/auth/wx-login',
-      method: 'POST',
-      data: loginData,
+    // 发送到后端API（使用便捷的POST方法）
+    const response = await http.post('/auth/wx-login', loginData, {
       skipAuth: true // 标记此请求不需要token
     })
 
@@ -121,12 +118,10 @@ export const silentWxLogin = async () => {
 
     console.log('静默发送登录请求:', loginData)
     console.log('请求URL: /auth/wx-login')
+    console.log('完整URL将会是:', 'https://connivently-fitted-grayce.ngrok-free.app/api/v1' + '/auth/wx-login')
 
-    // 发送到后端API（使用http实例，但不带token）
-    const response = await http.sendRequest({
-      url: '/auth/wx-login',
-      method: 'POST',
-      data: loginData,
+    // 发送到后端API（使用便捷的POST方法）
+    const response = await http.post('/auth/wx-login', loginData, {
       skipAuth: true // 标记此请求不需要token
     })
 
@@ -190,7 +185,24 @@ export const apiRequest = async (url, method = 'GET', data = null) => {
       requestConfig.data = data
     }
 
-    const response = await http.sendRequest(requestConfig)
+    // 根据请求方法选择合适的便捷方法
+    let response
+    switch (method.toUpperCase()) {
+      case 'GET':
+        response = await http.get(url)
+        break
+      case 'POST':
+        response = await http.post(url, data)
+        break
+      case 'PUT':
+        response = await http.put(url, data)
+        break
+      case 'DELETE':
+        response = await http.delete(url)
+        break
+      default:
+        response = await http.sendRequest(requestConfig)
+    }
 
     return {
       success: true,

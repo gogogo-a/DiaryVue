@@ -76,7 +76,7 @@ const handleLogin = async () => {
   }
 };
 
-// 测试登录API
+// 测试登录API 原生测试，不依赖任何文件  仅用于开发阶段测试连接情况
 const testLogin = async () => {
   try {
     console.log('开始原生测试登录API...');
@@ -163,7 +163,7 @@ const checkAndAutoLogin = async () => {
 };
 
 // 页面加载时检查登录状态
-onMounted(async () => {
+/* onMounted(async () => {
   // 检查token并自动登录
   await checkAndAutoLogin();
 
@@ -171,5 +171,5 @@ onMounted(async () => {
   if (tabBar.value) {
     tabBar.value.setActiveTab("index");
   }
-});
+}); */
 </script>

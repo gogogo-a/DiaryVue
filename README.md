@@ -184,9 +184,16 @@ pnpm dev:weapp --watch
 1. 使用微信开发者工具打开项目根目录下的`dist`文件夹
 2. 在开发者工具中预览和调试小程序
 
-## 核心模块分工
 
-### 🔐 tokenmanager.js - Token生命周期管理
+
+
+
+## 用户管理核心模块分工
+
+### tokenmanager.js 
+
+- Token生命周期管理
+
 - **职责**: Token的底层存储和生命周期管理
 - **核心功能**:
   - Token存储/读取 (`setTokens`, `getAccessToken`)
@@ -194,16 +201,95 @@ pnpm dev:weapp --watch
   - 自动刷新定时器 (`setupAutoRefresh`)
   - 回调机制 (`setRefreshCallback`, `setExpiredCallback`)
 
-### 🌐 http.js - HTTP请求处理器
+### http.js 
+
+- HTTP请求处理器
+
 - **职责**: HTTP请求封装、拦截器和错误处理
 - **核心功能**:
   - 请求/响应拦截器 (`processRequestConfig`, `processResponse`)
-  - 自动添加Token (`addAuthToken`)
+  请求：
+  除了登录-》添加通用信息（设备型号等），添加自动添加Token (`addAuthToken`)
+
   - Token过期处理 (`handleTokenExpired` - 委托给user.js)--避免循环
-  - 统一错误处理 (`handleHttpError`, `showErrorToast`)
+  响应：
+
+  - 通过状态码，统一错误处理 (`handleHttpError`, `showErrorToast`) 
+  注意，实际接口开发中不需要再次错误处理！！！
+
   - 便捷请求方法 (`get`, `post`, `put`, `delete`)
 
-### 🔌 userinfo.js - 登录API封装
+#### HTTP拦截器使用方法
+
+**基础使用**:
+
+```javascript
+import http from '@/utils/http'
+
+// GET请求
+const userData = await http.get('/user/profile')
+
+// 带参数的GET请求
+const diaryList = await http.get('/diary/list', { page: 1, size: 10 })
+
+// POST请求
+const newDiary = await http.post('/diary/create', {
+  title: '今天的心情',
+  content: '今天天气不错...'
+})
+
+// PUT请求
+const updated = await http.put('/diary/123', { title: '更新标题' })
+
+// DELETE请求
+await http.delete('/diary/123')
+```
+
+**特殊配置**:
+```javascript
+// 跳过token验证（用于登录接口）
+await http.post('/auth/login', data, { skipAuth: true })
+
+// 自定义超时时间
+await http.get('/api/data', {}, { timeout: 15000 })
+
+// 自定义请求头
+await http.post('/upload', formData, {
+  header: { 'Content-Type': 'multipart/form-data' }
+})
+```
+
+**在Store中使用**:
+```javascript
+// stores/diary.js
+export const useDiaryStore = defineStore('diary', {
+  actions: {
+    async fetchDiaryList() {
+      try {
+        this.loading = true
+        this.diaryList = await http.get('/diary/list')
+      } catch (error) {
+        // 错误已自动处理和显示
+        console.log('请求失败，可显示重试按钮')
+      } finally {
+        this.loading = false
+      }
+    }
+  }
+})
+```
+
+**自动功能**:
+- ✅ **Token管理**: 自动添加Authorization头，token过期时自动刷新
+- ✅ **错误处理**: 自动显示错误Toast提示，无需手动处理
+- ✅ **请求队列**: token刷新期间请求会自动排队等待
+- ✅ **通用配置**: 自动添加设备信息、时间戳等请求头
+- ✅ **URL处理**: 自动拼接基础URL和处理查询参数
+
+###  userinfo.js 
+
+- 登录API封装
+
 - **职责**: 纯API调用，不处理状态管理
 - **核心功能**:
   - 完整登录 (`wxLogin` - 带UI交互)->跟用户有交互
@@ -211,7 +297,10 @@ pnpm dev:weapp --watch
   - 用户信息获取 (`getUserInfo`)
   - 通用API请求 (`apiRequest`)
 
-### 👤 user.js - 用户状态管理
+###  user.js 
+
+- 用户状态管理
+
 - **职责**: 用户状态管理和登录流程协调
 - **核心功能**:
   - 用户状态管理 (`userInfo`, `isLoggedIn`, `userStats`)
@@ -219,7 +308,7 @@ pnpm dev:weapp --watch
   - 状态持久化 (`setLoginState`, `clearLoginState`)
   - Token刷新协调 (调用userinfo.js后更新tokenmanager.js)
 
-### 📊 调用逻辑
+### 调用逻辑
 
 ```
 用户登录流程:
