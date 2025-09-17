@@ -163,7 +163,7 @@ const checkAndAutoLogin = async () => {
 };
 
 // 页面加载时检查登录状态
-/* onMounted(async () => {
+ onMounted(async () => {
   // 检查token并自动登录
   await checkAndAutoLogin();
 
@@ -171,5 +171,5 @@ const checkAndAutoLogin = async () => {
   if (tabBar.value) {
     tabBar.value.setActiveTab("index");
   }
-}); */
+});
 </script>
