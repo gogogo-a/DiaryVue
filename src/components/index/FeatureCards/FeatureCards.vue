@@ -99,9 +99,8 @@ const handleFeatureClick = (feature) => {
       })
       break
     case 'todo':
-      Taro.showToast({
-        title: '待办功能即将上线',
-        icon: 'none'
+      Taro.navigateTo({
+        url: '/pages/schedule/index/schedule'
       })
       break
     case 'theme':

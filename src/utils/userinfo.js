@@ -7,9 +7,7 @@
  */
 
 import Taro from '@tarojs/taro'
-
-// 后端API基础地址
-const API_BASE_URL = 'https://connivently-fitted-grayce.ngrok-free.app/api/v1'
+import http from './http'
 
 /**
  * 微信登录API (包含完整UI交互)
@@ -33,62 +31,38 @@ export const wxLogin = async () => {
 
     console.log('发送登录请求:', loginData)
 
-    // 发送到后端API
-    const response = await Taro.request({
-      url: `${API_BASE_URL}/auth/wx-login`,
+    // 发送到后端API（使用http实例，但不带token）
+    const response = await http.sendRequest({
+      url: '/auth/wx-login',
       method: 'POST',
       data: loginData,
-      header: {
-        'Content-Type': 'application/json'
-      }
+      skipAuth: true // 标记此请求不需要token
     })
 
     // 隐藏加载中
     Taro.hideLoading()
 
-    console.log('后端响应:', response.data)
+    console.log('后端响应:', response)
 
-    // 处理后端响应
-    if (response.data.code === 200) {
-      // 登录成功
-      const result = {
-        success: true,
-        user: response.data.data.user,
-        token: response.data.data.token,
-        message: response.data.message
-      }
-
-
-      // 显示成功提示
-      Taro.showToast({
-        title: result.message || '登录成功',
-        icon: 'success',
-        duration: 2000
-      })
-
-      console.log('登录成功，用户信息:', result.user)
-      console.log('获得Token:', result.token)
-
-      return result
-
-    } else {
-      // 登录失败
-      const errorMessage = response.data.message || '登录失败'
-
-      Taro.showToast({
-        title: errorMessage,
-        icon: 'none',
-        duration: 3000
-      })
-
-      console.error('登录失败:', response.data)
-
-      return {
-        success: false,
-        error: errorMessage,
-        code: response.data.code
-      }
+    // http.sendRequest 已处理响应，直接使用返回的数据
+    const result = {
+      success: true,
+      user: response.user,
+      token: response.token,
+      message: '登录成功'
     }
+
+    // 显示成功提示
+    Taro.showToast({
+      title: '登录成功',
+      icon: 'success',
+      duration: 2000
+    })
+
+    console.log('登录成功，用户信息:', result.user)
+    console.log('获得Token:', result.token)
+
+    return result
 
   } catch (error) {
     // 隐藏加载中
@@ -96,27 +70,10 @@ export const wxLogin = async () => {
 
     console.error('登录请求失败:', error)
 
-    // 处理网络错误或其他异常
-    let errorMessage = '网络错误，请重试'
-
-    if (error.errMsg) {
-      if (error.errMsg.includes('cancel')) {
-        errorMessage = '用户取消登录'
-      } else if (error.errMsg.includes('fail')) {
-        errorMessage = '网络请求失败'
-      }
-    }
-
-    // 显示错误提示
-    Taro.showToast({
-      title: errorMessage,
-      icon: 'none',
-      duration: 2000
-    })
-
+    // http.sendRequest 已处理错误提示，这里只需要返回失败结果
     return {
       success: false,
-      error: errorMessage,
+      error: error.message || '登录失败',
       originalError: error
     }
   }
@@ -146,6 +103,76 @@ export const getUserInfo = async () => {
 }
 
 /**
+ * 静默登录API (不显示任何UI)
+ * 获取微信登录code并发送到后端，静默处理，不显示loading和toast
+ * @returns {Promise<Object>} 返回登录结果
+ */
+export const silentWxLogin = async () => {
+  try {
+    console.log('开始静默登录...')
+
+    // 调用微信登录接口获取code
+    const loginRes = await Taro.login()
+
+    // 准备发送到后端的数据
+    const loginData = {
+      code: loginRes.code
+    }
+
+    console.log('静默发送登录请求:', loginData)
+    console.log('请求URL: /auth/wx-login')
+
+    // 发送到后端API（使用http实例，但不带token）
+    const response = await http.sendRequest({
+      url: '/auth/wx-login',
+      method: 'POST',
+      data: loginData,
+      skipAuth: true // 标记此请求不需要token
+    })
+
+    console.log('静默登录后端响应:', response)
+
+    // http.sendRequest 成功返回数据
+    if (response && response.user && response.token) {
+      const result = {
+        success: true,
+        user: response.user,
+        token: response.token,
+        message: '静默登录成功'
+      }
+
+      console.log('静默登录成功，用户信息:', result.user)
+      console.log('静默获得Token:', result.token.substring(0, 20) + '...')
+
+      return result
+    } else {
+      console.warn('静默登录响应数据格式异常:', response)
+      return {
+        success: false,
+        error: '响应数据格式异常',
+        originalError: null
+      }
+    }
+
+  } catch (error) {
+    console.error('静默登录请求失败:', error)
+    console.error('错误详情:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    })
+
+    // 静默失败，不显示错误提示，返回详细错误信息
+    return {
+      success: false,
+      error: error.message || '静默登录失败',
+      errorCode: error.code || 'UNKNOWN',
+      originalError: error
+    }
+  }
+}
+
+/**
  * 带Token的API请求
  * @param {string} url 请求地址
  * @param {string} method 请求方法
@@ -154,50 +181,32 @@ export const getUserInfo = async () => {
  */
 export const apiRequest = async (url, method = 'GET', data = null) => {
   try {
-    const token = getToken()
-
     const requestConfig = {
-      url: `${API_BASE_URL}${url}`,
-      method: method.toUpperCase(),
-      header: {
-        'Content-Type': 'application/json',
-        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-      }
+      url,
+      method: method.toUpperCase()
     }
 
     if (data && (method.toUpperCase() === 'POST' || method.toUpperCase() === 'PUT')) {
       requestConfig.data = data
     }
 
-    const response = await Taro.request(requestConfig)
+    const response = await http.sendRequest(requestConfig)
 
     return {
-      success: response.data.code === 200,
-      data: response.data.data,
-      message: response.data.message,
-      code: response.data.code
+      success: true,
+      data: response,
+      message: '请求成功'
     }
 
   } catch (error) {
     console.error('API请求失败:', error)
     return {
       success: false,
-      error: '网络请求失败'
+      error: error.message || '网络请求失败'
     }
   }
 }
 
 
 
-/**
- * 获取存储的Token
- * @returns {string|null} Token
- */
-export const getToken = () => {
-  try {
-    return Taro.getStorageSync('DIARY_TOKEN')
-  } catch (error) {
-    return null
-  }
-}
 

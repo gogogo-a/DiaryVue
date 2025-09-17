@@ -1,0 +1,183 @@
+/**
+ * 待办任务卡片组件样式
+ */
+
+.task-card {
+  background: var(--card-background);
+  border: var(--card-border);
+  border-radius: 24rpx;
+  margin: 0 32rpx 24rpx;
+  box-shadow: var(--box-shadow);
+  overflow: hidden;
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 32rpx 32rpx 0;
+
+    .task-number {
+      font-size: 56rpx;
+      font-weight: 700;
+      color: var(--text-color);
+      font-family: 'Courier New', monospace;
+    }
+
+    .task-options {
+      display: flex;
+      align-items: center;
+      gap: 16rpx;
+
+      .repeat-option {
+        display: flex;
+        align-items: center;
+        gap: 8rpx;
+        padding: 8rpx 16rpx;
+        background: var(--primary-pitch-on);
+        border-radius: 16rpx;
+
+        .repeat-icon {
+          font-size: 24rpx;
+        }
+
+        .repeat-text {
+          font-size: 24rpx;
+          color: var(--text-color-light);
+        }
+      }
+
+      .more-btn {
+        display: flex;
+        align-items: center;
+        gap: 6rpx;
+        padding: 8rpx 16rpx;
+        background: var(--svg-outer-color);
+        border-radius: 16rpx;
+        transition: all 0.3s ease;
+
+        &:active {
+          transform: scale(0.95);
+          opacity: 0.7;
+        }
+
+        .more-icon {
+          font-size: 28rpx;
+          color: var(--text-color-light);
+        }
+
+        .more-text {
+          font-size: 24rpx;
+          color: var(--text-color-light);
+        }
+      }
+    }
+  }
+
+  .card-content {
+    padding: 24rpx 32rpx;
+
+    .task-title {
+      font-size: 36rpx;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 12rpx;
+      line-height: 1.4;
+      cursor: pointer;
+      transition: color 0.3s ease;
+
+      &:active {
+        color: var(--primary-button-background);
+      }
+    }
+
+    .task-description {
+      font-size: 28rpx;
+      color: var(--text-color-light);
+      line-height: 1.5;
+      margin-bottom: 20rpx;
+    }
+
+    .progress-section {
+      display: flex;
+      align-items: center;
+      gap: 12rpx;
+
+      .progress-label {
+        font-size: 28rpx;
+        color: var(--text-color-light);
+      }
+
+      .progress-value {
+        font-size: 28rpx;
+        font-weight: 600;
+        color: var(--primary-button-background);
+        font-family: 'Courier New', monospace;
+      }
+    }
+  }
+
+  .card-footer {
+    padding: 0 32rpx 32rpx;
+
+    .add-subtask-input {
+      display: flex;
+      align-items: center;
+      background: var(--svg-outer-color);
+      border-radius: 20rpx;
+      padding: 4rpx;
+
+      .subtask-input {
+        flex: 1;
+        padding: 20rpx 24rpx;
+        font-size: 28rpx;
+        color: var(--text-color);
+        background: transparent;
+        border: none;
+
+        &::placeholder {
+          color: var(--text-color-lighter);
+        }
+      }
+
+      .add-subtask-btn {
+        background: var(--primary-button-background);
+        color: var(--primary-button-text);
+        padding: 20rpx 32rpx;
+        border-radius: 16rpx;
+        margin-right: 4rpx;
+        transition: all 0.3s ease;
+
+        &:active {
+          transform: scale(0.95);
+          opacity: 0.8;
+        }
+
+        .add-btn-text {
+          font-size: 28rpx;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}
+
+/* 主题适配 */
+.theme-default {
+  .task-card {
+    .task-title {
+      font-family: var(--title-font-family);
+    }
+  }
+}
+
+.theme-remember {
+  .task-card {
+    .task-title {
+      font-family: var(--title-font-family);
+    }
+    
+    .task-description {
+      font-family: var(--text-font-family);
+    }
+  }
+}

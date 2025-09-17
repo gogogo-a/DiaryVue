@@ -69,6 +69,13 @@
         color: var(--text-color-light);
         font-family: var(--text-font-family);
       }
+
+      .logout-text {
+        font-size: 14px;
+        color: #F44336;
+        font-family: var(--text-font-family);
+        font-weight: 500;
+      }
     }
   }
 }
@@ -88,8 +95,14 @@
       color: var(--text-color-light);
     }
 
-    .menu-extra .version-text {
-      color: var(--text-color-light);
+    .menu-extra {
+      .version-text {
+        color: var(--text-color-light);
+      }
+
+      .logout-text {
+        color: #FF5252; // 怀旧主题下稍微亮一点的红色
+      }
     }
   }
 }

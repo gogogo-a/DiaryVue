@@ -1,0 +1,233 @@
+/**
+ * 添加任务弹窗组件样式
+ */
+
+.add-task-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 32rpx;
+
+  .modal-content {
+    background: var(--card-background);
+    border-radius: 24rpx;
+    width: 100%;
+    max-width: 600rpx;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.2);
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 32rpx 32rpx 16rpx;
+      border-bottom: 2rpx solid var(--border-color);
+
+      .modal-title {
+        font-size: 36rpx;
+        font-weight: 600;
+        color: var(--text-color);
+      }
+
+      .close-btn {
+        width: 48rpx;
+        height: 48rpx;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32rpx;
+        color: var(--text-color-light);
+        border-radius: 50%;
+        transition: all 0.3s ease;
+
+        &:active {
+          background: var(--border-color);
+          transform: scale(0.9);
+        }
+      }
+    }
+
+    .modal-body {
+      padding: 32rpx;
+
+      .input-group {
+        margin-bottom: 32rpx;
+
+        .input-label {
+          display: block;
+          font-size: 28rpx;
+          font-weight: 500;
+          color: var(--text-color);
+          margin-bottom: 16rpx;
+        }
+
+        .task-input,
+        .task-textarea {
+          width: 100%;
+          padding: 20rpx 24rpx;
+          font-size: 28rpx;
+          color: var(--text-color);
+          background: var(--svg-outer-color);
+          border: 2rpx solid transparent;
+          border-radius: 16rpx;
+          transition: all 0.3s ease;
+
+          &:focus {
+            border-color: var(--primary-button-background);
+            background: var(--white-color);
+          }
+
+          &::placeholder {
+            color: var(--text-color-lighter);
+          }
+        }
+
+        .task-textarea {
+          height: 120rpx;
+          resize: none;
+        }
+
+        .priority-options {
+          display: flex;
+          gap: 16rpx;
+
+          .priority-option {
+            flex: 1;
+            padding: 20rpx 16rpx;
+            text-align: center;
+            background: var(--svg-outer-color);
+            border: 2rpx solid transparent;
+            border-radius: 16rpx;
+            transition: all 0.3s ease;
+
+            &:active {
+              transform: scale(0.95);
+            }
+
+            &.active {
+              background: var(--primary-button-background);
+              border-color: var(--primary-button-background);
+
+              .priority-text {
+                color: var(--primary-button-text);
+                font-weight: 600;
+              }
+            }
+
+            .priority-text {
+              font-size: 28rpx;
+              color: var(--text-color);
+            }
+          }
+        }
+
+        .checkbox-group {
+          .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 16rpx;
+            padding: 16rpx 0;
+
+            .checkbox {
+              width: 40rpx;
+              height: 40rpx;
+              border: 3rpx solid var(--border-color);
+              border-radius: 8rpx;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              transition: all 0.3s ease;
+
+              &.checked {
+                background: var(--primary-button-background);
+                border-color: var(--primary-button-background);
+
+                .check-icon {
+                  color: var(--primary-button-text);
+                  font-size: 24rpx;
+                  font-weight: 600;
+                }
+              }
+            }
+
+            .checkbox-label {
+              font-size: 28rpx;
+              color: var(--text-color);
+              flex: 1;
+            }
+          }
+        }
+      }
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 16rpx;
+      padding: 16rpx 32rpx 32rpx;
+
+      .cancel-btn,
+      .confirm-btn {
+        flex: 1;
+        padding: 24rpx;
+        text-align: center;
+        border-radius: 16rpx;
+        transition: all 0.3s ease;
+
+        &:active {
+          transform: scale(0.95);
+        }
+
+        .btn-text {
+          font-size: 32rpx;
+          font-weight: 500;
+        }
+      }
+
+      .cancel-btn {
+        background: var(--svg-outer-color);
+        border: 2rpx solid var(--border-color);
+
+        .btn-text {
+          color: var(--text-color-light);
+        }
+      }
+
+      .confirm-btn {
+        background: var(--primary-button-background);
+
+        .btn-text {
+          color: var(--primary-button-text);
+        }
+      }
+    }
+  }
+}
+
+/* 主题适配 */
+.theme-default {
+  .add-task-modal .modal-content {
+    .modal-header .modal-title {
+      font-family: var(--title-font-family);
+    }
+  }
+}
+
+.theme-remember {
+  .add-task-modal .modal-content {
+    .modal-header .modal-title {
+      font-family: var(--title-font-family);
+    }
+
+    .modal-body .input-group .input-label {
+      font-family: var(--text-font-family);
+    }
+  }
+}

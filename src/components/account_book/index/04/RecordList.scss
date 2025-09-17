@@ -1,0 +1,243 @@
+/**
+ * 记账记录列表组件样式
+ */
+
+.record-list {
+  width: 100%;
+
+  .records-container {
+    .date-group {
+      margin-bottom: 32rpx;
+
+      .date-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24rpx 32rpx;
+        background: var(--svg-outer-color);
+        border-radius: 16rpx 16rpx 0 0;
+        border-bottom: 2rpx solid var(--border-color);
+
+        .date-info {
+          display: flex;
+          align-items: center;
+          gap: 16rpx;
+
+          .date-text {
+            font-size: 32rpx;
+            font-weight: 600;
+            color: var(--text-color);
+          }
+
+          .weekday-text {
+            font-size: 24rpx;
+            color: var(--text-color-light);
+            padding: 4rpx 12rpx;
+            background: var(--card-background);
+            border-radius: 8rpx;
+          }
+        }
+
+        .date-summary {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 4rpx;
+
+          .expense-summary {
+            font-size: 24rpx;
+            color: #FF6B6B;
+            font-weight: 500;
+          }
+
+          .income-summary {
+            font-size: 24rpx;
+            color: #58D68D;
+            font-weight: 500;
+          }
+        }
+      }
+
+      .records-list {
+        background: var(--card-background);
+        border-radius: 0 0 16rpx 16rpx;
+        overflow: hidden;
+
+        .record-item {
+          display: flex;
+          align-items: center;
+          padding: 32rpx;
+          border-bottom: 2rpx solid var(--border-color);
+          transition: all 0.3s ease;
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          &:active {
+            background: var(--primary-pitch-on);
+            transform: scale(0.99);
+          }
+
+          .record-icon {
+            width: 80rpx;
+            height: 80rpx;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--svg-outer-color);
+            border-radius: 50%;
+            margin-right: 24rpx;
+
+            .category-icon {
+              font-size: 36rpx;
+            }
+          }
+
+          .record-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8rpx;
+
+            .record-main {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+
+              .category-name {
+                font-size: 32rpx;
+                font-weight: 500;
+                color: var(--text-color);
+              }
+
+              .record-amount {
+                font-size: 36rpx;
+                font-weight: 600;
+                font-family: 'Courier New', monospace;
+
+                &.expense {
+                  color: #FF6B6B;
+                }
+
+                &.income {
+                  color: #58D68D;
+                }
+              }
+            }
+
+            .record-meta {
+              .record-note {
+                font-size: 26rpx;
+                color: var(--text-color-light);
+                line-height: 1.4;
+              }
+            }
+          }
+
+          .record-actions {
+            margin-left: 16rpx;
+
+            .record-time {
+              font-size: 24rpx;
+              color: var(--text-color-lighter);
+              font-family: 'Courier New', monospace;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .empty-state {
+    padding: 120rpx 32rpx;
+    text-align: center;
+
+    .empty-content {
+      max-width: 600rpx;
+      margin: 0 auto;
+
+      .empty-icon {
+        font-size: 120rpx;
+        margin-bottom: 32rpx;
+        opacity: 0.6;
+      }
+
+      .empty-title {
+        font-size: 36rpx;
+        font-weight: 600;
+        color: var(--text-color);
+        margin-bottom: 16rpx;
+        line-height: 1.4;
+      }
+
+      .empty-description {
+        font-size: 28rpx;
+        color: var(--text-color-light);
+        line-height: 1.5;
+        margin-bottom: 48rpx;
+      }
+
+      .empty-action {
+        .start-record-btn {
+          background: var(--primary-button-background);
+          color: var(--primary-button-text);
+          padding: 24rpx 48rpx;
+          border-radius: 32rpx;
+          display: inline-block;
+          box-shadow: var(--box-shadow);
+          transition: all 0.3s ease;
+
+          &:active {
+            transform: scale(0.95);
+            opacity: 0.8;
+          }
+
+          .start-text {
+            font-size: 32rpx;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* 主题适配 */
+.theme-default {
+  .record-list {
+    .date-group .date-header .date-info .date-text {
+      font-family: var(--title-font-family);
+    }
+
+    .records-list .record-item .record-content .record-main .category-name {
+      font-family: var(--text-font-family);
+    }
+
+    .empty-state .empty-content .empty-title {
+      font-family: var(--title-font-family);
+    }
+  }
+}
+
+.theme-remember {
+  .record-list {
+    .date-group .date-header .date-info .date-text {
+      font-family: var(--title-font-family);
+    }
+
+    .records-list .record-item .record-content .record-main .category-name {
+      font-family: var(--text-font-family);
+    }
+
+    .empty-state .empty-content {
+      .empty-title {
+        font-family: var(--title-font-family);
+      }
+
+      .empty-description {
+        font-family: var(--text-font-family);
+      }
+    }
+  }
+}

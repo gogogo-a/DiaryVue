@@ -184,6 +184,57 @@ pnpm dev:weapp --watch
 1. 使用微信开发者工具打开项目根目录下的`dist`文件夹
 2. 在开发者工具中预览和调试小程序
 
+## 核心模块分工
+
+### 🔐 tokenmanager.js - Token生命周期管理
+- **职责**: Token的底层存储和生命周期管理
+- **核心功能**:
+  - Token存储/读取 (`setTokens`, `getAccessToken`)
+  - 过期检查 (`isTokenExpired`, `checkTokenRemainingTime`)
+  - 自动刷新定时器 (`setupAutoRefresh`)
+  - 回调机制 (`setRefreshCallback`, `setExpiredCallback`)
+
+### 🌐 http.js - HTTP请求处理器
+- **职责**: HTTP请求封装、拦截器和错误处理
+- **核心功能**:
+  - 请求/响应拦截器 (`processRequestConfig`, `processResponse`)
+  - 自动添加Token (`addAuthToken`)
+  - Token过期处理 (`handleTokenExpired` - 委托给user.js)--避免循环
+  - 统一错误处理 (`handleHttpError`, `showErrorToast`)
+  - 便捷请求方法 (`get`, `post`, `put`, `delete`)
+
+### 🔌 userinfo.js - 登录API封装
+- **职责**: 纯API调用，不处理状态管理
+- **核心功能**:
+  - 完整登录 (`wxLogin` - 带UI交互)->跟用户有交互
+  - 静默登录 (`silentWxLogin` - 无UI交互)->用户无感，防止打断
+  - 用户信息获取 (`getUserInfo`)
+  - 通用API请求 (`apiRequest`)
+
+### 👤 user.js - 用户状态管理
+- **职责**: 用户状态管理和登录流程协调
+- **核心功能**:
+  - 用户状态管理 (`userInfo`, `isLoggedIn`, `userStats`)
+  - 登录流程协调 (`login`, `silentLogin`, `checkAndEnsureLogin`)
+  - 状态持久化 (`setLoginState`, `clearLoginState`)
+  - Token刷新协调 (调用userinfo.js后更新tokenmanager.js)
+
+### 📊 调用逻辑
+
+```
+用户登录流程:
+App → user.js → userinfo.js → http.js → 后端API
+                     ↓
+             tokenmanager.js (存储token)
+
+Token自动刷新:
+http.js (检测过期) → user.js (协调刷新) → userinfo.js (静默登录) 
+                                              ↓
+                              tokenmanager.js (更新token)
+```
+
+**依赖关系**: `tokenmanager.js`(底层) ← `http.js` ← `userinfo.js` ← `user.js`(业务层)
+
 ## 项目特性
 
 - **主题切换**: 支持默认主题和怀旧主题，可随时切换
@@ -192,6 +243,7 @@ pnpm dev:weapp --watch
 - **状态管理**: 使用Pinia进行全局状态管理
 - **自定义导航栏**: 实现了自定义的TabBar导航组件
 - **筛选功能**: 在日记页面实现了分类、标签、日期和搜索筛选
+- **Token自动管理**: 自动刷新机制，用户无感知登录状态维护
 
 ## 开发注意事项
 
@@ -207,3 +259,4 @@ pnpm dev:weapp --watch
 3. 提交更改 (`git commit -m 'Add some amazing feature'`)
 4. 推送到分支 (`git push origin feature/amazing-feature`)
 5. 创建Pull Request
+

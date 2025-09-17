@@ -1,0 +1,84 @@
+/**
+ * 待办事项头部组件样式
+ */
+
+.schedule-header {
+  padding: 40rpx 32rpx 32rpx;
+  
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .title-section {
+    flex: 1;
+    
+    .main-title {
+      font-size: 48rpx;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 12rpx;
+      line-height: 1.3;
+    }
+
+    .sub-title {
+      font-size: 28rpx;
+      color: var(--text-color-light);
+      line-height: 1.4;
+    }
+  }
+
+  .action-section {
+    margin-left: 24rpx;
+    
+    .add-task-btn {
+      background: var(--primary-button-background);
+      color: var(--primary-button-text);
+      padding: 16rpx 24rpx;
+      border-radius: 24rpx;
+      display: flex;
+      align-items: center;
+      gap: 8rpx;
+      box-shadow: var(--box-shadow);
+      transition: all 0.3s ease;
+
+      &:active {
+        transform: scale(0.95);
+        opacity: 0.8;
+      }
+
+      .add-icon {
+        font-size: 32rpx;
+        font-weight: 600;
+        line-height: 1;
+      }
+
+      .add-text {
+        font-size: 28rpx;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+/* 主题适配 */
+.theme-default {
+  .schedule-header {
+    background: var(--background-color);
+  }
+}
+
+.theme-remember {
+  .schedule-header {
+    background: var(--background-color);
+    
+    .title-section .main-title {
+      font-family: var(--title-font-family);
+    }
+    
+    .title-section .sub-title {
+      font-family: var(--text-font-family);
+    }
+  }
+}

@@ -1,78 +1,233 @@
-@import "../../../../styles/themes.scss";
-@import "../../../../styles/variables.scss";
+/**
+ * 记账本统计组件样式
+ */
 
 .account-stats {
   width: 100%;
-  background-color: var(--card-background);
-  border-radius: 16px; /* 增加圆角与header保持一致 */
+  background: var(--card-background);
+  border-radius: 24rpx;
   box-shadow: var(--box-shadow);
   overflow: hidden;
+  border: var(--card-border);
 }
 
 .filter-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: $padding-size;
-  border-bottom: 1px solid var(--border-color);
-  background-color: var(--svg-outer-color);
+  padding: 24rpx 32rpx;
+  background: var(--svg-outer-color);
+  border-bottom: 2rpx solid var(--border-color);
 }
 
 .filter-item {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  background-color: var(--card-background);
-  border-radius: $border-radius;
-  transition: all $transition-time ease;
+  gap: 12rpx;
+  padding: 16rpx 20rpx;
+  background: var(--card-background);
+  border-radius: 16rpx;
+  transition: all 0.3s ease;
+  border: 2rpx solid transparent;
 
   &:active {
     transform: scale(0.95);
-    background-color: var(--svg-select-color);
+    background: var(--primary-pitch-on);
+    border-color: var(--primary-button-background);
   }
 }
 
 .filter-text {
-  font-size: $tip-font-size;
+  font-size: 24rpx;
   color: var(--text-color);
-  font-family: var(--text-font-family);
-  font-weight: $font-weight-medium;
+  font-weight: 500;
 }
 
 .filter-arrow,
 .filter-icon {
-  width: 16px;
-  height: 16px;
+  width: 32rpx;
+  height: 32rpx;
   opacity: 0.6;
 }
 
 .stats-section {
   display: flex;
   justify-content: space-around;
-  align-items: center;
-  padding: 30px $padding-size;
-  background-color: var(--card-background);
+  align-items: stretch;
+  padding: 40rpx 32rpx;
+  background: var(--card-background);
+  gap: 24rpx;
 }
 
 .stat-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 16rpx;
   flex: 1;
+  position: relative;
+  padding: 20rpx 16rpx;
+  border-radius: 16rpx;
+  transition: all 0.3s ease;
+
+  &.expense {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 107, 107, 0.05));
+  }
+
+  &.income {
+    background: linear-gradient(135deg, rgba(88, 214, 141, 0.1), rgba(88, 214, 141, 0.05));
+  }
+
+  &.balance {
+    background: linear-gradient(135deg, rgba(69, 183, 209, 0.1), rgba(69, 183, 209, 0.05));
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 }
 
 .stat-amount {
-  font-size: 36px;
-  font-weight: bold;
-  color: var(--text-color);
-  font-family: var(--text-font-family);
+  font-size: 56rpx;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  line-height: 1.2;
+
+  &.expense-amount {
+    color: #FF6B6B;
+  }
+
+  &.income-amount {
+    color: #58D68D;
+  }
+
+  &.balance-amount {
+    &.positive {
+      color: #58D68D;
+    }
+    &.negative {
+      color: #FF6B6B;
+    }
+    &.neutral {
+      color: var(--text-color-light);
+    }
+  }
 }
 
 .stat-label {
-  font-size: $body-font-size;
+  font-size: 26rpx;
   color: var(--text-color-light);
-  font-family: var(--text-font-family);
-  font-weight: $font-weight-medium;
+  font-weight: 500;
+  text-align: center;
+}
+
+.stat-trend {
+  position: absolute;
+  top: 12rpx;
+  right: 12rpx;
+  
+  .trend-text {
+    font-size: 20rpx;
+    font-weight: 500;
+    padding: 4rpx 8rpx;
+    border-radius: 8rpx;
+    
+    &.up {
+      color: #58D68D;
+      background: rgba(88, 214, 141, 0.1);
+    }
+    
+    &.down {
+      color: #FF6B6B;
+      background: rgba(255, 107, 107, 0.1);
+    }
+    
+    &.stable {
+      color: var(--text-color-light);
+      background: rgba(153, 153, 153, 0.1);
+    }
+  }
+}
+
+.stat-progress {
+  width: 100%;
+  margin-top: 8rpx;
+  
+  .progress-bar {
+    width: 100%;
+    height: 6rpx;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3rpx;
+    overflow: hidden;
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #58D68D, #45B7D1);
+      border-radius: 3rpx;
+      transition: width 0.5s ease;
+    }
+  }
+}
+
+.quick-stats {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 32rpx;
+  background: var(--svg-outer-color);
+  border-top: 2rpx solid var(--border-color);
+  gap: 24rpx;
+}
+
+.quick-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  flex: 1;
+  padding: 16rpx;
+  border-radius: 12rpx;
+  background: var(--card-background);
+  transition: all 0.3s ease;
+
+  &:active {
+    transform: scale(0.95);
+    background: var(--primary-pitch-on);
+  }
+}
+
+.quick-stat-number {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--primary-button-background);
+  font-family: 'Courier New', monospace;
+}
+
+.quick-stat-label {
+  font-size: 22rpx;
+  color: var(--text-color-light);
+  font-weight: 400;
+}
+
+/* 主题适配 */
+.theme-default {
+  .account-stats {
+    .stat-amount {
+      font-family: var(--title-font-family);
+    }
+  }
+}
+
+.theme-remember {
+  .account-stats {
+    .stat-amount {
+      font-family: var(--title-font-family);
+    }
+    
+    .filter-text,
+    .stat-label,
+    .quick-stat-label {
+      font-family: var(--text-font-family);
+    }
+  }
 }

@@ -103,8 +103,9 @@
 </template>
 
 <script setup>
-import { defineOptions, ref, computed } from 'vue'
+import { defineOptions, ref, computed, onMounted } from 'vue'
 import { useThemeStore } from '../../../stores/theme'
+import { useAccountStore } from '../../../stores/account'
 import Taro from '@tarojs/taro'
 import './add_record.scss'
 
@@ -114,6 +115,9 @@ defineOptions({
 
 // 使用主题状态
 const themeStore = useThemeStore()
+
+// 使用记账本状态
+const accountStore = useAccountStore()
 
 // 记账类型
 const recordType = ref('expense') // 'expense' | 'income'
@@ -130,29 +134,9 @@ const selectedDate = ref(new Date())
 // 选中的分类
 const selectedCategory = ref(null)
 
-// 支出分类
-const expenseCategories = ref([
-  { id: 1, name: '购物', icon: '🛍️' },
-  { id: 2, name: '餐饮', icon: '🍽️' },
-  { id: 3, name: '娱乐', icon: '🎮' },
-  { id: 4, name: '礼物', icon: '🎁' },
-  { id: 5, name: '交通', icon: '🚗' },
-  { id: 6, name: '服务', icon: '🔧' }
-])
-
-// 收入分类
-const incomeCategories = ref([
-  { id: 7, name: '工资', icon: '💰' },
-  { id: 8, name: '奖金', icon: '🏆' },
-  { id: 9, name: '投资', icon: '📈' },
-  { id: 10, name: '兼职', icon: '💼' },
-  { id: 11, name: '礼金', icon: '🧧' },
-  { id: 12, name: '其他', icon: '💵' }
-])
-
 // 当前显示的分类
 const currentCategories = computed(() => {
-  return recordType.value === 'expense' ? expenseCategories.value : incomeCategories.value
+  return accountStore.getCategoriesByType(recordType.value)
 })
 
 // 切换记账类型
@@ -259,23 +243,49 @@ const saveRecord = () => {
     return
   }
 
-  // 这里保存记账记录
-  console.log('保存记账记录:', {
+  // 验证金额格式
+  const amount = parseFloat(amountInput.value)
+  if (isNaN(amount) || amount <= 0) {
+    Taro.showToast({
+      title: '请输入有效金额',
+      icon: 'none'
+    })
+    return
+  }
+
+  // 保存记账记录到状态管理
+  const recordData = {
     type: recordType.value,
-    amount: amountInput.value,
-    category: selectedCategory.value,
-    date: selectedDate.value
-  })
+    amount: amount,
+    categoryId: selectedCategory.value.id,
+    categoryName: selectedCategory.value.name,
+    categoryIcon: selectedCategory.value.icon,
+    date: selectedDate.value.toISOString(),
+    note: '', // 暂时为空，后续可以添加备注功能
+    images: [] // 暂时为空，后续可以添加图片功能
+  }
 
-  Taro.showToast({
-    title: '保存成功',
-    icon: 'success'
-  })
+  const newRecord = accountStore.addRecord(recordData)
 
-  // 关闭页面
-  setTimeout(() => {
-    handleClose()
-  }, 1500)
+  if (newRecord) {
+    Taro.showToast({
+      title: '记账成功',
+      icon: 'success',
+      duration: 1500
+    })
+
+    console.log('记账记录已保存:', newRecord)
+
+    // 关闭页面
+    setTimeout(() => {
+      handleClose()
+    }, 1500)
+  } else {
+    Taro.showToast({
+      title: '保存失败，请重试',
+      icon: 'none'
+    })
+  }
 }
 
 // 关闭页面
@@ -291,6 +301,10 @@ const handleOverlayClick = () => {
 // 页面加载时的初始化
 const init = () => {
   console.log('记账页面初始化完成')
+
+  // 初始化记账本数据
+  accountStore.initAccountData()
+
   // 设置默认选中第一个分类
   if (currentCategories.value.length > 0) {
     selectedCategory.value = currentCategories.value[0]
@@ -298,7 +312,7 @@ const init = () => {
 }
 
 // 页面加载完成后初始化
-Taro.useReady(() => {
+onMounted(() => {
   init()
 })
 </script>

@@ -1,0 +1,81 @@
+/**
+ * 待办事项空状态组件样式
+ */
+
+.empty-state {
+  padding: 120rpx 32rpx;
+  text-align: center;
+
+  .empty-content {
+    max-width: 600rpx;
+    margin: 0 auto;
+
+    .empty-icon {
+      font-size: 120rpx;
+      margin-bottom: 32rpx;
+      opacity: 0.6;
+    }
+
+    .empty-title {
+      font-size: 36rpx;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 16rpx;
+      line-height: 1.4;
+    }
+
+    .empty-description {
+      font-size: 28rpx;
+      color: var(--text-color-light);
+      line-height: 1.5;
+      margin-bottom: 48rpx;
+    }
+
+    .empty-action {
+      .create-task-btn {
+        background: var(--primary-button-background);
+        color: var(--primary-button-text);
+        padding: 24rpx 48rpx;
+        border-radius: 32rpx;
+        display: inline-block;
+        box-shadow: var(--box-shadow);
+        transition: all 0.3s ease;
+
+        &:active {
+          transform: scale(0.95);
+          opacity: 0.8;
+        }
+
+        .create-text {
+          font-size: 32rpx;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}
+
+/* 主题适配 */
+.theme-default {
+  .empty-state {
+    .empty-title {
+      font-family: var(--title-font-family);
+    }
+
+    .empty-description {
+      font-family: var(--text-font-family);
+    }
+  }
+}
+
+.theme-remember {
+  .empty-state {
+    .empty-title {
+      font-family: var(--title-font-family);
+    }
+
+    .empty-description {
+      font-family: var(--text-font-family);
+    }
+  }
+}

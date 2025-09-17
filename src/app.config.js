@@ -1,22 +1,21 @@
+
 export default {
   pages: [
     'pages/index/index',
     'pages/diary/diary',
     'pages/mine/index/mine',
-    'pages/mine/personal_space/personal_space',
     'pages/account_book/index/account_book',
     'pages/account_book/control/account_control',
     'pages/account_book/add/add_record',
     'pages/discover/index/discover',
+    'pages/schedule/index/schedule', // 待办事项页面
     "pages/diary/detail/index", // 日记详情页 (detail/index.vue)
+    'pages/mine/personal_space/personal_space' // 个人空间页面
   ],
-  navigationBarTitleText: "日记本",
-  navigationBarBackgroundColor: "#ebf0f6",
-  backgroundColor: "#ebf0f6",
   window: {
-    backgroundTextStyle: "light",
-    navigationBarBackgroundColor: "#ebf0f6",
-    navigationBarTitleText: "日记本",
-    navigationBarTextStyle: "black",
-  },
-};
+    backgroundTextStyle: 'light',
+    navigationBarBackgroundColor: '#ebf0f6', // 默认主题的primaryColor
+    navigationBarTitleText: 'DiaryVue',
+    navigationBarTextStyle: 'black'
+  }
+}

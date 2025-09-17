@@ -25,6 +25,11 @@
         <text class="version-text">{{ appVersion }}</text>
       </view>
 
+      <!-- 退出账号特殊样式 -->
+      <view v-else-if="item.id === 'logout'" class="menu-extra">
+        <text class="logout-text">退出</text>
+      </view>
+
       <!-- 普通箭头 -->
       <view v-else class="menu-arrow">
         <text class="arrow-text">›</text>
@@ -36,6 +41,7 @@
 <script setup>
 import { defineOptions, ref, reactive } from 'vue'
 import { useThemeStore } from '../../../../stores/theme'
+import { useUserStore } from '../../../../stores/user'
 import Taro from '@tarojs/taro'
 import './MineMenuList.scss'
 
@@ -45,6 +51,9 @@ defineOptions({
 
 // 使用主题状态
 const themeStore = useThemeStore()
+
+// 使用用户状态
+const userStore = useUserStore()
 
 // 密码开关状态
 const passwordEnabled = ref(false)
@@ -107,6 +116,12 @@ const menuItems = reactive([
     title: '软件版本',
     icon: 'ℹ️',
     iconBg: '#9E9E9E'
+  },
+  {
+    id: 'logout',
+    title: '退出账号',
+    icon: '🚪',
+    iconBg: '#F44336'
   }
 ])
 
@@ -171,10 +186,61 @@ const handleMenuTap = (item) => {
         showCancel: false
       })
       break
+    case 'logout':
+      handleLogout()
+      break
     case 'password':
       // 密码功能由开关处理，这里不做操作
       break
   }
+}
+
+// 处理退出账号
+const handleLogout = () => {
+  Taro.showModal({
+    title: '退出账号',
+    content: '确定要退出当前账号吗？',
+    confirmText: '退出',
+    confirmColor: '#F44336',
+    success: async (res) => {
+      if (res.confirm) {
+        try {
+          // 显示加载提示
+          Taro.showLoading({
+            title: '退出中...',
+            mask: true
+          })
+
+          // 调用用户store的退出登录方法
+          const success = await userStore.logout()
+
+          Taro.hideLoading()
+
+          if (success) {
+            // 退出成功，跳转到首页
+            Taro.reLaunch({
+              url: '/pages/index/index'
+            })
+          } else {
+            Taro.showToast({
+              title: '退出失败，请重试',
+              icon: 'none',
+              duration: 2000
+            })
+          }
+        } catch (error) {
+          Taro.hideLoading()
+          console.error('退出账号异常:', error)
+
+          Taro.showToast({
+            title: '退出异常，请重试',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      }
+    }
+  })
 }
 
 // 处理密码开关切换
