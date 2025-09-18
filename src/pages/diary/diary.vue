@@ -71,9 +71,11 @@ const viewDiary = () => {
 };
 
 const addNewDiary = () => {
-  Taro.showToast({
-    title: "添加新日记",
-    icon: "success",
+  console.log('尝试跳转到:', "/pages/diary/adddiary/adddiary");
+  Taro.navigateTo({
+    url: "/pages/diary/adddiary/adddiary",
+  }).catch(err => {
+    console.error('跳转失败详情:', err);
   });
 };
 

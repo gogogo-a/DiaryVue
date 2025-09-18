@@ -1,0 +1,302 @@
+@use "../../../styles/themes" as themes;
+@use "../../../styles/variables" as vars;
+
+.add-diary-page {
+  min-height: 100vh;
+  background-color: var(--background-color);
+  padding-bottom: 100px;
+  font-size: 20px; // 进一步增大基础字体大小
+}
+
+/* 导航栏样式 */
+.navigation-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px vars.$padding-size; // 增加内边距
+  background-color: var(--primary-color);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  .nav-back,
+  .nav-action {
+    font-size: 20px; // 增大字体
+    color: var(--text-color);
+    padding: 12px 0;
+  }
+
+  .nav-title {
+    font-size: 22px; // 增大标题字体
+    font-weight: vars.$font-weight-bold;
+    color: var(--text-color);
+    font-family: var(--title-font-family);
+  }
+}
+
+/* 表单滚动区域 */
+.form-scroll {
+  height: calc(100vh - 130px);
+}
+
+/* 表单容器 */
+.form-container {
+  padding: vars.$padding-size;
+}
+
+.form-group {
+  margin-bottom: 28px; // 增加间距
+
+  .form-label {
+    display: block;
+    font-size: 20px; // 增大标签字体
+    font-weight: vars.$font-weight-medium;
+    color: var(--text-color);
+    margin-bottom: 14px; // 增加间距
+    font-family: var(--text-font-family);
+  }
+}
+
+/* 输入框样式 */
+.form-input,
+.form-textarea {
+  width: 100%;
+  /* 关键修改：上下内边距从18px增至24px，左右保持变量，同时设置最小高度 */
+  padding: 24px vars.$padding-size;
+  min-height: 70px; /* 新增：设置最小高度，确保输入框“框框”足够大 */
+  border-radius: vars.$border-radius;
+  background-color: var(--card-background);
+  border: var(--card-border);
+  font-size: 20px;
+  color: var(--text-color);
+  box-sizing: border-box;
+
+  &.placeholder {
+    color: var(--text-color-lighter);
+    font-size: 18px;
+  }
+}
+
+.form-textarea {
+  min-height: 160px; // 增加最小高度
+  line-height: 1.6;
+}
+
+/* 选择器样式 */
+.form-picker {
+  .picker-value {
+    padding: 18px vars.$padding-size; // 增加内边距
+    border-radius: vars.$border-radius;
+    background-color: var(--card-background);
+    border: var(--card-border);
+    font-size: 20px; // 增大字体
+    color: var(--text-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &.placeholder {
+      color: var(--text-color-lighter);
+    }
+  }
+}
+
+/* 情绪选择容器 */
+.emotion-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.emotion-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px;
+  border-radius: 14px;
+  background-color: var(--card-background);
+  border: 2px solid var(--border-color);
+  transition: all 0.2s ease;
+
+  &.active {
+    background-color: var(--primary-color-light);
+    border-color: var(--primary-color);
+    transform: scale(1.05);
+  }
+
+  .emotion-emoji {
+    font-size: 32px; // 增大表情大小
+    margin-bottom: 8px;
+  }
+
+  .emotion-text {
+    font-size: 18px; // 增大文字
+    color: var(--text-color);
+  }
+}
+
+/* 天气选择容器 */
+.weather-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.weather-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px;
+  border-radius: 14px;
+  background-color: var(--card-background);
+  border: 2px solid var(--border-color);
+  transition: all 0.2s ease;
+
+  &.active {
+    background-color: var(--primary-color-light);
+    border-color: var(--primary-color);
+    transform: scale(1.05);
+  }
+
+  .weather-icon {
+    font-size: 32px; // 增大图标大小
+    margin-bottom: 8px;
+  }
+
+  .weather-text {
+    font-size: 18px; // 增大文字
+    color: var(--text-color);
+  }
+}
+
+/* 标签容器 */
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.tag-item {
+  padding: 12px 18px; // 增加内边距
+  border-radius: 22px;
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
+  font-size: 18px; // 增大字体
+  color: var(--text-color-light);
+  transition: all 0.2s ease;
+
+  &.active {
+    background-color: var(--primary-button-background);
+    color: var(--primary-button-text);
+    border-color: var(--primary-button-background);
+    transform: scale(1.05);
+  }
+}
+
+/* 图片上传区域 - 改为按钮样式 */
+.image-upload-container {
+  margin-top: 10px;
+}
+
+.upload-image-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 20px;
+  background-color: var(--primary-button-background);
+  color: var(--primary-button-text);
+  border-radius: vars.$border-radius;
+  font-size: 20px; // 增大字体
+  font-weight: vars.$font-weight-medium;
+  transition: all 0.2s ease;
+
+  &:active {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
+
+  .iconfont {
+    margin-right: 10px;
+    font-size: 24px; // 增大图标
+  }
+}
+
+/* 图片预览区域 */
+.image-preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.image-preview {
+  width: 100px; // 增大预览图尺寸
+  height: 100px;
+  border-radius: vars.$border-radius;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  .preview-image {
+    width: 100%;
+    height: 100%;
+  }
+
+  .remove-image {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 32px; // 增大关闭按钮
+    height: 32px;
+    border-radius: 0 0 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px; // 增大图标
+  }
+}
+
+/* 字数统计 */
+.word-count {
+  text-align: right;
+  font-size: 18px; // 增大字体
+  color: var(--text-color-lighter);
+  margin-top: 10px;
+}
+
+/* 底部操作栏 */
+.action-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  padding: 22px; // 增加内边距
+  background-color: var(--card-background);
+  border-top: 1px solid var(--border-color);
+  z-index: 10;
+
+  .button {
+    flex: 1;
+    padding: 18px; // 增加内边距
+    text-align: center;
+    border-radius: vars.$border-radius;
+    font-size: 20px; // 增大字体
+    font-weight: vars.$font-weight-medium;
+
+    &-outline {
+      background-color: transparent;
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      margin-right: 14px; // 增加间距
+    }
+
+    &:last-child {
+      background-color: var(--primary-button-background);
+      color: var(--primary-button-text);
+    }
+  }
+}
