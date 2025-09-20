@@ -3,6 +3,59 @@
 
 .account-list {
   width: 100%;
+
+  // 加载状态
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0;
+
+    .loading-text {
+      font-size: $body-font-size;
+      color: var(--text-color-light);
+      font-family: var(--text-font-family);
+    }
+  }
+
+  // 空状态
+  .empty-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+
+    .empty-text {
+      font-size: $body-font-size;
+      color: var(--text-color-light);
+      text-align: center;
+      line-height: 1.5;
+      font-family: var(--text-font-family);
+    }
+  }
+
+  // 加载更多
+  .load-more {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin-top: 10px;
+    background-color: var(--svg-outer-color);
+    border-radius: 8px;
+    transition: all $transition-time ease;
+
+    &:active {
+      background-color: var(--svg-select-color);
+    }
+
+    .load-more-text {
+      font-size: $body-font-size;
+      color: var(--primary-color);
+      font-weight: $font-weight-medium;
+      font-family: var(--text-font-family);
+    }
+  }
 }
 
 .account-card {
@@ -23,6 +76,28 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+
+  .account-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+
+    .account-icon {
+      font-size: 24px;
+    }
+
+    .account-name {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--text-color);
+      font-family: var(--title-font-family);
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
 }
 
 .account-number {
@@ -58,6 +133,25 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+
+  .account-stats {
+    margin-bottom: 12px;
+    padding: 12px;
+    background-color: var(--svg-outer-color);
+    border-radius: 8px;
+
+    .stats-text {
+      display: block;
+      font-size: $tip-font-size;
+      color: var(--text-color-light);
+      font-family: var(--text-font-family);
+      margin-bottom: 4px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
 }
 
 .participant-info {

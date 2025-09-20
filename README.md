@@ -179,6 +179,7 @@ pnpm install
 pnpm dev:weapp --watch
 ```
 
+
 ### 预览和调试
 
 1. 使用微信开发者工具打开项目根目录下的`dist`文件夹
@@ -210,13 +211,10 @@ pnpm dev:weapp --watch
   - 请求/响应拦截器 (`processRequestConfig`, `processResponse`)
   请求：
   除了登录-》添加通用信息（设备型号等），添加自动添加Token (`addAuthToken`)
-
-  - Token过期处理 (`handleTokenExpired` - 委托给user.js)--避免循环
+- Token过期处理 (`handleTokenExpired` - 委托给user.js)--避免循环
   响应：
-
   - 通过状态码，统一错误处理 (`handleHttpError`, `showErrorToast`) 
-  注意，实际接口开发中不需要再次错误处理！！！
-
+**注意，实际接口开发中不需要再次错误处理！！！**
   - 便捷请求方法 (`get`, `post`, `put`, `delete`)
 
 #### HTTP拦截器使用方法

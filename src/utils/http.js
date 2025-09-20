@@ -19,11 +19,11 @@ import tokenManager from './tokenmanager'
 const CONFIG = {
   // 基础URL（可根据环境变量配置）
   BASE_URL: process.env.NODE_ENV === 'development'
-    ? 'https://connivently-fitted-grayce.ngrok-free.app/api/v1'
-    : 'https://connivently-fitted-grayce.ngrok-free.app/api/v1',
+    ? 'http://8.140.245.242:8020/api/v1'  // 开发环境也使用HTTPS
+    : 'https://connivently-fitted-grayce.ngrok-free.app/api/v1', // 生产环境使用HTTPS
 
   // 请求超时时间（毫秒）
-  TIMEOUT: 10000,
+  TIMEOUT: 10000, // 增加到30秒
 
   // 最大重试次数
   MAX_RETRY_COUNT: 3,
@@ -35,11 +35,13 @@ const CONFIG = {
   SILENT_ERROR_URLS: ['/auth/wx-login']
 }
 
+
 // 错误码映射
 const ERROR_CODE_MAP = {
   // 网络错误
   'fail': '网络异常，请检查网络连接',
   'timeout': '请求超时，请重试',
+  '-1012': 'SSL证书验证失败，请检查网络配置',
 
   // HTTP状态码
   400: '请求参数有误',
@@ -98,7 +100,7 @@ class HttpClient {
     }
 
     // 添加通用信息
-    this.addCommonHeaders(config)
+    /* this.addCommonHeaders(config) */
 
     // 添加token
     this.addAuthToken(config)
@@ -135,21 +137,21 @@ class HttpClient {
   addAuthToken(config) {
     // 检查是否跳过认证
     if (config.skipAuth) {
-      console.log('跳过token认证:', config.url)
       return
     }
 
     // 检查是否需要token
     const needsAuth = this.isAuthRequired(config.url)
-    if (!needsAuth) return
+
+    if (!needsAuth) {
+      return
+    }
 
     // 获取token
     const authHeader = tokenManager.getAuthorizationHeader()
+
     if (authHeader) {
       config.header['Authorization'] = authHeader
-      console.log('已添加Authorization头')
-    } else {
-      console.warn('接口需要认证但没有token:', config.url)
     }
   }
 
@@ -263,7 +265,6 @@ class HttpClient {
 
     // 对于静默请求，返回错误信息而不是抛出异常
     if (isSilent) {
-      console.warn(`静默请求业务错误 [${code}]: ${errorMessage}`)
       return Promise.reject(new Error(errorMessage))
     }
 
@@ -280,15 +281,12 @@ class HttpClient {
    * @returns {Promise} 处理结果
    */
   async handleTokenExpired(originalConfig) {
-    console.log('Token已过期，尝试刷新...')
-
     // 如果已经在刷新中，将请求加入队列
     if (this.refreshingPromise) {
       return new Promise((resolve, reject) => {
         this.retryQueue.push({ resolve, reject, config: originalConfig })
       })
     }
-
 
     // 开始刷新token
     this.refreshingPromise = this.refreshToken()
@@ -307,8 +305,6 @@ class HttpClient {
       // 重新发送原请求
       return this.sendRequest(newConfig)
     } catch (error) {
-      console.error('Token刷新失败:', error)
-
       // 处理队列中的请求
       this.processRetryQueue(false, error)
 
@@ -327,8 +323,6 @@ class HttpClient {
    */
   async refreshToken() {
     try {
-      console.log('委托用户状态管理处理token刷新...')
-
       // 动态导入user store，避免循环依赖
       const { useUserStore } = await import('../stores/user')
       const userStore = useUserStore()
@@ -350,7 +344,6 @@ class HttpClient {
 
       throw new Error('Token刷新失败')
     } catch (error) {
-      console.error('Token刷新失败:', error)
       throw error
     }
   }
@@ -457,14 +450,16 @@ class HttpClient {
    * @returns {Promise} 处理结果
    */
   handleNetworkError(error, config) {
-    console.error('网络请求失败:', error)
-
     let errorMessage = ERROR_CODE_MAP.fail
 
     // 根据错误类型给出具体提示
     if (error.errMsg) {
       if (error.errMsg.includes('timeout')) {
         errorMessage = ERROR_CODE_MAP.timeout
+      } else if (error.errMsg.includes('-1012')) {
+        errorMessage = ERROR_CODE_MAP['-1012']
+      } else if (error.errMsg.includes('certificate')) {
+        errorMessage = 'SSL证书验证失败，请检查网络配置'
       } else if (error.errMsg.includes('fail')) {
         errorMessage = ERROR_CODE_MAP.fail
       }
@@ -488,10 +483,22 @@ class HttpClient {
       // 处理请求配置
       const processedConfig = this.processRequestConfig(config)
 
-      console.log('发送请求:', processedConfig.method, processedConfig.url)
+      // 1. 发送请求之前打印实际请求
+      console.log('📤 发送请求:', {
+        url: processedConfig.url,
+        method: processedConfig.method,
+        headers: processedConfig.header,
+        data: processedConfig.data
+      })
 
       // 发送请求
       const response = await Taro.request(processedConfig)
+
+      // 2. 接收的消息先打印，然后再处理数据
+      console.log('📥 收到响应:', {
+        statusCode: response.statusCode,
+        data: response.data
+      })
 
       // 处理响应
       return this.processResponse(response, config)
@@ -520,6 +527,7 @@ class HttpClient {
         .join('&')
       url += (url.includes('?') ? '&' : '?') + queryString
     }
+
 
     return this.sendRequest({
       url,
@@ -585,12 +593,10 @@ tokenManager.init({
       await http.refreshToken()
       return true
     } catch (error) {
-      console.error('自动刷新token失败:', error)
       return false
     }
   },
   onExpired: () => {
-    console.log('Token已过期，需要重新登录')
     http.redirectToLogin()
   }
 })

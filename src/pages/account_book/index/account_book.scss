@@ -82,6 +82,24 @@
   line-height: 1;
 }
 
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px $padding-size;
+  background-color: var(--card-background);
+  border-radius: $card-radius;
+  box-shadow: var(--box-shadow);
+  margin: $margin-size 0;
+
+  text {
+    font-size: $subtitle-font-size;
+    color: var(--text-color-light);
+    font-family: var(--text-font-family);
+  }
+}
+
 /* 底部空间预留，与其他页面保持一致 */
 .bottom-spacer {
   margin-bottom: 120px; /* 为底部导航栏预留空间 */

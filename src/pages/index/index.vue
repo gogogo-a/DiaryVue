@@ -93,11 +93,11 @@ const testLogin = async () => {
     };
 
     console.log('发送原生测试请求:', testData);
-    console.log('请求URL:', 'https://connivently-fitted-grayce.ngrok-free.app/api/v1/auth/wx-login');
+    console.log('请求URL:', 'http://8.140.245.242:8020/api/v1');
 
     // 使用Taro原生请求，完全不依赖任何封装
     const response = await Taro.request({
-      url: 'https://connivently-fitted-grayce.ngrok-free.app/api/v1/auth/wx-login',
+      url: 'http://8.140.245.242:8020/api/v1/auth/wx-login',
       method: 'POST',
       data: testData,
       header: {

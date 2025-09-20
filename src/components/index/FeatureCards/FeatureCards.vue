@@ -89,7 +89,7 @@ const handleFeatureClick = (feature) => {
       break
     case 'money':
       Taro.navigateTo({
-        url: '/pages/account_book/index/account_book'
+        url: '/pages/account_book/control/account_control'
       })
       break
     case 'checkin':
@@ -99,8 +99,9 @@ const handleFeatureClick = (feature) => {
       })
       break
     case 'todo':
-      Taro.navigateTo({
-        url: '/pages/schedule/index/schedule'
+      Taro.showToast({
+        title: '待办功能即将上线',
+        icon: 'none'
       })
       break
     case 'theme':

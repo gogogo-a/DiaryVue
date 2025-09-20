@@ -1,9 +1,9 @@
 <template>
   <view class="record-list" :class="themeStore.currentThemeClass">
     <!-- 记录列表 -->
-    <view v-if="accountStore.totalRecords > 0" class="records-container">
+    <view v-if="totalRecords > 0" class="records-container">
       <view
-        v-for="dateGroup in accountStore.recordsByDate"
+        v-for="dateGroup in recordsByDate"
         :key="dateGroup.date"
         class="date-group"
       >
@@ -74,9 +74,8 @@
 </template>
 
 <script setup>
-import { defineOptions } from 'vue'
+import { defineOptions, computed } from 'vue'
 import { useThemeStore } from '../../../../stores/theme'
-import { useAccountStore } from '../../../../stores/account'
 import Taro from '@tarojs/taro'
 import './RecordList.scss'
 
@@ -84,14 +83,63 @@ defineOptions({
   name: 'RecordList'
 })
 
+// Props
+const props = defineProps({
+  bills: {
+    type: Array,
+    default: () => []
+  }
+})
+
 // 使用主题状态
 const themeStore = useThemeStore()
 
-// 使用记账本状态
-const accountStore = useAccountStore()
-
 // 定义事件
 const emit = defineEmits(['recordClick', 'startRecord'])
+
+// 处理账单数据，按日期分组
+const recordsByDate = computed(() => {
+  if (!props.bills || props.bills.length === 0) return []
+
+  const grouped = {}
+
+  props.bills.forEach(bill => {
+    const date = new Date(bill.created_at || bill.bill_time).toDateString()
+
+    if (!grouped[date]) {
+      grouped[date] = {
+        date,
+        records: [],
+        totalIncome: 0,
+        totalExpense: 0
+      }
+    }
+
+    // 转换账单数据为记录格式
+    const record = {
+      id: bill.id,
+      amount: bill.amount,
+      type: bill.type,
+      categoryName: bill.tags?.[0]?.tag_name || '未分类',
+      categoryIcon: bill.type === 'income' ? '💰' : '💸',
+      note: bill.remark,
+      date: bill.created_at || bill.bill_time
+    }
+
+    grouped[date].records.push(record)
+
+    if (bill.type === 'income') {
+      grouped[date].totalIncome += bill.amount
+    } else {
+      grouped[date].totalExpense += bill.amount
+    }
+  })
+
+  // 转换为数组并按日期排序
+  return Object.values(grouped).sort((a, b) => new Date(b.date) - new Date(a.date))
+})
+
+const totalRecords = computed(() => props.bills?.length || 0)
 
 // 格式化日期头部
 const formatDateHeader = (dateString) => {
@@ -171,18 +219,10 @@ const handleDeleteRecord = (record) => {
     content: `确定要删除这条${record.type === 'expense' ? '支出' : '收入'}记录吗？`,
     success: (res) => {
       if (res.confirm) {
-        const success = accountStore.deleteRecord(record.id)
-        if (success) {
-          Taro.showToast({
-            title: '删除成功',
-            icon: 'success'
-          })
-        } else {
-          Taro.showToast({
-            title: '删除失败',
-            icon: 'none'
-          })
-        }
+        Taro.showToast({
+          title: '删除功能开发中',
+          icon: 'none'
+        })
       }
     }
   })
@@ -193,3 +233,8 @@ const handleStartRecord = () => {
   emit('startRecord')
 }
 </script>
+
+
+
+
+

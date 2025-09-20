@@ -48,10 +48,10 @@
     </view>
 
     <!-- 快速统计卡片 -->
-    <view class="quick-stats" v-if="accountStore.totalRecords > 0">
+    <view class="quick-stats" v-if="props.stats">
       <view class="quick-stat-item">
-        <text class="quick-stat-number">{{ accountStore.totalRecords }}</text>
-        <text class="quick-stat-label">总记录</text>
+        <text class="quick-stat-number">{{ Object.keys(props.stats.tag_stats || {}).length }}</text>
+        <text class="quick-stat-label">分类数</text>
       </view>
       <view class="quick-stat-item">
         <text class="quick-stat-number">{{ todayRecordCount }}</text>
@@ -66,9 +66,8 @@
 </template>
 
 <script setup>
-import { defineOptions, ref, computed, onMounted } from 'vue'
+import { defineOptions, ref, computed } from 'vue'
 import { useThemeStore } from '../../../../stores/theme'
-import { useAccountStore } from '../../../../stores/account'
 import Taro from '@tarojs/taro'
 import './AccountStats.scss'
 
@@ -76,11 +75,22 @@ defineOptions({
   name: 'AccountStatsComponent'
 })
 
+// Props
+const props = defineProps({
+  stats: {
+    type: Object,
+    default: () => ({
+      total_income: 0,
+      total_expense: 0,
+      net_amount: 0,
+      group_stats: [],
+      tag_stats: {}
+    })
+  }
+})
+
 // 使用主题状态
 const themeStore = useThemeStore()
-
-// 使用记账本状态
-const accountStore = useAccountStore()
 
 // 当前统计周期
 const currentPeriod = ref('month') // 'today' | 'week' | 'month'
@@ -106,57 +116,31 @@ const currentPeriodText = computed(() => {
 
 // 当前统计数据
 const currentStats = computed(() => {
-  return accountStore.getStatistics(currentPeriod.value)
+  return {
+    income: props.stats?.total_income || 0,
+    expense: props.stats?.total_expense || 0,
+    balance: props.stats?.net_amount || 0
+  }
 })
 
-// 今日记录数
+// 今日记录数 (暂时固定，后续可以从bills数据获取)
 const todayRecordCount = computed(() => {
-  const today = new Date().toDateString()
-  return accountStore.records.filter(record =>
-    new Date(record.date).toDateString() === today
-  ).length
+  return 0 // 需要从bills中计算
 })
 
 // 日均支出
 const avgDailyExpense = computed(() => {
-  if (accountStore.totalRecords === 0) return '0'
-  const days = Math.max(1, Math.ceil(
-    (Date.now() - new Date(accountStore.records[accountStore.records.length - 1]?.date).getTime())
-    / (1000 * 60 * 60 * 24)
-  ))
-  const totalExpense = accountStore.records
-    .filter(record => record.type === 'expense')
-    .reduce((total, record) => total + record.amount, 0)
-  return Math.round(totalExpense / days).toString()
+  return '0' // 需要从bills统计中计算
 })
 
 // 支出趋势
 const expenseTrend = computed(() => {
-  // 简化的趋势计算
-  const thisWeekExpense = accountStore.getStatistics('week').expense
-  const avgWeeklyExpense = currentStats.value.expense * 7 / 30 // 粗略估算
-
-  if (thisWeekExpense > avgWeeklyExpense * 1.1) {
-    return { type: 'up', text: '↗ 较高' }
-  } else if (thisWeekExpense < avgWeeklyExpense * 0.9) {
-    return { type: 'down', text: '↘ 较低' }
-  } else {
-    return { type: 'stable', text: '→ 平稳' }
-  }
+  return { type: 'stable', text: '→ 平稳' }
 })
 
 // 收入趋势
 const incomeTrend = computed(() => {
-  const thisWeekIncome = accountStore.getStatistics('week').income
-  const avgWeeklyIncome = currentStats.value.income * 7 / 30
-
-  if (thisWeekIncome > avgWeeklyIncome * 1.1) {
-    return { type: 'up', text: '↗ 较高' }
-  } else if (thisWeekIncome < avgWeeklyIncome * 0.9) {
-    return { type: 'down', text: '↘ 较低' }
-  } else {
-    return { type: 'stable', text: '→ 平稳' }
-  }
+  return { type: 'stable', text: '→ 平稳' }
 })
 
 // 结余样式类
@@ -215,8 +199,4 @@ const handleSummaryFilter = () => {
   })
 }
 
-// 页面加载时初始化数据
-onMounted(() => {
-  accountStore.initAccountData()
-})
 </script>

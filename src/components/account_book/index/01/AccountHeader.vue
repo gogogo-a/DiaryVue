@@ -24,7 +24,6 @@
 <script setup>
 import { defineOptions, computed } from 'vue'
 import { useThemeStore } from '../../../../stores/theme'
-import { useAccountStore } from '../../../../stores/account'
 import { useUserStore } from '../../../../stores/user'
 import Taro from '@tarojs/taro'
 import './AccountHeader.scss'
@@ -33,17 +32,24 @@ defineOptions({
   name: 'AccountHeaderComponent'
 })
 
+// Props
+const props = defineProps({
+  account: {
+    type: Object,
+    default: () => null
+  }
+})
+
 // 使用主题状态
 const themeStore = useThemeStore()
-
-// 使用记账本状态
-const accountStore = useAccountStore()
 
 // 使用用户状态
 const userStore = useUserStore()
 
-// 参与人数（暂时固定为1）
-const participantCount = computed(() => 1)
+// 参与人数
+const participantCount = computed(() => {
+  return props.account?.member_count || 1
+})
 
 // 用户头像
 const userAvatar = computed(() => {
@@ -52,33 +58,30 @@ const userAvatar = computed(() => {
 
 // 处理导出账本
 const handleExport = () => {
-  if (accountStore.totalRecords === 0) {
+  if (!props.account) {
     Taro.showToast({
-      title: '暂无数据可导出',
+      title: '账本信息不存在',
       icon: 'none'
     })
     return
   }
 
-  try {
-    const exportData = accountStore.exportData()
-    console.log('导出数据:', exportData)
-
-    Taro.showToast({
-      title: `已导出${exportData.records.length}条记录`,
-      icon: 'success'
-    })
-  } catch (error) {
-    console.error('导出失败:', error)
-    Taro.showToast({
-      title: '导出失败',
-      icon: 'none'
-    })
-  }
+  Taro.showToast({
+    title: '导出功能开发中',
+    icon: 'none'
+  })
 }
 
 // 处理用户信息点击
 const handleUserClick = () => {
+  if (!props.account) {
+    Taro.showToast({
+      title: '账本信息不存在',
+      icon: 'none'
+    })
+    return
+  }
+
   Taro.showToast({
     title: '用户管理功能开发中',
     icon: 'none'

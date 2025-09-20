@@ -105,7 +105,7 @@
 <script setup>
 import { defineOptions, ref, computed, onMounted } from 'vue'
 import { useThemeStore } from '../../../stores/theme'
-import { useAccountStore } from '../../../stores/account'
+import accountAPI from '../../../pages/account_book/control/api_account'
 import Taro from '@tarojs/taro'
 import './add_record.scss'
 
