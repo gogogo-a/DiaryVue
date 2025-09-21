@@ -29,7 +29,7 @@ class BillsAPI {
   async getBills(params = {}) {
     // 转换参数名称以匹配后端期望
     const queryParams = {}
-    if (params.account_book_id) queryParams.AccountBookID = params.account_book_id
+    if (params.account_book_id) queryParams.accountBookID = params.account_book_id
     if (params.page) queryParams.page = params.page
     if (params.page_size) queryParams.page_size = params.page_size
     if (params.type) queryParams.type = params.type
@@ -113,6 +113,19 @@ class BillsAPI {
 
     return http.get('/bills/stats', queryParams)
   }
+
+  /**
+   * 获取标签列表
+   * @param {Object} params - 查询参数
+   * @param {string} params.category - 标签分类 (bill/diary)
+   * @returns {Promise<Array>} 标签列表
+   */
+  async getTags(params = {}) {
+    const queryParams = {}
+    if (params.category) queryParams.category = params.category
+
+    return http.get('/tags', queryParams)
+  }
 }
 
 // 创建API实例
@@ -125,7 +138,8 @@ export const {
   updateBill,
   deleteBill,
   getBillDetail,
-  getBillStats
+  getBillStats,
+  getTags
 } = billsAPI
 
 // 默认导出API实例

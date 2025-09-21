@@ -28,10 +28,13 @@
           <view
             v-for="record in dateGroup.records"
             :key="record.id"
-            class="record-item"
-            @tap="handleRecordClick(record)"
-            @longpress="handleRecordLongPress(record)"
+            class="record-wrapper"
           >
+            <view
+              class="record-item"
+              @tap="handleRecordClick(record)"
+              @longpress="handleRecordLongPress(record)"
+            >
             <view class="record-icon">
               <text class="category-icon">{{ record.categoryIcon }}</text>
             </view>
@@ -51,6 +54,12 @@
 
             <view class="record-actions">
               <text class="record-time">{{ formatTime(record.date) }}</text>
+
+              <!-- 删除按钮 -->
+              <view class="delete-btn" @tap.stop="handleDeleteRecord(record)">
+                <text class="delete-text">删除</text>
+              </view>
+            </view>
             </view>
           </view>
         </view>
@@ -76,6 +85,7 @@
 <script setup>
 import { defineOptions, computed } from 'vue'
 import { useThemeStore } from '../../../../stores/theme'
+import billsAPI from '../../../../pages/account_book/index/api_bills'
 import Taro from '@tarojs/taro'
 import './RecordList.scss'
 
@@ -95,7 +105,7 @@ const props = defineProps({
 const themeStore = useThemeStore()
 
 // 定义事件
-const emit = defineEmits(['recordClick', 'startRecord'])
+const emit = defineEmits(['recordClick', 'startRecord', 'recordDeleted'])
 
 // 处理账单数据，按日期分组
 const recordsByDate = computed(() => {
@@ -213,19 +223,42 @@ const handleEditRecord = (record) => {
 }
 
 // 删除记录
-const handleDeleteRecord = (record) => {
-  Taro.showModal({
-    title: '确认删除',
-    content: `确定要删除这条${record.type === 'expense' ? '支出' : '收入'}记录吗？`,
-    success: (res) => {
-      if (res.confirm) {
-        Taro.showToast({
-          title: '删除功能开发中',
-          icon: 'none'
-        })
-      }
+const handleDeleteRecord = async (record) => {
+  try {
+    const result = await Taro.showModal({
+      title: '确认删除',
+      content: `确定要删除这条${record.type === 'expense' ? '支出' : '收入'}记录吗？`,
+      confirmColor: '#FF6B6B'
+    })
+
+    if (result.confirm) {
+      Taro.showLoading({
+        title: '删除中...'
+      })
+
+      // 调用API删除账单
+      await billsAPI.deleteBill(record.id)
+
+      Taro.hideLoading()
+
+      Taro.showToast({
+        title: '删除成功',
+        icon: 'success'
+      })
+
+      // 触发父组件事件，通知删除成功
+      emit('recordDeleted', record.id)
     }
-  })
+  } catch (error) {
+    Taro.hideLoading()
+
+    console.error('删除记录失败:', error)
+
+    Taro.showToast({
+      title: '删除失败，请重试',
+      icon: 'none'
+    })
+  }
 }
 
 // 开始记账

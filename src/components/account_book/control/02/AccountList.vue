@@ -44,8 +44,8 @@
           </view>
 
           <view class="account-stats">
-            <text class="stats-text">本月支出: ¥{{ formatAmount(account.monthly_expense || 0) }}</text>
-            <text class="stats-text">本月收入: ¥{{ formatAmount(account.monthly_income || 0) }}</text>
+            <text class="stats-text">本月支出: ¥{{ formatAmount(getAccountStats(account.id)?.expense || 0) }}</text>
+            <text class="stats-text">本月收入: ¥{{ formatAmount(getAccountStats(account.id)?.income || 0) }}</text>
           </view>
 
           <view class="action-buttons">
@@ -71,10 +71,11 @@
 </template>
 
 <script setup>
-import { defineOptions, computed, onMounted } from 'vue'
+import { defineOptions, computed, onMounted, ref } from 'vue'
 import { useThemeStore } from '../../../../stores/theme'
 import { useAccountManagementStore } from '../../../../stores/account/accountManagement'
 import accountAPI from '../../../../pages/account_book/control/api_account'
+import billsAPI from '../../../../pages/account_book/index/api_bills'
 import Taro from '@tarojs/taro'
 import './AccountList.scss'
 
@@ -88,6 +89,9 @@ const themeStore = useThemeStore()
 // 使用账本管理状态
 const accountManagementStore = useAccountManagementStore()
 
+// 账本统计数据
+const accountStats = ref(new Map())
+
 // 计算属性
 const accountList = computed(() => accountManagementStore.accountList)
 const isLoading = computed(() => accountManagementStore.isLoading)
@@ -98,10 +102,70 @@ const formatAmount = (amount) => {
   return parseFloat(amount).toFixed(2)
 }
 
+// 获取账本统计数据
+const getAccountStats = (accountId) => {
+  return accountStats.value.get(accountId)
+}
+
+// 获取本月日期范围
+const getCurrentMonthRange = () => {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = now.getMonth()
+
+  const startTime = new Date(year, month, 1).toISOString().split('T')[0]
+  const endTime = new Date(year, month + 1, 0).toISOString().split('T')[0]
+
+  return { startTime, endTime }
+}
+
+// 加载单个账本的统计数据
+const loadAccountStats = async (accountId) => {
+  try {
+    const { startTime, endTime } = getCurrentMonthRange()
+    const stats = await billsAPI.getBillStats({
+      account_book_id: accountId,
+      start_time: startTime,
+      end_time: endTime
+    })
+
+    // 存储统计数据
+    accountStats.value.set(accountId, {
+      income: stats.total_income || 0,
+      expense: stats.total_expense || 0,
+      balance: stats.net_amount || 0
+    })
+  } catch (error) {
+    console.error(`获取账本${accountId}统计数据失败:`, error)
+    // 设置默认值
+    accountStats.value.set(accountId, {
+      income: 0,
+      expense: 0,
+      balance: 0
+    })
+  }
+}
+
+// 批量加载所有账本的统计数据
+const loadAllAccountStats = async () => {
+  const accounts = accountManagementStore.accountList
+  if (accounts.length === 0) return
+
+  console.log('🔄 开始加载账本统计数据...')
+
+  // 并行加载所有账本的统计数据
+  const promises = accounts.map(account => loadAccountStats(account.id))
+  await Promise.allSettled(promises)
+
+  console.log('✅ 账本统计数据加载完成')
+}
+
 // 加载账本列表
 const loadAccountList = async () => {
   try {
     await accountManagementStore.fetchAccounts()
+    // 账本列表加载完成后，加载统计数据
+    await loadAllAccountStats()
   } catch (error) {
     console.error('加载账本列表失败:', error)
     Taro.showToast({
@@ -115,6 +179,8 @@ const loadAccountList = async () => {
 const refreshList = async () => {
   try {
     await accountManagementStore.fetchAccounts()
+    // 刷新统计数据
+    await loadAllAccountStats()
   } catch (error) {
     console.error('刷新列表失败:', error)
     Taro.showToast({

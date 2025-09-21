@@ -90,9 +90,8 @@ const handleShowCard = () => {
 
 // 处理编辑资料
 const handleEditProfile = () => {
-  Taro.showToast({
-    title: '编辑资料功能',
-    icon: 'none'
+  Taro.navigateTo({
+    url: '/pages/mine/editor/profile_editor'
   })
 }
 
@@ -111,3 +110,4 @@ const handleSetBirthday = () => {
   })
 }
 </script>
+

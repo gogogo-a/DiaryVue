@@ -23,6 +23,7 @@
           :bills="billsList"
           @startRecord="handleStartRecord"
           @recordClick="handleRecordClick"
+          @recordDeleted="handleRecordDeleted"
         />
       </view>
     </template>
@@ -31,7 +32,7 @@
     <view class="bottom-spacer"></view>
 
     <!-- 记账本专用底部导航栏 -->
-    <AccountBottomNav />
+    <AccountBottomNav :accountId="accountId" />
   </view>
 </template>
 
@@ -64,29 +65,26 @@ const accountId = ref('')
 // 确保导航栏颜色与当前主题一致
 themeStore.updateNavigationBarColor()
 
-// 获取账本ID
+// 简单获取账本ID
 const getAccountId = () => {
-  // 从路由参数获取账本ID
-  const instance = Taro.getCurrentInstance()
-  const router = instance.router || {}
-  const params = router.params || {}
+  const pages = Taro.getCurrentPages()
+  const currentPage = pages[pages.length - 1]
+  const options = currentPage?.options || {}
 
-  if (params.accountId) {
-    accountId.value = params.accountId
-    return params.accountId
+  console.log('📝 页面参数:', options)
+
+  if (options.accountId) {
+    accountId.value = options.accountId
+    console.log('✅ 获取到账本ID:', options.accountId)
+    return options.accountId
   }
 
-  // 如果没有参数，提示错误并返回上一页
+  console.error('❌ 没有找到账本ID')
   Taro.showToast({
-    title: '缺少账本ID参数',
-    icon: 'error',
-    duration: 2000
+    title: '账本ID缺失',
+    icon: 'error'
   })
-
-  setTimeout(() => {
-    Taro.navigateBack()
-  }, 2000)
-
+  setTimeout(() => Taro.navigateBack(), 2000)
   return null
 }
 
@@ -132,6 +130,7 @@ const initPageData = async () => {
   if (!id) return
 
   loading.value = true
+  console.log('🚀 开始加载账本数据:', id)
 
   try {
     // 并行加载所有数据
@@ -140,8 +139,9 @@ const initPageData = async () => {
       loadBillsList(id),
       loadStatsData(id)
     ])
+    console.log('✅ 页面数据加载完成')
   } catch (error) {
-    console.error('页面数据加载失败:', error)
+    console.error('❌ 页面数据加载失败:', error)
   } finally {
     loading.value = false
   }
@@ -171,8 +171,26 @@ const handleRecordClick = (record) => {
   })
 }
 
-// 页面加载时初始化数据
+// 处理记录删除
+const handleRecordDeleted = async (recordId) => {
+  console.log('记录已删除:', recordId)
+
+  // 从本地列表中移除
+  billsList.value = billsList.value.filter(bill => bill.id !== recordId)
+
+  // 重新加载统计数据
+  if (accountId.value) {
+    try {
+      await loadStatsData(accountId.value)
+    } catch (error) {
+      console.error('刷新统计数据失败:', error)
+    }
+  }
+}
+
+// 页面初始化
 onMounted(() => {
+  console.log('📱 页面挂载，开始初始化')
   initPageData()
 })
 </script>

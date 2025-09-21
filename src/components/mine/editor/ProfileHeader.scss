@@ -1,0 +1,58 @@
+.profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  background: var(--card-background);
+  padding: 0 16px;
+  position: relative;
+  border-bottom: 1px solid var(--border-color);
+
+  .back-btn {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: var(--text-color);
+    position: relative;
+
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-left: 2px solid var(--text-color);
+      border-bottom: 2px solid var(--text-color);
+      transform: rotate(45deg);
+      margin-right: 6px;
+      position: relative;
+      top: -1px;
+    }
+  }
+
+  .header-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-color);
+    text-align: center;
+    flex: 1;
+  }
+
+  .header-right {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .header-icon {
+      font-size: 24px;
+      color: var(--text-color);
+    }
+  }
+}
+
+/* 怀旧主题样式 */
+.theme-remember .profile-header {
+  background-color: var(--primary-light);
+}

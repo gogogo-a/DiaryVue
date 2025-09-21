@@ -39,13 +39,13 @@
       <view class="category-section">
         <view class="category-grid">
           <view
-            v-for="category in currentCategories"
-            :key="category.id"
-            :class="['category-item', selectedCategory?.id === category.id ? 'selected' : '']"
-            @tap="selectCategory(category)"
+            v-for="tag in currentCategories"
+            :key="tag.id"
+            :class="['category-item', selectedTag?.id === tag.id ? 'selected' : '']"
+            @tap="selectCategory(tag)"
           >
-            <view class="category-icon">{{ category.icon }}</view>
-            <text class="category-name">{{ category.name }}</text>
+            <view class="category-icon">📝</view>
+            <text class="category-name">{{ tag.tag_name }}</text>
           </view>
         </view>
       </view>
@@ -105,7 +105,7 @@
 <script setup>
 import { defineOptions, ref, computed, onMounted } from 'vue'
 import { useThemeStore } from '../../../stores/theme'
-import accountAPI from '../../../pages/account_book/control/api_account'
+import billsAPI from '../index/api_bills'
 import Taro from '@tarojs/taro'
 import './add_record.scss'
 
@@ -116,8 +116,18 @@ defineOptions({
 // 使用主题状态
 const themeStore = useThemeStore()
 
-// 使用记账本状态
-const accountStore = useAccountStore()
+// 简单获取账本ID
+const getAccountId = () => {
+  const pages = Taro.getCurrentPages()
+  const currentPage = pages[pages.length - 1]
+  const options = currentPage?.options || {}
+
+  console.log('📝 记账页面参数:', options)
+  return options.accountId || null
+}
+
+const accountId = ref(getAccountId())
+console.log('🔍 [add_record] 最终账本ID:', accountId.value)
 
 // 记账类型
 const recordType = ref('expense') // 'expense' | 'income'
@@ -131,23 +141,29 @@ const displayAmount = computed(() => {
 // 日期
 const selectedDate = ref(new Date())
 
-// 选中的分类
-const selectedCategory = ref(null)
+// 选中的标签
+const selectedTag = ref(null)
 
-// 当前显示的分类
+// 后端获取的标签数据
+const allTags = ref([])
+
+// 当前显示的标签（根据收入/支出类型过滤）
 const currentCategories = computed(() => {
-  return accountStore.getCategoriesByType(recordType.value)
+  const targetType = recordType.value === 'expense' ? '支出' : '收入'
+  return allTags.value.filter(tag =>
+    tag.category === 'bill' && tag.type === targetType
+  )
 })
 
 // 切换记账类型
 const switchType = (type) => {
   recordType.value = type
-  selectedCategory.value = null // 清除已选分类
+  selectedTag.value = null // 清除已选标签
 }
 
-// 选择分类
-const selectCategory = (category) => {
-  selectedCategory.value = category
+// 选择标签
+const selectCategory = (tag) => {
+  selectedTag.value = tag
 }
 
 // 数字输入
@@ -226,10 +242,18 @@ const addImage = () => {
 }
 
 // 保存记录
-const saveRecord = () => {
-  if (!selectedCategory.value) {
+const saveRecord = async () => {
+  if (!accountId.value) {
     Taro.showToast({
-      title: '请选择分类',
+      title: '账本ID缺失',
+      icon: 'none'
+    })
+    return
+  }
+
+  if (!selectedTag.value) {
+    Taro.showToast({
+      title: '请选择标签',
       icon: 'none'
     })
     return
@@ -253,34 +277,45 @@ const saveRecord = () => {
     return
   }
 
-  // 保存记账记录到状态管理
-  const recordData = {
-    type: recordType.value,
-    amount: amount,
-    categoryId: selectedCategory.value.id,
-    categoryName: selectedCategory.value.name,
-    categoryIcon: selectedCategory.value.icon,
-    date: selectedDate.value.toISOString(),
-    note: '', // 暂时为空，后续可以添加备注功能
-    images: [] // 暂时为空，后续可以添加图片功能
-  }
+  try {
+    Taro.showLoading({
+      title: '保存中...'
+    })
 
-  const newRecord = accountStore.addRecord(recordData)
+    // 准备账单数据
+    const billData = {
+      account_book_id: accountId.value,
+      amount: amount,
+      type: recordType.value,
+      tag_ids: [selectedTag.value.id], // 使用数组格式的标签ID
+      bill_time: selectedDate.value.toISOString(),
+      remark: '',
+      image_url: ''
+    }
 
-  if (newRecord) {
+    // 调用API创建账单
+    const newBill = await billsAPI.createBill(billData)
+
+    Taro.hideLoading()
+
     Taro.showToast({
       title: '记账成功',
       icon: 'success',
       duration: 1500
     })
 
-    console.log('记账记录已保存:', newRecord)
+    console.log('记账记录已保存:', newBill)
 
     // 关闭页面
     setTimeout(() => {
       handleClose()
     }, 1500)
-  } else {
+
+  } catch (error) {
+    Taro.hideLoading()
+
+    console.error('保存记账记录失败:', error)
+
     Taro.showToast({
       title: '保存失败，请重试',
       icon: 'none'
@@ -298,17 +333,45 @@ const handleOverlayClick = () => {
   handleClose()
 }
 
-// 页面加载时的初始化
-const init = () => {
-  console.log('记账页面初始化完成')
+// 获取标签数据
+const loadTags = async () => {
+  try {
+    const tags = await billsAPI.getTags({ category: 'bill' })
+    allTags.value = tags
+    console.log('📋 获取到账单标签:', tags)
 
-  // 初始化记账本数据
-  accountStore.initAccountData()
-
-  // 设置默认选中第一个分类
-  if (currentCategories.value.length > 0) {
-    selectedCategory.value = currentCategories.value[0]
+    // 设置默认选中第一个标签
+    if (currentCategories.value.length > 0) {
+      selectedTag.value = currentCategories.value[0]
+    }
+  } catch (error) {
+    console.error('获取标签失败:', error)
+    Taro.showToast({
+      title: '获取标签失败',
+      icon: 'none'
+    })
   }
+}
+
+// 页面加载时的初始化
+const init = async () => {
+  console.log('记账页面初始化完成')
+  console.log('账本ID:', accountId.value)
+
+  // 检查账本ID
+  if (!accountId.value) {
+    Taro.showToast({
+      title: '账本ID缺失，即将返回',
+      icon: 'none'
+    })
+    setTimeout(() => {
+      Taro.navigateBack()
+    }, 2000)
+    return
+  }
+
+  // 加载标签数据
+  await loadTags()
 }
 
 // 页面加载完成后初始化

@@ -1,0 +1,52 @@
+.profile-avatar {
+  padding: 16px;
+
+  .avatar-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 16px;
+  }
+
+  .avatar-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .avatar-image {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 2px solid var(--primary-color);
+      margin-bottom: 12px;
+    }
+
+    .avatar-hint {
+      font-size: 12px;
+      color: var(--text-color-light);
+      margin-bottom: 16px;
+    }
+
+    .update-avatar-btn {
+      background-color: var(--primary-color);
+      color: var(--button-text);
+      padding: 8px 24px;
+      border-radius: 20px;
+      font-size: 14px;
+      box-shadow: var(--box-shadow-light);
+    }
+  }
+}
+
+/* 怀旧主题样式 */
+.theme-remember .profile-avatar {
+  .avatar-content {
+    .avatar-image {
+      border-color: var(--primary-dark);
+    }
+
+    .update-avatar-btn {
+      background-color: var(--primary-light);
+    }
+  }
+}

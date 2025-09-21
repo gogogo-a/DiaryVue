@@ -63,12 +63,16 @@
         border-radius: 0 0 16rpx 16rpx;
         overflow: hidden;
 
+        .record-wrapper {
+          position: relative;
+        }
+
         .record-item {
           display: flex;
           align-items: center;
           padding: 32rpx;
           border-bottom: 2rpx solid var(--border-color);
-          transition: all 0.3s ease;
+          background: var(--card-background);
 
           &:last-child {
             border-bottom: none;
@@ -137,11 +141,33 @@
 
           .record-actions {
             margin-left: 16rpx;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8rpx;
 
             .record-time {
               font-size: 24rpx;
               color: var(--text-color-lighter);
               font-family: 'Courier New', monospace;
+            }
+
+            .delete-btn {
+              background: #FF6B6B;
+              color: #ffffff;
+              padding: 8rpx 16rpx;
+              border-radius: 8rpx;
+              font-size: 24rpx;
+              margin-top: 8rpx;
+
+              .delete-text {
+                color: #ffffff;
+                font-weight: 500;
+              }
+
+              &:active {
+                background: #FF5252;
+              }
             }
           }
         }
@@ -196,6 +222,41 @@
           .start-text {
             font-size: 32rpx;
             font-weight: 500;
+          }
+        }
+
+        /* 删除按钮样式 - 微信小程序优化 */
+        .delete-action {
+          position: absolute;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          width: 160rpx;
+          background: #FF6B6B;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1;
+          border-radius: 0;
+
+          /* 微信小程序兼容性优化 */
+          height: 100%;
+          box-sizing: border-box;
+
+          .delete-text {
+            color: #ffffff;
+            font-size: 28rpx;
+            font-weight: 600;
+            line-height: 1;
+          }
+
+          &:active {
+            background: #FF5252;
+          }
+
+          /* 显示状态 */
+          &.show {
+            background: #FF4444;
           }
         }
       }

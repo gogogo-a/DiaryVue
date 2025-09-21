@@ -61,3 +61,4 @@ const handleStatTap = (type) => {
   })
 }
 </script>
+

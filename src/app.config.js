@@ -10,7 +10,8 @@ export default {
     'pages/discover/index/discover',
     'pages/schedule/index/schedule', // 待办事项页面
     "pages/diary/detail/index", // 日记详情页 (detail/index.vue)
-    'pages/mine/personal_space/personal_space' // 个人空间页面
+    'pages/mine/personal_space/personal_space', // 个人空间页面
+    'pages/mine/editor/profile_editor' // 个人资料编辑页
   ],
   window: {
     backgroundTextStyle: 'light',

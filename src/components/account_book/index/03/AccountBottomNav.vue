@@ -44,6 +44,14 @@ defineOptions({
   name: 'AccountBottomNavComponent'
 })
 
+// Props
+const props = defineProps({
+  accountId: {
+    type: String,
+    default: ''
+  }
+})
+
 // 使用主题状态
 const themeStore = useThemeStore()
 
@@ -69,9 +77,16 @@ const handleManage = () => {
 const handleAddRecord = () => {
   console.log('点击记一笔按钮')
 
+  if (!props.accountId) {
+    Taro.showToast({
+      title: '账本ID不存在',
+      icon: 'error'
+    })
+    return
+  }
 
   Taro.navigateTo({
-    url: '/pages/account_book/add/add_record',
+    url: `/pages/account_book/add/add_record?accountId=${props.accountId}`,
     success: (res) => {
       console.log('跳转到记账页面成功:', res)
     },
