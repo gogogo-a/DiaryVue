@@ -121,13 +121,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    
+
     .stat-label {
       font-size: var(--tip-font-size);
       color: var(--text-color-light);
       margin-bottom: 4rpx;
     }
-    
+
     .stat-value {
       font-size: var(--body-font-size);
       color: var(--text-color);
@@ -152,13 +152,49 @@
 // 空状态样式
 .empty-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 120rpx 0;
+  padding: 120rpx 40rpx;
+  text-align: center;
 
-  .empty-text {
+  .empty-icon {
+    font-size: 120rpx;
+    margin-bottom: 40rpx;
+    opacity: 0.6;
+  }
+
+  .empty-title {
     font-size: var(--subtitle-font-size);
+    color: var(--text-color);
+    font-weight: var(--font-weight-medium);
+    margin-bottom: 16rpx;
+  }
+
+  .empty-subtitle {
+    font-size: var(--body-font-size);
     color: var(--text-color-light);
+    margin-bottom: 60rpx;
+    line-height: 1.5;
+  }
+
+  .empty-action {
+    background: var(--primary-color);
+    border-radius: 50rpx;
+    padding: 24rpx 48rpx;
+    box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+
+    &:active {
+      transform: translateY(2rpx);
+      box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
+    }
+
+    .action-text {
+      font-size: var(--body-font-size);
+      color: #ffffff;
+      font-weight: var(--font-weight-medium);
+    }
   }
 }
 
@@ -202,7 +238,7 @@
     .stat-label {
       color: var(--text-color-light);
     }
-    
+
     .stat-value {
       color: var(--text-color);
     }
@@ -212,7 +248,15 @@
     color: var(--text-color-light);
   }
 
-  .empty-text {
+  .empty-title {
+    color: var(--text-color);
+  }
+
+  .empty-subtitle {
     color: var(--text-color-light);
+  }
+
+  .empty-action {
+    background: var(--primary-color);
   }
 }
