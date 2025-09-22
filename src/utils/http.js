@@ -21,7 +21,7 @@ const CONFIG = {
   BASE_URL:
     process.env.NODE_ENV === "development"
       ? "http://8.140.245.242:8020/api/v1" // 开发环境也使用HTTPS
-      : "https://connivently-fitted-grayce.ngrok-free.app/api/v1", // 生产环境使用HTTPS
+      : "http://8.140.245.242:8020/api/v1", // 生产环境使用HTTPS
 
   // 请求超时时间（毫秒）
   TIMEOUT: 10000, // 增加到30秒
