@@ -8,20 +8,7 @@
       @search="handleSearch"
     />
     <DiaryCard />
-    <!-- <view class="content margin">
-      <view class="card diary-item" @tap="viewDiary">
-        <view class="subtitle-text">今天的日记</view>
-        <view class="tip-text">2025-09-13</view>
-        <view class="body-text">这是一个使用Taro和Vue 3的日记应用示例...</view>
-      </view>
-
-      <view class="card diary-item" @tap="viewDiary">
-        <view class="subtitle-text">昨天的回忆</view>
-        <view class="tip-text">2025-09-12</view>
-        <view class="body-text">今天学习了如何使用Taro框架开发小程序...</view>
-      </view>
-    </view> -->
-
+    <!-- 操作栏 -->
     <view class="action-bar">
       <view class="button" @tap="addNewDiary">添加日记</view>
       <view class="button-outline" @tap="goBack">返回首页</view>

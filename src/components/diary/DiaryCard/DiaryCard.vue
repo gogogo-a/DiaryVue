@@ -62,101 +62,18 @@ import Taro from "@tarojs/taro";
 import diaryAPI from "../../../utils/diary";
 import "./DiaryCard.scss";
 
-// 响应式数据
-const diaryList = ref([]);
-const loading = ref(false);
+// 日记数据
+const month = ref("09月");
+const lunarDate = ref("七月廿四");
+const date = ref("15");
+const weekday = ref("周一");
+const time = ref("14:47");
+const year = ref("2025");
+const quoteText = ref("就算要出卖灵魂，也要找个付的起价钱的人。");
+const quoteSource = ref("歌德《浮士德》");
 
-// 获取日记列表
-const fetchDiaryList = async () => {
-  try {
-    loading.value = true;
-    console.log("🟢 开始获取日记列表...");
-
-    const response = await diaryAPI.getDiaryList({
-      page: 1,
-      page_size: 10,
-    });
-
-    // 根据最新接口文档，diaryAPI.getDiaryList 已经返回 data 部分
-    // response.list 包含日记数据
-    if (response && Array.isArray(response.list)) {
-      diaryList.value = response.list;
-      console.log("✅ 获取日记列表成功，数据数量:", diaryList.value.length);
-
-      if (diaryList.value.length > 0) {
-        console.log("✅ 日记数据结构示例:", diaryList.value[0]);
-      } else {
-        console.log("📝 当前没有日记数据，显示空状态");
-      }
-    } else {
-      console.warn("⚠️ 接口返回数据格式异常:", response);
-      diaryList.value = [];
-    }
-  } catch (error) {
-    console.error("❌ 获取日记列表失败:", error);
-    diaryList.value = [];
-
-    // 显示错误提示
-    Taro.showToast({
-      title: "获取日记失败",
-      icon: "none",
-      duration: 2000,
-    });
-  } finally {
-    loading.value = false;
-  }
-};
-
-// 格式化日期
-const formatDate = (dateString) => {
-  try {
-    const date = new Date(dateString);
-
-    // 月份
-    const month = (date.getMonth() + 1).toString().padStart(2, "0") + "月";
-
-    // 日期
-    const day = date.getDate().toString();
-
-    // 年份
-    const year = date.getFullYear().toString();
-
-    // 星期
-    const weekdays = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
-    const weekday = weekdays[date.getDay()];
-
-    // 时间
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-    const time = `${hours}:${minutes}`;
-
-    // 农历日期（这里暂时用简单的替代）
-    const lunarDate = "农历";
-
-    return {
-      month,
-      date: day,
-      year,
-      weekday,
-      time,
-      lunarDate,
-    };
-  } catch (error) {
-    console.error("日期格式化失败:", error);
-    return {
-      month: "--",
-      date: "--",
-      year: "--",
-      weekday: "--",
-      time: "--",
-      lunarDate: "--",
-    };
-  }
-};
-
-// 处理卡片点击
-const handleCardClick = (diaryId) => {
-  console.log("🟢 点击卡片，准备跳转，日记ID:", diaryId);
+const handleCardClick = () => {
+  console.log('🟢 点击卡片，准备跳转...');
 
   Taro.navigateTo({
     url: `/pages/diary/detail/index?id=${diaryId}`,
