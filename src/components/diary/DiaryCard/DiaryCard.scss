@@ -109,18 +109,57 @@
   font-style: italic;
 }
 
-// 作者信息样式
-.diary-author {
+// 统计信息样式
+.diary-stats {
   display: flex;
-  align-items: center;
+  justify-content: space-around;
   margin-top: 24rpx;
   padding-top: 20rpx;
   border-top: 1rpx solid var(--border-color);
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    .stat-label {
+      font-size: var(--tip-font-size);
+      color: var(--text-color-light);
+      margin-bottom: 4rpx;
+    }
+    
+    .stat-value {
+      font-size: var(--body-font-size);
+      color: var(--text-color);
+      font-weight: var(--font-weight-medium);
+    }
+  }
 }
 
-.author-name {
-  font-size: var(--tip-font-size);
-  color: var(--text-color-light);
+// 加载状态样式
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80rpx 0;
+
+  .loading-text {
+    font-size: var(--body-font-size);
+    color: var(--text-color-light);
+  }
+}
+
+// 空状态样式
+.empty-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 120rpx 0;
+
+  .empty-text {
+    font-size: var(--subtitle-font-size);
+    color: var(--text-color-light);
+  }
 }
 
 // 暗色主题适配
@@ -159,7 +198,21 @@
     color: var(--text-color-lighter);
   }
 
-  .author-name {
+  .diary-stats {
+    .stat-label {
+      color: var(--text-color-light);
+    }
+    
+    .stat-value {
+      color: var(--text-color);
+    }
+  }
+
+  .loading-text {
+    color: var(--text-color-light);
+  }
+
+  .empty-text {
     color: var(--text-color-light);
   }
 }

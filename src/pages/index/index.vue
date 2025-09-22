@@ -162,14 +162,14 @@ const checkAndAutoLogin = async () => {
   }
 };
 
-// // 页面加载时检查登录状态
-//  onMounted(async () => {
-//   // 检查token并自动登录
-//   await checkAndAutoLogin();
+// 页面加载时检查登录状态
+ onMounted(async () => {
+  // 检查token并自动登录
+  await checkAndAutoLogin();
 
-//   // 设置当前激活的标签
-//   if (tabBar.value) {
-//     tabBar.value.setActiveTab("index");
-//   }
-// });
+  // 设置当前激活的标签
+  if (tabBar.value) {
+    tabBar.value.setActiveTab("index");
+  }
+});
 </script>
