@@ -202,6 +202,151 @@
   box-sizing: border-box;
 }
 
+/* 加载状态样式 */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  padding: 40rpx;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid var(--border-color);
+  border-top: 4rpx solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 24rpx;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: var(--text-color-light);
+}
+
+/* 错误状态样式 */
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  padding: 40rpx;
+}
+
+.error-icon {
+  font-size: 80rpx;
+  margin-bottom: 24rpx;
+}
+
+.error-text {
+  font-size: 28rpx;
+  color: var(--text-color);
+  text-align: center;
+  margin-bottom: 40rpx;
+  line-height: 1.6;
+}
+
+.error-actions {
+  display: flex;
+  gap: 24rpx;
+}
+
+.retry-btn,
+.back-btn-error {
+  padding: 16rpx 32rpx;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  text-align: center;
+  min-width: 120rpx;
+}
+
+.retry-btn {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.back-btn-error {
+  background-color: var(--card-background);
+  color: var(--text-color);
+  border: 1rpx solid var(--border-color);
+}
+
+/* 日记标题区域 */
+.diary-title-section {
+  padding: 32rpx;
+  background-color: var(--card-background);
+  margin: 0 32rpx 24rpx 32rpx;
+  border-radius: 16rpx;
+  border: var(--card-border);
+}
+
+.diary-title {
+  font-size: 36rpx;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-color);
+  line-height: 1.4;
+  margin-bottom: 20rpx;
+  display: block;
+}
+
+.diary-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  font-size: 24rpx;
+  color: var(--text-color-light);
+}
+
+.permission-icon,
+.stat-icon {
+  font-size: 24rpx;
+}
+
+.permission-text,
+.stat-text {
+  font-size: 24rpx;
+}
+
+/* 标签区域 */
+.tags-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  padding: 0 32rpx;
+  margin-bottom: 24rpx;
+}
+
+.tag-item {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+}
+
+.tag-text {
+  font-size: 24rpx;
+}
+
 /* 添加全局样式重置 */
 * {
   box-sizing: border-box;
