@@ -12,13 +12,62 @@
       </view>
     </view>
 
+    <!-- 加载状态 -->
+    <view v-if="loading" class="loading-container">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">加载中...</text>
+    </view>
+
+    <!-- 错误状态 -->
+    <view v-else-if="error" class="error-container">
+      <view class="error-icon">😞</view>
+      <text class="error-text">{{ error }}</text>
+      <view class="error-actions">
+        <view class="retry-btn" @tap="loadDiaryDetail(diaryId)">重试</view>
+        <view class="back-btn-error" @tap="handleBack">返回</view>
+      </view>
+    </view>
+
     <!-- 日记内容区域 -->
-    <scroll-view class="detail-content" scroll-y>
-      <!-- 作者信息 - 只显示名字 -->
+    <scroll-view v-else class="detail-content" scroll-y>
+      <!-- 日记标题 -->
+      <view class="diary-title-section">
+        <text class="diary-title">{{
+          diaryDetail?.diary?.title || "无标题"
+        }}</text>
+        <!-- 权限和统计信息 -->
+        <view class="diary-meta">
+          <view class="meta-item">
+            <text class="permission-icon">{{
+              getPermissionIcon(permission)
+            }}</text>
+            <text class="permission-text">{{
+              getPermissionText(permission)
+            }}</text>
+          </view>
+          <view class="meta-item">
+            <text class="stat-icon">👁️</text>
+            <text class="stat-text">{{ formatPageview(pageviewCount) }}</text>
+          </view>
+          <view class="meta-item">
+            <text class="stat-icon">❤️</text>
+            <text class="stat-text">{{ formatLikeCount(likeCount) }}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 作者信息 -->
       <view class="author-section">
         <view class="author-info">
-          <text class="author-name-large">小明</text>
+          <text class="author-name-large">{{ authorName }}</text>
           <text class="publish-time">发布于 {{ publishTime }}</text>
+        </view>
+      </view>
+
+      <!-- 标签区域 -->
+      <view v-if="tags.length > 0" class="tags-section">
+        <view class="tag-item" v-for="tag in tags" :key="tag.id">
+          <text class="tag-text">{{ tag.displayText }}</text>
         </view>
       </view>
 
@@ -31,7 +80,7 @@
       <view class="interaction-buttons">
         <view class="interaction-btn" @tap="handleLike">
           <text class="icon">{{ isLiked ? "❤️" : "🤍" }}</text>
-          <text class="btn-text">{{ likeCount }}</text>
+          <text class="btn-text">{{ formatLikeCount(likeCount) }}</text>
         </view>
         <view class="interaction-btn" @tap="handleComment">
           <text class="icon">💬</text>
@@ -88,21 +137,40 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue"; // 修改这里：使用 onMounted 替代 onLoad
+import { ref, onMounted } from "vue";
 import Taro from "@tarojs/taro";
 import { useThemeStore } from "../../../stores/theme";
+import diaryAPI from "../../../utils/diary";
+import {
+  formatPublishTime,
+  getPermissionText,
+  getPermissionIcon,
+  formatTags,
+  formatPageview,
+  formatLikeCount,
+  processContent,
+  getDefaultAuthorName,
+  validateDiaryDetail,
+} from "../../../utils/detail";
 
 const themeStore = useThemeStore();
 
+// 页面状态
+const loading = ref(true);
+const error = ref("");
+
 // 日记数据
 const diaryId = ref("");
-const diaryContent = ref(
-  "就算要出卖灵魂，也要找个付的起价钱的人。今天在图书馆读到了这句话，深有感触。我们常常为了各种原因妥协，但最重要的是要知道自己的价值。"
-);
-const publishTime = ref("2025-09-15 14:47");
+const diaryDetail = ref(null);
+const diaryContent = ref("");
+const publishTime = ref("");
 const isLiked = ref(false);
-const likeCount = ref(24);
-const commentCount = ref(8);
+const likeCount = ref(0);
+const pageviewCount = ref(0);
+const commentCount = ref(0);
+const authorName = ref("");
+const tags = ref([]);
+const permission = ref(null);
 
 // 评论数据
 const comments = ref([
@@ -139,9 +207,80 @@ onMounted(() => {
   loadDiaryDetail(options.id);
 });
 
-const loadDiaryDetail = (id) => {
-  console.log("加载日记详情数据，ID:", id);
-  // 实际项目中这里应该调用API
+const loadDiaryDetail = async (id) => {
+  if (!id) {
+    error.value = "缺少日记ID参数";
+    loading.value = false;
+    Taro.showModal({
+      title: "参数错误",
+      content: "缺少日记ID参数",
+      showCancel: false,
+      success: () => {
+        Taro.navigateBack();
+      },
+    });
+    return;
+  }
+
+  try {
+    loading.value = true;
+    error.value = "";
+
+    console.log("🟢 开始加载日记详情，ID:", id);
+
+    // 调用API获取日记详情
+    const response = await diaryAPI.getDiaryDetail(id);
+
+    console.log("✅ 获取日记详情成功:", response);
+
+    // 验证数据结构
+    if (!validateDiaryDetail(response)) {
+      throw new Error("日记详情数据格式不正确");
+    }
+
+    // 设置数据
+    diaryDetail.value = response;
+    const diary = response.diary;
+
+    // 基础信息
+    diaryContent.value = processContent(diary.content);
+    publishTime.value = formatPublishTime(diary.created_at);
+    isLiked.value = response.is_liked || false;
+    likeCount.value = diary.like || 0;
+    pageviewCount.value = diary.pageview || 0;
+    authorName.value = getDefaultAuthorName(); // 暂时使用默认名称
+
+    // 标签信息
+    tags.value = formatTags(response.tags || []);
+
+    // 权限信息
+    permission.value = response.permission;
+
+    // 评论数量（暂时使用静态数据，后续可扩展）
+    commentCount.value = 0;
+
+    console.log("✅ 日记详情数据设置完成");
+  } catch (err) {
+    console.error("❌ 加载日记详情失败:", err);
+    error.value = err.message || "加载日记详情失败";
+
+    Taro.showModal({
+      title: "加载失败",
+      content: error.value,
+      showCancel: true,
+      cancelText: "返回",
+      confirmText: "重试",
+      success: (res) => {
+        if (res.confirm) {
+          loadDiaryDetail(id);
+        } else {
+          Taro.navigateBack();
+        }
+      },
+    });
+  } finally {
+    loading.value = false;
+  }
 };
 
 const handleBack = () => {
