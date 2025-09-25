@@ -61,6 +61,7 @@ const accountData = ref(null)
 const billsList = ref([])
 const statsData = ref(null)
 const accountId = ref('')
+const tagsDict = ref(new Map()) // 标签字典，key为标签id，value为标签对象
 
 // 确保导航栏颜色与当前主题一致
 themeStore.updateNavigationBarColor()
@@ -98,6 +99,21 @@ const loadAccountData = async (id) => {
   }
 }
 
+// 加载标签字典
+const loadTagsDict = async () => {
+  try {
+    const tags = await billsAPI.getTags({ category: 'bill' })
+    const dict = new Map()
+    tags.forEach(tag => {
+      dict.set(tag.id, tag)
+    })
+    tagsDict.value = dict
+    console.log('📋 标签字典加载完成:', dict.size, '个标签')
+  } catch (error) {
+    console.error('获取标签失败:', error)
+  }
+}
+
 // 加载账单列表
 const loadBillsList = async (id) => {
   try {
@@ -106,7 +122,28 @@ const loadBillsList = async (id) => {
       page: 1,
       page_size: 50 // 暂时加载更多数据
     })
-    billsList.value = result.list || []
+
+    // 处理账单数据，补充标签信息
+    const processedBills = (result.list || []).map(bill => {
+      // 为每个账单添加tags字段，基于tag_ids查找
+      const tags = []
+      if (bill.tag_ids && Array.isArray(bill.tag_ids)) {
+        bill.tag_ids.forEach(tagId => {
+          const tag = tagsDict.value.get(tagId)
+          if (tag) {
+            tags.push(tag)
+          }
+        })
+      }
+
+      return {
+        ...bill,
+        tags // 添加完整的标签信息
+      }
+    })
+
+    billsList.value = processedBills
+    console.log('📝 账单列表加载完成:', processedBills.length, '条记录')
   } catch (error) {
     console.error('获取账单列表失败:', error)
   }
@@ -133,10 +170,13 @@ const initPageData = async () => {
   console.log('🚀 开始加载账本数据:', id)
 
   try {
-    // 并行加载所有数据
+    // 1. 先加载标签字典
+    await loadTagsDict()
+
+    // 2. 然后并行加载其他数据
     await Promise.all([
       loadAccountData(id),
-      loadBillsList(id),
+      loadBillsList(id), // 这里会使用上面加载的标签字典
       loadStatsData(id)
     ])
     console.log('✅ 页面数据加载完成')

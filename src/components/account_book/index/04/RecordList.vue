@@ -114,7 +114,7 @@ const recordsByDate = computed(() => {
   const grouped = {}
 
   props.bills.forEach(bill => {
-    const date = new Date(bill.created_at || bill.bill_time).toDateString()
+    const date = new Date(bill.bill_time || bill.created_at).toDateString()
 
     if (!grouped[date]) {
       grouped[date] = {
@@ -133,7 +133,7 @@ const recordsByDate = computed(() => {
       categoryName: bill.tags?.[0]?.tag_name || '未分类',
       categoryIcon: bill.type === 'income' ? '💰' : '💸',
       note: bill.remark,
-      date: bill.created_at || bill.bill_time
+      date: bill.bill_time || bill.created_at
     }
 
     grouped[date].records.push(record)

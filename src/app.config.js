@@ -12,7 +12,7 @@ export default {
     'pages/mine/personal_space/personal_space', // 个人空间页面
     'pages/mine/editor/profile_editor', // 个人资料编辑页
     "pages/diary/adddiary/adddiary",
-    "pages/mine/personal_space/personal_space", // 个人空间页面
+
   ],
   window: {
     backgroundTextStyle: "light",
@@ -21,3 +21,6 @@ export default {
     navigationBarTextStyle: "black",
   },
 };
+
+
+
