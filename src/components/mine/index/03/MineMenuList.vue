@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { defineOptions, ref, reactive } from 'vue'
+import { defineOptions, ref, reactive, onMounted } from 'vue'
 import { useThemeStore } from '../../../../stores/theme'
 import { useUserStore } from '../../../../stores/user'
 import Taro from '@tarojs/taro'
@@ -60,6 +60,10 @@ const passwordEnabled = ref(false)
 
 // 应用版本号
 const appVersion = ref('v25.0912')
+
+// 开发者模式相关
+const devModeClickCount = ref(0)
+const devModeTimerId = ref(null)
 
 // 菜单项配置
 const menuItems = reactive([
@@ -180,11 +184,8 @@ const handleMenuTap = (item) => {
       })
       break
     case 'version':
-      Taro.showModal({
-        title: '软件版本',
-        content: `当前版本：${appVersion.value}\n\n这是一个基于Taro和Vue3开发的日记应用`,
-        showCancel: false
-      })
+      // 检测开发者模式的点击
+      handleVersionClick()
       break
     case 'logout':
       handleLogout()
@@ -193,6 +194,54 @@ const handleMenuTap = (item) => {
       // 密码功能由开关处理，这里不做操作
       break
   }
+}
+
+// 处理版本点击，用于激活开发者模式
+const handleVersionClick = () => {
+  // 增加点击计数
+  devModeClickCount.value++
+  
+  // 清除之前的定时器
+  if (devModeTimerId.value) {
+    clearTimeout(devModeTimerId.value)
+  }
+  
+  // 设置新的定时器，2秒内需要点击3次
+  devModeTimerId.value = setTimeout(() => {
+    // 重置点击计数
+    devModeClickCount.value = 0
+  }, 2000)
+  
+  // 如果点击次数达到3次，进入开发者模式
+  if (devModeClickCount.value >= 3) {
+    devModeClickCount.value = 0
+    navigateToDevPage()
+  } else {
+    // 显示提示，还需要点击几次
+    const remainingClicks = 3 - devModeClickCount.value
+    Taro.showToast({
+      title: `再点击${remainingClicks}次进入开发模式`,
+      icon: 'none',
+      duration: 1500
+    })
+  }
+}
+
+// 跳转到开发者页面
+const navigateToDevPage = () => {
+  Taro.navigateTo({
+    url: '/pages/dev_page/dev_page/dev_page',
+    success: () => {
+      console.log('跳转到开发者页面成功')
+    },
+    fail: (err) => {
+      console.error('跳转到开发者页面失败:', err)
+      Taro.showToast({
+        title: '开发者页面跳转失败',
+        icon: 'none'
+      })
+    }
+  })
 }
 
 // 处理退出账号
@@ -252,5 +301,14 @@ const handlePasswordToggle = (e) => {
     icon: passwordEnabled.value ? 'success' : 'none'
   })
 }
+
+// 组件卸载时清除定时器
+onMounted(() => {
+  return () => {
+    if (devModeTimerId.value) {
+      clearTimeout(devModeTimerId.value)
+    }
+  }
+})
 </script>
 

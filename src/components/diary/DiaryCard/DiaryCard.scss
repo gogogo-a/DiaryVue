@@ -1,6 +1,151 @@
 @use "../../../styles/themes.scss" as themes;
 @use "../../../styles/variables.scss" as vars;
 
+/* 操作菜单样式 */
+.diary-actions {
+  position: absolute;
+  top: 16rpx;
+  right: 16rpx;
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  z-index: 2;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
+  }
+}
+
+.action-icon {
+  font-size: 32rpx;
+  color: var(--text-color);
+  font-weight: bold;
+  transform: rotate(90deg);
+}
+
+/* 日记内容区域 */
+.diary-content-area {
+  width: 100%;
+  height: 100%;
+}
+
+/* 操作菜单弹出层 */
+.action-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  z-index: 9999; /* 提高z-index确保在最顶层 */
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.action-menu {
+  width: 100%;
+  background-color: var(--card-background);
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 0;
+  animation: slideUp 0.3s ease;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.action-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx 40rpx 24rpx 40rpx;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.menu-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.menu-close {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: var(--background-color);
+}
+
+.close-icon {
+  font-size: 28rpx;
+  color: var(--text-color-light);
+}
+
+.action-menu-content {
+  padding: 16rpx 0 60rpx 0; /* 增加底部内边距，确保最后一项可见 */
+}
+
+.action-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 40rpx;
+  transition: background-color 0.2s ease;
+  min-height: 80rpx; /* 确保每个操作项有足够的高度 */
+
+  &:hover {
+    background-color: var(--background-color);
+  }
+
+  &.danger {
+    .action-text {
+      color: #ff4757;
+    }
+
+    .action-icon {
+      opacity: 0.8;
+    }
+  }
+}
+
+.action-item .action-icon {
+  font-size: 32rpx;
+  margin-right: 24rpx;
+  width: 48rpx;
+  text-align: center;
+}
+
+.action-item .action-text {
+  font-size: 30rpx;
+  color: var(--text-color);
+  flex: 1;
+}
+
 .diary-card-container {
   padding: 20rpx;
 }
@@ -23,6 +168,7 @@
   font-family: var(--text-font-family);
   transition: all var(--transition-time);
   box-sizing: border-box;
+  position: relative; /* 添加相对定位以支持操作按钮 */
 }
 
 // 顶部日期区域样式
@@ -109,18 +255,93 @@
   font-style: italic;
 }
 
-// 作者信息样式
-.diary-author {
+// 统计信息样式
+.diary-stats {
   display: flex;
-  align-items: center;
+  justify-content: space-around;
   margin-top: 24rpx;
   padding-top: 20rpx;
   border-top: 1rpx solid var(--border-color);
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .stat-label {
+      font-size: var(--tip-font-size);
+      color: var(--text-color-light);
+      margin-bottom: 4rpx;
+    }
+
+    .stat-value {
+      font-size: var(--body-font-size);
+      color: var(--text-color);
+      font-weight: var(--font-weight-medium);
+    }
+  }
 }
 
-.author-name {
-  font-size: var(--tip-font-size);
-  color: var(--text-color-light);
+// 加载状态样式
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80rpx 0;
+
+  .loading-text {
+    font-size: var(--body-font-size);
+    color: var(--text-color-light);
+  }
+}
+
+// 空状态样式
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 120rpx 40rpx;
+  text-align: center;
+
+  .empty-icon {
+    font-size: 120rpx;
+    margin-bottom: 40rpx;
+    opacity: 0.6;
+  }
+
+  .empty-title {
+    font-size: var(--subtitle-font-size);
+    color: var(--text-color);
+    font-weight: var(--font-weight-medium);
+    margin-bottom: 16rpx;
+  }
+
+  .empty-subtitle {
+    font-size: var(--body-font-size);
+    color: var(--text-color-light);
+    margin-bottom: 60rpx;
+    line-height: 1.5;
+  }
+
+  .empty-action {
+    background: var(--primary-color);
+    border-radius: 50rpx;
+    padding: 24rpx 48rpx;
+    box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+
+    &:active {
+      transform: translateY(2rpx);
+      box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
+    }
+
+    .action-text {
+      font-size: var(--body-font-size);
+      color: #ffffff;
+      font-weight: var(--font-weight-medium);
+    }
+  }
 }
 
 // 暗色主题适配
@@ -159,7 +380,29 @@
     color: var(--text-color-lighter);
   }
 
-  .author-name {
+  .diary-stats {
+    .stat-label {
+      color: var(--text-color-light);
+    }
+
+    .stat-value {
+      color: var(--text-color);
+    }
+  }
+
+  .loading-text {
     color: var(--text-color-light);
+  }
+
+  .empty-title {
+    color: var(--text-color);
+  }
+
+  .empty-subtitle {
+    color: var(--text-color-light);
+  }
+
+  .empty-action {
+    background: var(--primary-color);
   }
 }

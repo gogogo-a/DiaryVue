@@ -12,7 +12,8 @@ export default {
     'pages/mine/personal_space/personal_space', // 个人空间页面
     'pages/mine/editor/profile_editor', // 个人资料编辑页
     "pages/diary/adddiary/adddiary",
-
+    "pages/dev_page/dev_page/dev_page", // 开发者页面
+    "pages/dev_page/SupabaseUpload/SupabaseUpload", // Supabase上传测试页面
   ],
   window: {
     backgroundTextStyle: "light",
