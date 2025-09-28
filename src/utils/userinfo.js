@@ -76,28 +76,7 @@ export const wxLogin = async () => {
   }
 }
 
-/**
- * 获取用户信息（可选）
- * @returns {Promise<Object>} 返回用户信息
- */
-export const getUserInfo = async () => {
-  try {
-    const userInfoRes = await Taro.getUserProfile({
-      desc: '用于完善用户资料'
-    })
 
-    return {
-      success: true,
-      userInfo: userInfoRes.userInfo
-    }
-
-  } catch (error) {
-    return {
-      success: false,
-      error: error.errMsg || '获取用户信息失败'
-    }
-  }
-}
 
 /**
  * 静默登录API (不显示任何UI)
@@ -115,10 +94,6 @@ export const silentWxLogin = async () => {
     const loginData = {
       code: loginRes.code
     }
-
-    console.log('静默发送登录请求:', loginData)
-    console.log('请求URL: /auth/wx-login')
-    console.log('完整URL将会是:', 'https://connivently-fitted-grayce.ngrok-free.app/api/v1' + '/auth/wx-login')
 
     // 发送到后端API（使用便捷的POST方法）
     const response = await http.post('/auth/wx-login', loginData, {
@@ -167,6 +142,28 @@ export const silentWxLogin = async () => {
   }
 }
 
+/**
+ * 获取用户信息（可选）
+ * @returns {Promise<Object>} 返回用户信息
+ */
+export const getUserInfo = async () => {
+  try {
+    const userInfoRes = await Taro.getUserProfile({
+      desc: '用于完善用户资料'
+    })
+
+    return {
+      success: true,
+      userInfo: userInfoRes.userInfo
+    }
+
+  } catch (error) {
+    return {
+      success: false,
+      error: error.errMsg || '获取用户信息失败'
+    }
+  }
+}
 /**
  * 带Token的API请求
  * @param {string} url 请求地址

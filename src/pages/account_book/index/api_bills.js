@@ -111,6 +111,7 @@ class BillsAPI {
     if (params.end_time) queryParams.end_time = params.end_time
     if (params.group_by) queryParams.group_by = params.group_by
 
+
     return http.get('/bills/stats', queryParams)
   }
 
@@ -126,6 +127,7 @@ class BillsAPI {
 
     return http.get('/tags', queryParams)
   }
+
 }
 
 // 创建API实例

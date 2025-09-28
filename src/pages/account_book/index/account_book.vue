@@ -1,26 +1,75 @@
 <template>
   <view class="account-book-page" :class="themeStore.currentThemeClass">
     <!-- 加载状态 -->
-    <view v-if="loading" class="loading-container">
+    <view v-if="billsStore.isLoading" class="loading-container">
       <text>加载中...</text>
     </view>
 
     <!-- 内容区域 -->
     <template v-else>
-      <!-- 账本头部信息组件 -->
-      <view class="card margin">
-        <AccountHeader :account="accountData" />
-      </view>
+      <!-- 账本统计 -->
+      <view class="stats-card">
+        <view class="stats-header">
+          <text class="stats-title">本月统计</text>
+          <text class="stats-period">{{ getCurrentMonth() }}</text>
+        </view>
 
-      <!-- 账本统计组件 -->
-      <view class="card margin">
-        <AccountStats :stats="statsData" />
+        <view class="stats-content" v-if="statsInfo">
+          <view class="stats-row">
+            <view class="stat-item income">
+              <view class="stat-icon">💰</view>
+              <view class="stat-info">
+                <text class="stat-label">收入</text>
+                <text class="stat-amount">¥{{ formatAmount(statsInfo.total_income) }}</text>
+              </view>
+            </view>
+
+            <view class="stat-item expense">
+              <view class="stat-icon">💸</view>
+              <view class="stat-info">
+                <text class="stat-label">支出</text>
+                <text class="stat-amount">¥{{ formatAmount(statsInfo.total_expense) }}</text>
+              </view>
+            </view>
+          </view>
+
+          <view class="stats-balance">
+            <text class="balance-label">结余</text>
+            <text class="balance-amount" :class="balanceClass">
+              ¥{{ formatAmount(statsInfo.net_amount) }}
+            </text>
+          </view>
+
+          <!-- 分类统计 -->
+          <view class="tag-stats" v-if="tagStatsArray.length > 0">
+            <text class="tag-stats-title">分类统计</text>
+            <view class="tag-stats-list">
+              <view
+                v-for="(tagStat, index) in tagStatsArray"
+                :key="index"
+                class="tag-stat-item"
+              >
+                <text class="tag-name">{{ tagStat.name }}</text>
+                <text class="tag-amount">¥{{ formatAmount(tagStat.amount) }}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="stats-loading" v-else>
+          <text>统计数据加载中...</text>
+        </view>
       </view>
 
       <!-- 记账记录列表 -->
-      <view class="card margin">
+      <view class="records-card">
+        <view class="records-header">
+          <text class="records-title">记账明细</text>
+          <text class="records-count">共{{ billsStore.billsList.length }}条记录</text>
+        </view>
+
         <RecordList
-          :bills="billsList"
+          :bills="billsStore.billsList"
           @startRecord="handleStartRecord"
           @recordClick="handleRecordClick"
           @recordDeleted="handleRecordDeleted"
@@ -37,14 +86,11 @@
 </template>
 
 <script setup>
-import AccountHeader from '../../../components/account_book/index/01/AccountHeader.vue'
-import AccountStats from '../../../components/account_book/index/02/AccountStats.vue'
 import AccountBottomNav from '../../../components/account_book/index/03/AccountBottomNav.vue'
 import RecordList from '../../../components/account_book/index/04/RecordList.vue'
-import { defineOptions, ref, onMounted } from 'vue'
+import { defineOptions, ref, onMounted, onUnmounted, computed } from 'vue'
 import { useThemeStore } from '../../../stores/theme'
-import accountAPI from '../control/api_account'
-import billsAPI from './api_bills'
+import { useBillsManagementStore } from '../../../stores/account/billsManagement'
 import Taro from '@tarojs/taro'
 import './account_book.scss'
 
@@ -55,32 +101,26 @@ defineOptions({
 // 使用主题状态
 const themeStore = useThemeStore()
 
-// 页面状态
-const loading = ref(true)
-const accountData = ref(null)
-const billsList = ref([])
-const statsData = ref(null)
+// 使用账单管理状态
+const billsStore = useBillsManagementStore()
+
+// 当前账本ID
 const accountId = ref('')
-const tagsDict = ref(new Map()) // 标签字典，key为标签id，value为标签对象
 
 // 确保导航栏颜色与当前主题一致
 themeStore.updateNavigationBarColor()
 
-// 简单获取账本ID
+// 获取账本ID
 const getAccountId = () => {
   const pages = Taro.getCurrentPages()
   const currentPage = pages[pages.length - 1]
   const options = currentPage?.options || {}
 
-  console.log('📝 页面参数:', options)
-
   if (options.accountId) {
     accountId.value = options.accountId
-    console.log('✅ 获取到账本ID:', options.accountId)
     return options.accountId
   }
 
-  console.error('❌ 没有找到账本ID')
   Taro.showToast({
     title: '账本ID缺失',
     icon: 'error'
@@ -89,103 +129,65 @@ const getAccountId = () => {
   return null
 }
 
-// 加载账本数据
-const loadAccountData = async (id) => {
-  try {
-    const account = await accountAPI.getAccountDetail(id)
-    accountData.value = account
-  } catch (error) {
-    console.error('获取账本信息失败:', error)
-  }
-}
-
-// 加载标签字典
-const loadTagsDict = async () => {
-  try {
-    const tags = await billsAPI.getTags({ category: 'bill' })
-    const dict = new Map()
-    tags.forEach(tag => {
-      dict.set(tag.id, tag)
-    })
-    tagsDict.value = dict
-    console.log('📋 标签字典加载完成:', dict.size, '个标签')
-  } catch (error) {
-    console.error('获取标签失败:', error)
-  }
-}
-
-// 加载账单列表
-const loadBillsList = async (id) => {
-  try {
-    const result = await billsAPI.getBills({
-      account_book_id: id,
-      page: 1,
-      page_size: 50 // 暂时加载更多数据
-    })
-
-    // 处理账单数据，补充标签信息
-    const processedBills = (result.list || []).map(bill => {
-      // 为每个账单添加tags字段，基于tag_ids查找
-      const tags = []
-      if (bill.tag_ids && Array.isArray(bill.tag_ids)) {
-        bill.tag_ids.forEach(tagId => {
-          const tag = tagsDict.value.get(tagId)
-          if (tag) {
-            tags.push(tag)
-          }
-        })
-      }
-
-      return {
-        ...bill,
-        tags // 添加完整的标签信息
-      }
-    })
-
-    billsList.value = processedBills
-    console.log('📝 账单列表加载完成:', processedBills.length, '条记录')
-  } catch (error) {
-    console.error('获取账单列表失败:', error)
-  }
-}
-
-// 加载统计数据
-const loadStatsData = async (id) => {
-  try {
-    const stats = await billsAPI.getBillStats({
-      account_book_id: id
-    })
-    statsData.value = stats
-  } catch (error) {
-    console.error('获取统计数据失败:', error)
-  }
-}
-
 // 初始化数据
 const initPageData = async () => {
   const id = getAccountId()
   if (!id) return
 
-  loading.value = true
-  console.log('🚀 开始加载账本数据:', id)
-
   try {
-    // 1. 先加载标签字典
-    await loadTagsDict()
+    // 1. 先获取标签字典
+    await billsStore.fetchTagsDict()
 
-    // 2. 然后并行加载其他数据
-    await Promise.all([
-      loadAccountData(id),
-      loadBillsList(id), // 这里会使用上面加载的标签字典
-      loadStatsData(id)
-    ])
-    console.log('✅ 页面数据加载完成')
+    // 2. 获取账单列表
+    await billsStore.fetchBills({ account_book_id: id })
+
+    // 3. 获取统计数据 (自动缓存)
+    await billsStore.loadStats(id)
   } catch (error) {
-    console.error('❌ 页面数据加载失败:', error)
-  } finally {
-    loading.value = false
+    Taro.showToast({
+      title: '加载数据失败',
+      icon: 'error'
+    })
   }
 }
+
+// 获取当前月份
+const getCurrentMonth = () => {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  return `${year}年${month}月`
+}
+
+// 格式化金额
+const formatAmount = (amount) => {
+  return Math.abs(Number(amount) || 0).toFixed(2)
+}
+
+// 统计数据 - 直接访问ref
+const statsInfo = computed(() => {
+  if (!accountId.value) return null
+  return billsStore.statsDataMap.get(accountId.value)
+})
+
+// 分类统计数组
+const tagStatsArray = computed(() => {
+  if (!statsInfo.value?.tag_stats) return []
+
+  return Object.entries(statsInfo.value.tag_stats).map(([name, amount]) => ({
+    name,
+    amount: Math.abs(amount)
+  })).sort((a, b) => b.amount - a.amount) // 按金额降序排列
+})
+
+// 结余样式类
+const balanceClass = computed(() => {
+  if (!statsInfo.value) return ''
+  const balance = statsInfo.value.net_amount || 0
+  if (balance > 0) return 'positive'
+  if (balance < 0) return 'negative'
+  return 'neutral'
+})
 
 // 处理开始记账
 const handleStartRecord = () => {
@@ -204,7 +206,6 @@ const handleStartRecord = () => {
 
 // 处理记录点击
 const handleRecordClick = (record) => {
-  console.log('查看记录详情:', record)
   Taro.showToast({
     title: '记录详情功能开发中',
     icon: 'none'
@@ -213,24 +214,36 @@ const handleRecordClick = (record) => {
 
 // 处理记录删除
 const handleRecordDeleted = async (recordId) => {
-  console.log('记录已删除:', recordId)
+  try {
+    Taro.showLoading({
+      title: '删除中...'
+    })
 
-  // 从本地列表中移除
-  billsList.value = billsList.value.filter(bill => bill.id !== recordId)
+    await billsStore.deleteBill(recordId)
 
-  // 重新加载统计数据
-  if (accountId.value) {
-    try {
-      await loadStatsData(accountId.value)
-    } catch (error) {
-      console.error('刷新统计数据失败:', error)
-    }
+    Taro.hideLoading()
+
+    Taro.showToast({
+      title: '删除成功',
+      icon: 'success'
+    })
+  } catch (error) {
+    Taro.hideLoading()
+
+    Taro.showToast({
+      title: '删除失败，请重试',
+      icon: 'none'
+    })
   }
 }
 
 // 页面初始化
 onMounted(() => {
-  console.log('📱 页面挂载，开始初始化')
   initPageData()
+})
+
+// 页面卸载时清除store中的数据
+onUnmounted(() => {
+  billsStore.clearAllData()
 })
 </script>

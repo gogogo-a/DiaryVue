@@ -68,6 +68,7 @@
 <script setup>
 import { defineOptions, ref, computed } from 'vue'
 import { useThemeStore } from '../../../../stores/theme'
+import { useBillsManagementStore } from '../../../../stores/account/billsManagerment'
 import Taro from '@tarojs/taro'
 import './AccountStats.scss'
 
@@ -91,6 +92,9 @@ const props = defineProps({
 
 // 使用主题状态
 const themeStore = useThemeStore()
+
+// 使用账单管理状态
+const billsStore = useBillsManagementStore()
 
 // 当前统计周期
 const currentPeriod = ref('month') // 'today' | 'week' | 'month'
@@ -123,14 +127,47 @@ const currentStats = computed(() => {
   }
 })
 
-// 今日记录数 (暂时固定，后续可以从bills数据获取)
+// 今日记录数 (从store中的bills数据计算)
 const todayRecordCount = computed(() => {
-  return 0 // 需要从bills中计算
+  if (!billsStore.billsList || billsStore.billsList.length === 0) return 0
+
+  const today = new Date().toDateString()
+
+  return billsStore.billsList.filter(item => {
+    const bill = item.bill || item
+    const billDate = new Date(bill.bill_time || bill.created_at).toDateString()
+    return billDate === today
+  }).length
 })
 
-// 日均支出
+// 日均支出 (从store中的bills数据计算)
 const avgDailyExpense = computed(() => {
-  return '0' // 需要从bills统计中计算
+  if (!billsStore.billsList || billsStore.billsList.length === 0) return '0.00'
+
+  // 计算本月的支出账单
+  const now = new Date()
+  const currentMonth = now.getMonth()
+  const currentYear = now.getFullYear()
+
+  let totalExpense = 0
+  let expenseCount = 0
+
+  billsStore.billsList.forEach(item => {
+    const bill = item.bill || item
+    if (bill.type === 'expense') {
+      const billDate = new Date(bill.bill_time || bill.created_at)
+      if (billDate.getMonth() === currentMonth && billDate.getFullYear() === currentYear) {
+        totalExpense += Number(bill.amount) || 0
+        expenseCount++
+      }
+    }
+  })
+
+  // 计算日均（本月天数）
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
+  const avgDaily = expenseCount > 0 ? totalExpense / daysInMonth : 0
+
+  return billsStore.formatAmount(avgDaily)
 })
 
 // 支出趋势
@@ -161,19 +198,27 @@ const formatAmount = (amount) => {
   return Math.abs(amount).toFixed(2)
 }
 
+// 定义事件
+const emit = defineEmits(['periodChanged', 'categoryFilterChanged'])
+
 // 处理日期筛选
 const handleDateFilter = () => {
   Taro.showActionSheet({
     itemList: ['今日', '本周', '本月'],
     success: (res) => {
       const periods = ['today', 'week', 'month']
-      currentPeriod.value = periods[res.tapIndex]
+      const newPeriod = periods[res.tapIndex]
+      currentPeriod.value = newPeriod
 
+      // UI交互: 显示切换提示
       Taro.showToast({
         title: `已切换到${['今日', '本周', '本月'][res.tapIndex]}统计`,
         icon: 'none',
         duration: 1500
       })
+
+      // 数据操作: 通知父组件重新加载数据
+      emit('periodChanged', newPeriod)
     }
   })
 }

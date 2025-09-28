@@ -165,86 +165,6 @@ class AccountAPI {
   }
 
   // ================================
-  // 账单管理 (Bills)
-  // ================================
-
-  /**
-   * 获取账单列表
-   * @param {Object} params - 查询参数
-   * @param {string} params.account_book_id - 账本ID (必填)
-   * @param {number} params.page - 页码，默认1
-   * @param {number} params.page_size - 每页数量，默认10，最大100
-   * @param {string} params.type - 账单类型 (income/expense)
-   * @param {string} params.tag_ids - 标签ID数组，多个以逗号分隔
-   * @param {string} params.start_time - 开始时间 (YYYY-MM-DD)
-   * @param {string} params.end_time - 结束时间 (YYYY-MM-DD)
-   * @param {number} params.min_amount - 最小金额
-   * @param {number} params.max_amount - 最大金额
-   * @param {string} params.keyword - 搜索关键词
-   * @returns {Promise<Object>} 账单列表数据
-   */
-  async getBills(params = {}) {
-    return http.get('/bills', params)
-  }
-
-  /**
-   * 创建账单
-   * @param {Object} billData - 账单数据
-   * @param {string} billData.account_book_id - 账本UUID
-   * @param {number} billData.amount - 金额
-   * @param {string} billData.type - 类型 (income/expense)
-   * @param {Array} billData.tag_ids - 标签UUID数组
-   * @param {string} billData.bill_time - 账单时间
-   * @param {string} billData.remark - 备注
-   * @param {string} billData.image_url - 图片URL
-   * @returns {Promise<Object>} 创建的账单数据
-   */
-  async createBill(billData) {
-    return http.post('/bills', billData)
-  }
-
-  /**
-   * 更新账单
-   * @param {string} billId - 账单ID
-   * @param {Object} updates - 更新数据
-   * @returns {Promise<Object>} 更新后的账单数据
-   */
-  async updateBill(billId, updates) {
-    return http.put(`/bills/${billId}`, updates)
-  }
-
-  /**
-   * 删除账单
-   * @param {string} billId - 账单ID
-   * @returns {Promise<boolean>} 删除结果
-   */
-  async deleteBill(billId) {
-    return http.delete(`/bills/${billId}`)
-  }
-
-  /**
-   * 获取账单详情
-   * @param {string} billId - 账单ID
-   * @returns {Promise<Object>} 账单详情数据
-   */
-  async getBillDetail(billId) {
-    return http.get(`/bills/${billId}`)
-  }
-
-  /**
-   * 获取账单统计
-   * @param {Object} params - 查询参数
-   * @param {string} params.account_book_id - 账本ID (必填)
-   * @param {string} params.start_time - 开始时间 (YYYY-MM-DD)
-   * @param {string} params.end_time - 结束时间 (YYYY-MM-DD)
-   * @param {string} params.group_by - 分组方式 (day/week/month/year)
-   * @returns {Promise<Object>} 统计数据
-   */
-  async getBillStats(params = {}) {
-    return http.get('/bills/stats', params)
-  }
-
-  // ================================
   // 账本记录管理 (已废弃，请使用Bills接口)
   // ================================
 
@@ -443,12 +363,6 @@ export const {
   getAccountMembers,
   inviteMember,
   removeMember,
-  getBills,
-  createBill,
-  updateBill,
-  deleteBill,
-  getBillDetail,
-  getBillStats,
   getAccountStatistics,
   getCategoryStatistics,
   getAccountTrends

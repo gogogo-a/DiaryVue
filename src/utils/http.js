@@ -497,7 +497,7 @@ class HttpClient {
       const processedConfig = this.processRequestConfig(config);
 
       // 发送请求之前打印实际请求
-      console.log("📤 发送请求:", {
+      console.log("📤来自全局拦截器： 发送请求:", {
         url: processedConfig.url,
         method: processedConfig.method,
         headers: processedConfig.header,
@@ -508,7 +508,7 @@ class HttpClient {
       const response = await Taro.request(processedConfig);
 
       // 2. 接收的消息先打印，然后再处理数据
-      console.log("📥 收到响应:", {
+      console.log("📥来自全局拦截器 收到响应:", {
         statusCode: response.statusCode,
         data: response.data,
       });

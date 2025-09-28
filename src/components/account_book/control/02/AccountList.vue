@@ -20,11 +20,11 @@
       >
         <view class="card-header">
           <view class="account-info">
-            <text class="account-icon">{{ account.icon || '💰' }}</text>
+            <view class="account-icon">{{ account.icon || '💰' }}</view>
             <text class="account-name">{{ account.name }}</text>
           </view>
           <view class="edit-btn" @tap.stop="handleEdit(account)">
-            <image class="edit-icon" src="../../../../assets/svg/diary/search.svg" mode="aspectFit" />
+            <text class="edit-icon-text">✏️</text>
           </view>
         </view>
 
@@ -44,8 +44,8 @@
           </view>
 
           <view class="account-stats">
-            <text class="stats-text">本月支出: ¥{{ formatAmount(getAccountStats(account.id)?.expense || 0) }}</text>
-            <text class="stats-text">本月收入: ¥{{ formatAmount(getAccountStats(account.id)?.income || 0) }}</text>
+            <view class="stats-text" data-value="¥{{ formatAmount(getAccountStats(account.id)?.total_expense || 0) }}">本月支出</view>
+            <view class="stats-text" data-value="¥{{ formatAmount(getAccountStats(account.id)?.total_income || 0) }}">本月收入</view>
           </view>
 
           <view class="action-buttons">
@@ -55,12 +55,12 @@
 
             <view class="action-btn invite-btn" @tap.stop="handleInvite(account)">
               <text class="btn-text">邀请</text>
-              <image class="btn-icon" src="../../../../assets/svg/diary/search.svg" mode="aspectFit" />
+              <text class="btn-icon-text">👥</text>
             </view>
 
             <view class="action-btn enter-btn" @tap.stop="handleEnter(account)">
               <text class="btn-text">进入账本</text>
-              <image class="btn-icon" src="../../../../assets/svg/diary/search.svg" mode="aspectFit" />
+              <text class="btn-icon-text">➡️</text>
             </view>
           </view>
         </view>
@@ -71,11 +71,11 @@
 </template>
 
 <script setup>
-import { defineOptions, computed, onMounted, ref } from 'vue'
+import { defineOptions, computed } from 'vue'
 import { useThemeStore } from '../../../../stores/theme'
 import { useAccountManagementStore } from '../../../../stores/account/accountManagement'
+import { useBillsManagementStore } from '../../../../stores/account/billsManagement'
 import accountAPI from '../../../../pages/account_book/control/api_account'
-import billsAPI from '../../../../pages/account_book/index/api_bills'
 import Taro from '@tarojs/taro'
 import './AccountList.scss'
 
@@ -89,8 +89,8 @@ const themeStore = useThemeStore()
 // 使用账本管理状态
 const accountManagementStore = useAccountManagementStore()
 
-// 账本统计数据
-const accountStats = ref(new Map())
+// 使用账单管理状态
+const billsStore = useBillsManagementStore()
 
 // 计算属性
 const accountList = computed(() => accountManagementStore.accountList)
@@ -102,85 +102,31 @@ const formatAmount = (amount) => {
   return parseFloat(amount).toFixed(2)
 }
 
-// 获取账本统计数据
+// 获取账本统计数据 - 直接访问ref
 const getAccountStats = (accountId) => {
-  return accountStats.value.get(accountId)
-}
+  const data = billsStore.statsDataMap.get(accountId)
+  if (!data) {
+    return { income: 0, expense: 0, balance: 0 }
+  }
 
-// 获取本月日期范围
-const getCurrentMonthRange = () => {
-  const now = new Date()
-  const year = now.getFullYear()
-  const month = now.getMonth()
-
-  const startTime = new Date(year, month, 1).toISOString().split('T')[0]
-  const endTime = new Date(year, month + 1, 0).toISOString().split('T')[0]
-
-  return { startTime, endTime }
-}
-
-// 加载单个账本的统计数据
-const loadAccountStats = async (accountId) => {
-  try {
-    const { startTime, endTime } = getCurrentMonthRange()
-    const stats = await billsAPI.getBillStats({
-      account_book_id: accountId,
-      start_time: startTime,
-      end_time: endTime
-    })
-
-    // 存储统计数据
-    accountStats.value.set(accountId, {
-      income: stats.total_income || 0,
-      expense: stats.total_expense || 0,
-      balance: stats.net_amount || 0
-    })
-  } catch (error) {
-    console.error(`获取账本${accountId}统计数据失败:`, error)
-    // 设置默认值
-    accountStats.value.set(accountId, {
-      income: 0,
-      expense: 0,
-      balance: 0
-    })
+  return {
+    income: data.total_income || 0,
+    expense: data.total_expense || 0,
+    balance: data.net_amount || 0
   }
 }
 
-// 批量加载所有账本的统计数据
-const loadAllAccountStats = async () => {
-  const accounts = accountManagementStore.accountList
-  if (accounts.length === 0) return
-
-  console.log('🔄 开始加载账本统计数据...')
-
-  // 并行加载所有账本的统计数据
-  const promises = accounts.map(account => loadAccountStats(account.id))
-  await Promise.allSettled(promises)
-
-  console.log('✅ 账本统计数据加载完成')
-}
-
-// 加载账本列表
-const loadAccountList = async () => {
-  try {
-    await accountManagementStore.fetchAccounts()
-    // 账本列表加载完成后，加载统计数据
-    await loadAllAccountStats()
-  } catch (error) {
-    console.error('加载账本列表失败:', error)
-    Taro.showToast({
-      title: error.message || '加载失败',
-      icon: 'none'
-    })
-  }
-}
+// 注意：统计数据现在由父组件 account_control.vue 负责加载
 
 // 刷新列表
 const refreshList = async () => {
   try {
     await accountManagementStore.fetchAccounts()
-    // 刷新统计数据
-    await loadAllAccountStats()
+    // 刷新统计数据（通过父组件的 billsStore）
+    if (accountManagementStore.accountList.length > 0) {
+      const accountIds = accountManagementStore.accountList.map(account => account.id)
+      await billsStore.loadStats(accountIds)
+    }
   } catch (error) {
     console.error('刷新列表失败:', error)
     Taro.showToast({
@@ -310,14 +256,10 @@ const handleEnter = (account) => {
   })
 }
 
-// 组件挂载时加载数据
-onMounted(() => {
-  loadAccountList()
-})
+// 数据加载由父组件 account_control.vue 负责
 
 // 暴露方法供父组件调用
 defineExpose({
-  refreshList,
-  loadAccountList
+  refreshList
 })
 </script>

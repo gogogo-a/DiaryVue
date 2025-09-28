@@ -1,5 +1,26 @@
 <template>
   <view class="add-record-overlay" @tap="handleOverlayClick">
+    <!-- 自定义备注输入框 -->
+    <view v-if="showNoteInput" class="note-input-overlay" @tap.stop>
+      <view class="note-input-container">
+        <view class="note-input-header">
+          <text class="note-title">添加备注</text>
+        </view>
+        <textarea
+          class="note-textarea"
+          placeholder="请输入备注内容"
+          :value="noteContent"
+          id="noteTextarea"
+          @input="e => tempNoteContent = e.target.value"
+          auto-focus
+        ></textarea>
+        <view class="note-actions">
+          <view class="note-btn cancel-btn" @tap="cancelNote">取消</view>
+          <view class="note-btn confirm-btn" @tap="saveNote(tempNoteContent)">确定</view>
+        </view>
+      </view>
+    </view>
+
     <view class="add-record-modal" @tap.stop>
       <!-- 标题栏 -->
       <view class="modal-header">
@@ -53,7 +74,8 @@
       <!-- 功能按钮 -->
       <view class="function-buttons">
         <view class="function-btn" @tap="addNote">
-          <text class="function-text">添加备注</text>
+          <text class="function-text">{{ noteContent ? '修改备注' : '添加备注' }}</text>
+          <text v-if="noteContent" class="note-preview">{{ noteContent.length > 10 ? noteContent.substring(0, 10) + '...' : noteContent }}</text>
         </view>
         <view class="function-btn" @tap="manageCategory">
           <text class="function-text">分类管理</text>
@@ -223,10 +245,30 @@ const showDatePicker = () => {
   })
 }
 
+// 备注内容
+const noteContent = ref('')
+const showNoteInput = ref(false)
+const tempNoteContent = ref('')  // 临时存储编辑中的备注内容
+
 // 添加备注
 const addNote = () => {
   console.log('添加备注')
-  // 这里可以打开备注输入框
+  // 设置临时备注内容为当前备注内容
+  tempNoteContent.value = noteContent.value
+  // 显示自定义输入框
+  showNoteInput.value = true
+}
+
+// 保存备注
+const saveNote = (value) => {
+  noteContent.value = value
+  showNoteInput.value = false
+  console.log('备注已添加:', noteContent.value)
+}
+
+// 取消备注
+const cancelNote = () => {
+  showNoteInput.value = false
 }
 
 // 分类管理
@@ -289,7 +331,7 @@ const saveRecord = async () => {
       type: recordType.value,
       tag_ids: [selectedTag.value.id], // 使用数组格式的标签ID
       bill_time: selectedDate.value.toISOString(),
-      remark: '',
+      remark: noteContent.value, // 使用用户输入的备注
       image_url: ''
     }
 

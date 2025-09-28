@@ -57,14 +57,9 @@ const themeStore = useThemeStore()
 
 // 处理管理账本
 const handleManage = () => {
-  console.log('点击管理账本按钮')
   Taro.navigateTo({
     url: '/pages/account_book/control/account_control',
-    success: () => {
-      console.log('跳转成功')
-    },
     fail: (err) => {
-      console.error('跳转失败:', err)
       Taro.showToast({
         title: '跳转失败，请重试',
         icon: 'none'
@@ -75,8 +70,6 @@ const handleManage = () => {
 
 // 处理添加记录
 const handleAddRecord = () => {
-  console.log('点击记一笔按钮')
-
   if (!props.accountId) {
     Taro.showToast({
       title: '账本ID不存在',
@@ -87,11 +80,7 @@ const handleAddRecord = () => {
 
   Taro.navigateTo({
     url: `/pages/account_book/add/add_record?accountId=${props.accountId}`,
-    success: (res) => {
-      console.log('跳转到记账页面成功:', res)
-    },
     fail: (err) => {
-      console.error('跳转失败详细信息:', err)
       Taro.showToast({
         title: `跳转失败: ${err.errMsg}`,
         icon: 'none',

@@ -85,7 +85,6 @@
 <script setup>
 import { defineOptions, computed } from 'vue'
 import { useThemeStore } from '../../../../stores/theme'
-import billsAPI from '../../../../pages/account_book/index/api_bills'
 import Taro from '@tarojs/taro'
 import './RecordList.scss'
 
@@ -107,14 +106,19 @@ const themeStore = useThemeStore()
 // 定义事件
 const emit = defineEmits(['recordClick', 'startRecord', 'recordDeleted'])
 
-// 处理账单数据，按日期分组
+  // 处理账单数据，按日期分组
 const recordsByDate = computed(() => {
   if (!props.bills || props.bills.length === 0) return []
 
   const grouped = {}
 
-  props.bills.forEach(bill => {
-    const date = new Date(bill.bill_time || bill.created_at).toDateString()
+  props.bills.forEach(item => {
+    // 处理新的数据结构，根据bill属性获取账单信息
+    const bill = item.bill || item
+
+    // 确保我们有一个有效日期
+    const billTime = bill.bill_time || bill.created_at
+    const date = new Date(billTime).toDateString()
 
     if (!grouped[date]) {
       grouped[date] = {
@@ -125,23 +129,30 @@ const recordsByDate = computed(() => {
       }
     }
 
+    // 获取标签信息 - 直接使用tags里的tag_name
+    const tags = item.tags || []
+    const tagName = tags.length > 0 ? tags[0].tag_name : '未分类'
+
     // 转换账单数据为记录格式
     const record = {
       id: bill.id,
-      amount: bill.amount,
+      amount: Number(bill.amount) || 0, // 确保金额为数字类型
       type: bill.type,
-      categoryName: bill.tags?.[0]?.tag_name || '未分类',
+      categoryName: tagName,
       categoryIcon: bill.type === 'income' ? '💰' : '💸',
-      note: bill.remark,
-      date: bill.bill_time || bill.created_at
+      note: bill.remark || '',
+      date: billTime
     }
 
     grouped[date].records.push(record)
 
+    // 确保金额为数字类型
+    const amount = Number(bill.amount) || 0
+
     if (bill.type === 'income') {
-      grouped[date].totalIncome += bill.amount
+      grouped[date].totalIncome += amount
     } else {
-      grouped[date].totalExpense += bill.amount
+      grouped[date].totalExpense += amount
     }
   })
 
@@ -191,14 +202,11 @@ const formatAmount = (amount) => {
 
 // 处理记录点击
 const handleRecordClick = (record) => {
-  console.log('点击记录:', record)
   emit('recordClick', record)
 }
 
 // 处理记录长按
 const handleRecordLongPress = (record) => {
-  console.log('长按记录:', record)
-
   Taro.showActionSheet({
     itemList: ['编辑', '删除'],
     success: (res) => {
@@ -225,37 +233,22 @@ const handleEditRecord = (record) => {
 // 删除记录
 const handleDeleteRecord = async (record) => {
   try {
+    // 获取实际的bill数据
+    const bill = record.bill || record
+
     const result = await Taro.showModal({
       title: '确认删除',
-      content: `确定要删除这条${record.type === 'expense' ? '支出' : '收入'}记录吗？`,
+      content: `确定要删除这条${bill.type === 'expense' ? '支出' : '收入'}记录吗？`,
       confirmColor: '#FF6B6B'
     })
 
     if (result.confirm) {
-      Taro.showLoading({
-        title: '删除中...'
-      })
-
-      // 调用API删除账单
-      await billsAPI.deleteBill(record.id)
-
-      Taro.hideLoading()
-
-      Taro.showToast({
-        title: '删除成功',
-        icon: 'success'
-      })
-
-      // 触发父组件事件，通知删除成功
-      emit('recordDeleted', record.id)
+      // 只负责UI确认，实际删除操作交给父组件处理
+      emit('recordDeleted', bill.id)
     }
   } catch (error) {
-    Taro.hideLoading()
-
-    console.error('删除记录失败:', error)
-
     Taro.showToast({
-      title: '删除失败，请重试',
+      title: '操作失败，请重试',
       icon: 'none'
     })
   }
