@@ -12,7 +12,7 @@
       </view>
 
       <view class="user-details">
-        <view class="username">{{ userInfo.username || '山水图' }}</view>
+        <view class="username">{{ userInfo.username }}</view>
         <view class="follow-info">
           <text class="follow-count">{{ userInfo.following || 0 }}</text>
           <text class="follow-label">关注</text>
@@ -40,8 +40,9 @@
 </template>
 
 <script setup>
-import { defineOptions, ref, reactive } from 'vue'
+import { defineOptions, ref, reactive, computed, onMounted } from 'vue'
 import { useThemeStore } from '../../../../stores/theme'
+import { useUserStore } from '../../../../stores/user'
 import Taro from '@tarojs/taro'
 import './MineHeader.scss'
 
@@ -52,31 +53,25 @@ defineOptions({
 // 使用主题状态
 const themeStore = useThemeStore()
 
+// 使用用户状态
+const userStore = useUserStore()
+
 // 默认头像
 const defaultAvatar = 'https://via.placeholder.com/80x80/333/fff?text=头像'
 
-// 用户信息
-const userInfo = reactive({
-  username: '山水图',
-  avatar: '',
-  following: 0,
-  followers: 0,
-  birthday: ''
-})
+// 从store中获取用户信息
+const userInfo = computed(() => ({
+  username: userStore.userInfo.user_name || '山水图',
+  avatar: userStore.userInfo.avatar || '',
+  following: 0, // TODO: 实际关注数据
+  followers: 0, // TODO: 实际粉丝数据
+  birthday: userStore.userInfo.birthday || ''
+}))
 
-// 处理头像点击
+// 处理头像点击 - 跳转到编辑页面
 const handleAvatarTap = () => {
-  Taro.chooseImage({
-    count: 1,
-    sizeType: ['original', 'compressed'],
-    sourceType: ['album', 'camera'],
-    success: (res) => {
-      userInfo.avatar = res.tempFilePaths[0]
-      Taro.showToast({
-        title: '头像更新成功',
-        icon: 'success'
-      })
-    }
+  Taro.navigateTo({
+    url: '/pages/mine/editor/profile_editor'
   })
 }
 
@@ -109,5 +104,14 @@ const handleSetBirthday = () => {
     }
   })
 }
+
+// 页面加载时初始化用户状态
+onMounted(() => {
+  // 确保用户状态已加载
+  if (!userStore.isLoggedIn) {
+    userStore.checkAndEnsureLogin()
+  }
+  console.log('MineHeader: 当前用户信息', userStore.userInfo)
+})
 </script>
 
